@@ -1,0 +1,90 @@
+{
+  "title": "Bread Assistant",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Bread Assistant",
+        "description": "Prowadzenie jednego wypieku lokalnie. Telefon jest opcjonalny.",
+        "data": {
+          "notify_target": "Powiadomienia na telefon",
+          "notifications_enabled": "Włącz przypomnienia",
+          "reminder_minutes": "Odstęp przypomnień (minuty)",
+          "dashboard_path": "Ścieżka pulpitu",
+          "time_format": "Format czasu",
+          "live_activities_enabled": "Włącz Live Activities (iOS)",
+          "live_activity_notify_target": "Powiadomienia Live Activity na iPhone"
+        }
+      }
+    },
+    "error": {
+      "notify_missing": "Wybrana usługa powiadomień jest niedostępna."
+    },
+    "abort": {
+      "already_configured": "Bread Assistant jest już skonfigurowany."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Bread Assistant preferences",
+        "data": {
+          "notify_target": "Powiadomienia na telefon",
+          "notifications_enabled": "Włącz przypomnienia",
+          "reminder_minutes": "Odstęp przypomnień (minuty)",
+          "dashboard_path": "Ścieżka pulpitu",
+          "time_format": "Format czasu",
+          "live_activities_enabled": "Włącz Live Activities (iOS)",
+          "live_activity_notify_target": "Powiadomienia Live Activity na iPhone"
+        }
+      }
+    },
+    "error": {
+      "notify_missing": "Wybrana usługa powiadomień jest niedostępna."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "status": {
+        "name": "Stan"
+      },
+      "current_step": {
+        "name": "Bieżący etap"
+      },
+      "next_step": {
+        "name": "Następny etap"
+      },
+      "next_due": {
+        "name": "Następny termin"
+      },
+      "progress": {
+        "name": "Postęp"
+      },
+      "overdue_count": {
+        "name": "Zaległe etapy"
+      }
+    },
+    "button": {
+      "start": {
+        "name": "Rozpocznij"
+      },
+      "start_prepared": {
+        "name": "Rozpocznij z gotowym zakwasem"
+      },
+      "complete_current": {
+        "name": "Potwierdź etap"
+      },
+      "snooze_current": {
+        "name": "Przypomnij za 10 minut"
+      },
+      "pause": {
+        "name": "Wstrzymaj"
+      },
+      "resume": {
+        "name": "Wznów"
+      },
+      "cancel": {
+        "name": "Anuluj"
+      }
+    }
+  }
+}

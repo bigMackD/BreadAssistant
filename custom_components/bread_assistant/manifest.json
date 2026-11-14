@@ -1,0 +1,12 @@
+{
+  "domain": "bread_assistant",
+  "name": "Bread Assistant",
+  "codeowners": ["@bigMackD"],
+  "config_flow": true,
+  "documentation": "https://github.com/bigMackD/BreadAssistant",
+  "integration_type": "service",
+  "iot_class": "local_push",
+  "issue_tracker": "https://github.com/bigMackD/BreadAssistant/issues",
+  "requirements": [],
+  "version": "0.1.0"
+}

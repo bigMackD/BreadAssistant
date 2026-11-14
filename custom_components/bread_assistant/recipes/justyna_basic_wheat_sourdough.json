@@ -1,0 +1,486 @@
+{
+  "id": "justyna_basic_wheat_sourdough",
+  "version": 1,
+  "title": "Basic wheat sourdough - after Justyna Dragan",
+  "url": "https://justynadragan.pl/2020/08/podstawowy-chleb-pszenny-na-zakwasie.html",
+  "ingredients": [
+    "Starter feeding: 40 g refrigerated starter, 40 g whole wheat flour, 40 g wheat bread flour type 750, 80 g water.",
+    "Dough: 350 g wheat bread flour type 750, 235 g water (32-35 C), 120 g active fed starter, 10 g salt.",
+    "Accessories: olive oil, rice flour, bench flour, parchment, proofing basket, Dutch oven, dry oven gloves, cooling rack."
+  ],
+  "steps": [
+    {
+      "id": "feed_starter",
+      "title": "Feed starter",
+      "kind": "action",
+      "offset_minutes": 0,
+      "instructions": "Combine the starter feeding ingredients. Mark Done after feeding; readiness is confirmed separately.",
+      "dependencies": [
+        {
+          "kind": "after_start",
+          "offset_minutes": 0
+        }
+      ],
+      "prerequisites": [],
+      "duration_minutes": 0,
+      "reference": true,
+      "alert_policy": "due",
+      "optional": false,
+      "requires_confirmation": true
+    },
+    {
+      "id": "autolyse_start",
+      "title": "Start autolyse",
+      "kind": "action",
+      "offset_minutes": 180,
+      "instructions": "Mix the dough flour and water until no dry patches remain. Cover and rest; keep starter and salt aside.",
+      "dependencies": [
+        {
+          "kind": "after_start",
+          "offset_minutes": 180
+        }
+      ],
+      "prerequisites": [],
+      "duration_minutes": 0,
+      "reference": true,
+      "alert_policy": "due",
+      "optional": false,
+      "requires_confirmation": true
+    },
+    {
+      "id": "starter_ready",
+      "title": "Confirm starter readiness",
+      "kind": "checkpoint",
+      "offset_minutes": 240,
+      "instructions": "Check the starter yourself. Continue only when active and suitable for baking; the four-hour estimate is not a readiness test.",
+      "dependencies": [
+        {
+          "kind": "after_completion",
+          "anchor": "feed_starter",
+          "offset_minutes": 240
+        }
+      ],
+      "prerequisites": [
+        "feed_starter"
+      ],
+      "duration_minutes": 0,
+      "reference": false,
+      "alert_policy": "due",
+      "optional": false,
+      "requires_confirmation": true
+    },
+    {
+      "id": "autolyse_complete",
+      "title": "Confirm autolyse complete",
+      "kind": "timer",
+      "offset_minutes": 240,
+      "instructions": "Confirm the dough has completed its one-hour hydration rest.",
+      "dependencies": [
+        {
+          "kind": "after_completion",
+          "anchor": "autolyse_start",
+          "offset_minutes": 60
+        }
+      ],
+      "prerequisites": [
+        "autolyse_start"
+      ],
+      "duration_minutes": 0,
+      "reference": false,
+      "alert_policy": "silent",
+      "optional": false,
+      "requires_confirmation": true
+    },
+    {
+      "id": "knead_start",
+      "title": "Begin kneading",
+      "kind": "action",
+      "offset_minutes": 240,
+      "instructions": "Work the active starter and salt into the rested dough until evenly incorporated.",
+      "dependencies": [
+        {
+          "kind": "after_completion",
+          "anchor": "starter_ready",
+          "offset_minutes": 0
+        },
+        {
+          "kind": "after_completion",
+          "anchor": "autolyse_complete",
+          "offset_minutes": 0
+        }
+      ],
+      "prerequisites": [
+        "starter_ready",
+        "autolyse_complete"
+      ],
+      "duration_minutes": 5,
+      "reference": true,
+      "alert_policy": "due",
+      "optional": false,
+      "requires_confirmation": true
+    },
+    {
+      "id": "bulk_start",
+      "title": "Begin bulk fermentation",
+      "kind": "timer",
+      "offset_minutes": 245,
+      "instructions": "After kneading, place dough in a lightly oiled covered container. Mark Done to record the actual bulk start.",
+      "dependencies": [
+        {
+          "kind": "after_completion",
+          "anchor": "knead_start",
+          "offset_minutes": 5
+        }
+      ],
+      "prerequisites": [
+        "knead_start"
+      ],
+      "duration_minutes": 0,
+      "reference": true,
+      "alert_policy": "due",
+      "optional": false,
+      "requires_confirmation": true
+    },
+    {
+      "id": "fold_1",
+      "title": "First stretch-and-fold",
+      "kind": "action",
+      "offset_minutes": 275,
+      "instructions": "With damp hands, stretch and fold the dough gently. Cover again.",
+      "dependencies": [
+        {
+          "kind": "parallel_anchor",
+          "anchor": "bulk_start",
+          "offset_minutes": 30
+        }
+      ],
+      "prerequisites": [
+        "bulk_start"
+      ],
+      "duration_minutes": 0,
+      "reference": true,
+      "alert_policy": "due",
+      "optional": false,
+      "requires_confirmation": true
+    },
+    {
+      "id": "fold_2",
+      "title": "Second stretch-and-fold",
+      "kind": "action",
+      "offset_minutes": 305,
+      "instructions": "Repeat the stretch-and-fold. Its target is one hour after bulk began, independent of the first fold timestamp.",
+      "dependencies": [
+        {
+          "kind": "parallel_anchor",
+          "anchor": "bulk_start",
+          "offset_minutes": 60
+        }
+      ],
+      "prerequisites": [
+        "bulk_start"
+      ],
+      "duration_minutes": 0,
+      "reference": true,
+      "alert_policy": "due",
+      "optional": false,
+      "requires_confirmation": true
+    },
+    {
+      "id": "bulk_ready",
+      "title": "Confirm bulk fermentation readiness",
+      "kind": "checkpoint",
+      "offset_minutes": 545,
+      "instructions": "Assess dough expansion and aeration. Wait longer if needed; confirm only after your own assessment.",
+      "dependencies": [
+        {
+          "kind": "after_completion",
+          "anchor": "bulk_start",
+          "offset_minutes": 300
+        }
+      ],
+      "prerequisites": [
+        "bulk_start"
+      ],
+      "duration_minutes": 0,
+      "reference": false,
+      "alert_policy": "due",
+      "optional": false,
+      "requires_confirmation": true
+    },
+    {
+      "id": "preshape",
+      "title": "Pre-shape",
+      "kind": "action",
+      "offset_minutes": 545,
+      "instructions": "Gently turn out the dough and form a loose round. Record completion to begin the bench rest.",
+      "dependencies": [
+        {
+          "kind": "after_completion",
+          "anchor": "bulk_ready",
+          "offset_minutes": 0
+        }
+      ],
+      "prerequisites": [
+        "bulk_ready",
+        "fold_1",
+        "fold_2"
+      ],
+      "duration_minutes": 0,
+      "reference": true,
+      "alert_policy": "due",
+      "optional": false,
+      "requires_confirmation": true
+    },
+    {
+      "id": "final_shape",
+      "title": "Final shape",
+      "kind": "timer",
+      "offset_minutes": 555,
+      "instructions": "After the ten-minute bench rest, shape the loaf with gentle surface tension.",
+      "dependencies": [
+        {
+          "kind": "after_completion",
+          "anchor": "preshape",
+          "offset_minutes": 10
+        }
+      ],
+      "prerequisites": [
+        "preshape"
+      ],
+      "duration_minutes": 0,
+      "reference": true,
+      "alert_policy": "due",
+      "optional": false,
+      "requires_confirmation": true
+    },
+    {
+      "id": "cold_proof_start",
+      "title": "Refrigerate shaped dough",
+      "kind": "timer",
+      "offset_minutes": 560,
+      "instructions": "Place the shaped loaf seam-up in a floured basket, cover and refrigerate. Mark Done when refrigerated.",
+      "dependencies": [
+        {
+          "kind": "after_completion",
+          "anchor": "final_shape",
+          "offset_minutes": 5
+        }
+      ],
+      "prerequisites": [
+        "final_shape"
+      ],
+      "duration_minutes": 0,
+      "reference": true,
+      "alert_policy": "due",
+      "optional": false,
+      "requires_confirmation": true
+    },
+    {
+      "id": "preheat_oven",
+      "title": "Preheat oven and cast iron",
+      "kind": "action",
+      "offset_minutes": 1240,
+      "instructions": "Preheat the oven and covered cast iron pot to 250 C. Use dry oven gloves; hot iron can cause severe burns.",
+      "dependencies": [
+        {
+          "kind": "parallel_anchor",
+          "anchor": "cold_proof_start",
+          "offset_minutes": 680
+        }
+      ],
+      "prerequisites": [
+        "cold_proof_start"
+      ],
+      "duration_minutes": 0,
+      "reference": true,
+      "alert_policy": "due",
+      "optional": false,
+      "requires_confirmation": true
+    },
+    {
+      "id": "dough_ready",
+      "title": "Confirm dough readiness",
+      "kind": "checkpoint",
+      "offset_minutes": 1280,
+      "instructions": "Inspect the cold-proofed loaf and confirm it is ready. Twelve hours is a suggested proof, not automatic release.",
+      "dependencies": [
+        {
+          "kind": "after_completion",
+          "anchor": "cold_proof_start",
+          "offset_minutes": 720
+        }
+      ],
+      "prerequisites": [
+        "cold_proof_start"
+      ],
+      "duration_minutes": 0,
+      "reference": false,
+      "alert_policy": "due",
+      "optional": false,
+      "requires_confirmation": true
+    },
+    {
+      "id": "oven_ready",
+      "title": "Confirm oven readiness",
+      "kind": "checkpoint",
+      "offset_minutes": 1280,
+      "instructions": "Verify the oven and cast iron are fully heated. Handle the 250 C pot with dry heatproof gloves.",
+      "dependencies": [
+        {
+          "kind": "after_completion",
+          "anchor": "preheat_oven",
+          "offset_minutes": 40
+        }
+      ],
+      "prerequisites": [
+        "preheat_oven"
+      ],
+      "duration_minutes": 0,
+      "reference": false,
+      "alert_policy": "silent",
+      "optional": false,
+      "requires_confirmation": true
+    },
+    {
+      "id": "score_loaf",
+      "title": "Score loaf",
+      "kind": "action",
+      "offset_minutes": 1280,
+      "instructions": "Turn the loaf onto parchment and score carefully before loading. Keep hands clear of the hot pot.",
+      "dependencies": [
+        {
+          "kind": "after_completion",
+          "anchor": "dough_ready",
+          "offset_minutes": 0
+        },
+        {
+          "kind": "after_completion",
+          "anchor": "oven_ready",
+          "offset_minutes": 0
+        }
+      ],
+      "prerequisites": [
+        "dough_ready",
+        "oven_ready"
+      ],
+      "duration_minutes": 0,
+      "reference": false,
+      "alert_policy": "silent",
+      "optional": false,
+      "requires_confirmation": true
+    },
+    {
+      "id": "bake_start",
+      "title": "Begin covered baking",
+      "kind": "action",
+      "offset_minutes": 1280,
+      "instructions": "Carefully load the loaf into the hot pot. Cover and bake at 250 C for 20 minutes. Mark Done once loaded.",
+      "dependencies": [
+        {
+          "kind": "after_completion",
+          "anchor": "score_loaf",
+          "offset_minutes": 0
+        }
+      ],
+      "prerequisites": [
+        "score_loaf",
+        "dough_ready",
+        "oven_ready"
+      ],
+      "duration_minutes": 20,
+      "reference": true,
+      "alert_policy": "due",
+      "optional": false,
+      "requires_confirmation": true
+    },
+    {
+      "id": "remove_lid",
+      "title": "Remove lid; bake uncovered",
+      "kind": "timer",
+      "offset_minutes": 1300,
+      "instructions": "Use dry oven gloves to remove the hot lid. Reduce the oven to 230 C and bake uncovered for 15-20 minutes.",
+      "dependencies": [
+        {
+          "kind": "after_completion",
+          "anchor": "bake_start",
+          "offset_minutes": 20
+        }
+      ],
+      "prerequisites": [
+        "bake_start"
+      ],
+      "duration_minutes": 20,
+      "reference": false,
+      "alert_policy": "due",
+      "optional": false,
+      "requires_confirmation": true
+    },
+    {
+      "id": "bake_finish",
+      "title": "Remove loaf",
+      "kind": "timer",
+      "offset_minutes": 1320,
+      "instructions": "Check the loaf after 15-20 minutes uncovered (the target is 20). Use oven gloves to lift it onto a rack.",
+      "dependencies": [
+        {
+          "kind": "after_completion",
+          "anchor": "remove_lid",
+          "offset_minutes": 20
+        }
+      ],
+      "prerequisites": [
+        "remove_lid"
+      ],
+      "duration_minutes": 20,
+      "reference": true,
+      "alert_policy": "due",
+      "optional": false,
+      "requires_confirmation": true,
+      "minimum_minutes": 15
+    },
+    {
+      "id": "cooling_start",
+      "title": "Begin cooling",
+      "kind": "action",
+      "offset_minutes": 1320,
+      "instructions": "Place the loaf on a rack with air underneath. Keep the hot pot and lid safely away from hands.",
+      "dependencies": [
+        {
+          "kind": "after_completion",
+          "anchor": "bake_finish",
+          "offset_minutes": 0
+        }
+      ],
+      "prerequisites": [
+        "bake_finish"
+      ],
+      "duration_minutes": 0,
+      "reference": false,
+      "alert_policy": "silent",
+      "optional": true,
+      "requires_confirmation": true
+    },
+    {
+      "id": "cooling_check",
+      "title": "Check cooling before slicing",
+      "kind": "checkpoint",
+      "offset_minutes": 1440,
+      "instructions": "Allow the crumb to cool before slicing. Confirm by checking the loaf yourself; this two-hour reminder is an estimate.",
+      "dependencies": [
+        {
+          "kind": "after_completion",
+          "anchor": "bake_finish",
+          "offset_minutes": 120
+        }
+      ],
+      "prerequisites": [
+        "bake_finish"
+      ],
+      "duration_minutes": 0,
+      "reference": false,
+      "alert_policy": "due",
+      "optional": false,
+      "requires_confirmation": true
+    }
+  ]
+}

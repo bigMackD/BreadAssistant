@@ -1,0 +1,85 @@
+start_bake:
+  name: Start bake
+  description: Start one bake. Prepared starter skips feeding and retains readiness confirmation.
+  fields:
+    recipe_id:
+      name: Recipe
+      example: justyna_basic_wheat_sourdough
+      selector:
+        text:
+    start_time:
+      name: Start time (ISO with offset)
+      example: "2026-11-14T11:00:00+01:00"
+      selector:
+        text:
+    starter_id:
+      name: Optional starter reference
+      selector:
+        text:
+    starter_workflow:
+      name: Starter workflow
+      default: feed
+      selector:
+        select:
+          options:
+            - feed
+            - prepared
+    starter_ready:
+      name: I explicitly confirm the prepared starter is ready
+      default: false
+      selector:
+        boolean:
+complete_step:
+  name: Complete step
+  description: Record actual completion or manually confirm a readiness checkpoint.
+  fields:
+    bake_id: &bake_id
+      name: Bake ID
+      required: true
+      selector:
+        text:
+    step_id: &step_id
+      name: Step ID
+      required: true
+      selector:
+        text:
+snooze_step:
+  name: Snooze reminder
+  description: Delay only the reminder; process timing remains unchanged.
+  fields:
+    bake_id: *bake_id
+    step_id: *step_id
+    minutes:
+      name: Minutes
+      required: true
+      selector:
+        number:
+          min: 1
+          max: 1440
+          mode: box
+adjust_step:
+  name: Adjust step deadline
+  description: Set a requested earliest deadline; prerequisite constraints still apply.
+  fields:
+    bake_id: *bake_id
+    step_id: *step_id
+    due_at:
+      name: Due time (ISO with offset)
+      required: true
+      selector:
+        text:
+pause_bake:
+  name: Pause reminders
+  description: Pause reminders while biological and oven time continue in real life.
+  fields:
+    bake_id: *bake_id
+resume_bake:
+  name: Resume reminders
+  description: Reconcile actual time and summarize overdue tasks.
+  fields:
+    bake_id: *bake_id
+cancel_bake:
+  name: Cancel bake
+  description: Archive a summary and cancel all pending reminders.
+  fields:
+    bake_id: *bake_id

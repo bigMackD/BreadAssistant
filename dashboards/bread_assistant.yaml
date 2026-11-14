@@ -1,0 +1,125 @@
+title: Bread Assistant
+views:
+  - title: Bake
+    path: overview
+    icon: mdi:bread-slice
+    cards:
+      - type: markdown
+        content: |
+          # Bread Assistant
+          **{{ states('sensor.bread_assistant_status') | title }}**
+          {{ state_attr('sensor.bread_assistant_status', 'recipe_title') or '' }}
+
+          Choose **Feed starter** or **Prepared starter** to begin.
+          Prepared starter skips feeding; you still confirm readiness.
+      - type: grid
+        columns: 2
+        square: false
+        cards:
+          - type: button
+            entity: button.bread_assistant_start
+            name: Feed starter
+            tap_action:
+              action: perform-action
+              perform_action: button.press
+              target:
+                entity_id: button.bread_assistant_start
+          - type: button
+            entity: button.bread_assistant_start_with_prepared_starter
+            name: Prepared starter
+            tap_action:
+              action: perform-action
+              perform_action: button.press
+              target:
+                entity_id: button.bread_assistant_start_with_prepared_starter
+      - type: conditional
+        conditions:
+          - entity: sensor.bread_assistant_status
+            state: paused
+        card:
+          type: markdown
+          content: |
+            ## Reminders paused
+            Fermentation, proofing and oven time continue in real life.
+            Resume to review outstanding work. Never leave a hot oven unattended.
+      - type: markdown
+        content: |
+          ## {{ states('sensor.bread_assistant_current_step') if has_value('sensor.bread_assistant_current_step') else 'No active task' }}
+          {{ state_attr('sensor.bread_assistant_current_step', 'instructions') or 'Start a bake or resume reminders to see the next task.' }}
+
+          {% set due = state_attr('sensor.bread_assistant_current_step', 'due_at') %}
+          {% if due %}Due: **{{ as_local(as_datetime(due)).strftime('%d %b %I:%M %p %Z' if state_attr('sensor.bread_assistant_status', 'time_format') == '12h' else '%d %b %H:%M %Z') }}**{% endif %}
+          {% set snooze = state_attr('sensor.bread_assistant_current_step', 'snoozed_until') %}
+          {% if snooze %}Reminder snoozed until {{ as_local(as_datetime(snooze)).strftime('%H:%M %Z') }}.{% endif %}
+
+          **Done confirms that you performed the action or assessed readiness.**
+      - type: grid
+        columns: 2
+        square: false
+        cards:
+          - type: button
+            entity: button.bread_assistant_complete_current
+            name: Done / Confirm ready
+            tap_action:
+              action: perform-action
+              perform_action: button.press
+              target:
+                entity_id: button.bread_assistant_complete_current
+          - type: button
+            entity: button.bread_assistant_snooze_current
+            name: Remind in 10 min
+            tap_action:
+              action: perform-action
+              perform_action: button.press
+              target:
+                entity_id: button.bread_assistant_snooze_current
+      - type: entities
+        title: Next and progress
+        entities:
+          - entity: sensor.bread_assistant_next_due
+            name: Next due
+            format: relative
+          - entity: sensor.bread_assistant_next_step
+          - entity: sensor.bread_assistant_progress
+          - entity: sensor.bread_assistant_overdue_count
+          - entity: button.bread_assistant_pause
+          - entity: button.bread_assistant_resume
+          - entity: button.bread_assistant_cancel
+      - type: markdown
+        title: Timeline
+        content: |
+          Estimates require your assessment. **Bold titles** are the 12 reference milestones.
+          {% set fmt = '%d %b %I:%M %p %Z' if state_attr('sensor.bread_assistant_status', 'time_format') == '12h' else '%d %b %H:%M %Z' %}
+          {% for step in state_attr('sensor.bread_assistant_current_step', 'timeline') or [] %}
+
+          {{ '✅' if step.state == 'done' else '⏭' if step.state == 'skipped' else '⚠' if step.overdue else '●' if step.state == 'ready' else '○' }} {{ '**' if step.reference else '' }}{{ step.title }}{{ '**' if step.reference else '' }} — {{ step.state }}{{ ' (overdue estimate)' if step.overdue else '' }}
+
+          Plan: {{ as_local(as_datetime(step.planned_at)).strftime(fmt) }}
+          · Due: {{ as_local(as_datetime(step.due_at)).strftime(fmt) }}
+          {% if step.completed_at %}· Actual: {{ as_local(as_datetime(step.completed_at)).strftime(fmt) }}{% endif %}
+          {% endfor %}
+      - type: markdown
+        title: Recipe and safety
+        content: |
+          {% for ingredient in state_attr('sensor.bread_assistant_status', 'ingredients') or [] %}
+          - {{ ingredient }}
+          {% endfor %}
+
+          Adapted from [Justyna Dragan's basic wheat sourdough]({{ state_attr('sensor.bread_assistant_status', 'recipe_url') }}).
+          Read the author's full method for technique. Reference times are estimates.
+
+          **Hot cast iron at 250 °C can cause severe burns. Use dry oven gloves,
+          keep the lid on a heatproof surface and handle steam carefully.**
+          Covered baking: 20 min at 250 °C. Uncovered: 15–20 min at 230 °C;
+          the reminder uses 20 minutes. Check cooling yourself before slicing.
+      - type: markdown
+        title: Diagnostics
+        content: |
+          Bake: `{{ state_attr('sensor.bread_assistant_status', 'bake_id') or 'none' }}`
+
+          Starter: {{ state_attr('sensor.bread_assistant_status', 'starter_id') or 'unlinked' }}
+          · Workflow: {{ state_attr('sensor.bread_assistant_status', 'starter_workflow') or 'none' }}
+
+          Last sync: {{ state_attr('sensor.bread_assistant_status', 'last_sync') or 'none' }}
+
+          {{ state_attr('sensor.bread_assistant_status', 'last_error') or 'No delivery errors.' }}

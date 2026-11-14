@@ -1,0 +1,30 @@
+[project]
+name = "bread-assistant"
+version = "0.1.0"
+description = "Local-first sourdough bake guidance for Home Assistant"
+requires-python = ">=3.14.2"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-q --strict-markers"
+
+[tool.ruff]
+target-version = "py314"
+line-length = 88
+extend-exclude = [".tools"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "ASYNC"]
+
+[tool.mypy]
+python_version = "3.14"
+files = ["custom_components/bread_assistant/models.py", "custom_components/bread_assistant/scheduler.py", "custom_components/bread_assistant/recipe_catalog.py", "custom_components/bread_assistant/starter.py", "custom_components/bread_assistant/serialization.py", "custom_components/bread_assistant/live_activities.py"]
+strict = true
+follow_imports = "silent"
+
+[[tool.mypy.overrides]]
+module = ["homeassistant.*", "voluptuous.*"]
+follow_imports = "skip"
+ignore_missing_imports = true

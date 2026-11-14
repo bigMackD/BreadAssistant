@@ -1,0 +1,90 @@
+{
+  "title": "Bread Assistant",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Bread Assistant",
+        "description": "Guide one bake locally. A phone is optional.",
+        "data": {
+          "notify_target": "Mobile notification action",
+          "notifications_enabled": "Enable reminders",
+          "reminder_minutes": "Repeat reminder interval (minutes)",
+          "dashboard_path": "Dashboard path",
+          "time_format": "Time format",
+          "live_activities_enabled": "Enable Live Activities (iOS)",
+          "live_activity_notify_target": "iPhone notification action for Live Activities"
+        }
+      }
+    },
+    "error": {
+      "notify_missing": "The selected notification action is unavailable."
+    },
+    "abort": {
+      "already_configured": "Bread Assistant is already configured."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Bread Assistant preferences",
+        "data": {
+          "notify_target": "Mobile notification action",
+          "notifications_enabled": "Enable reminders",
+          "reminder_minutes": "Repeat reminder interval (minutes)",
+          "dashboard_path": "Dashboard path",
+          "time_format": "Time format",
+          "live_activities_enabled": "Enable Live Activities (iOS)",
+          "live_activity_notify_target": "iPhone notification action for Live Activities"
+        }
+      }
+    },
+    "error": {
+      "notify_missing": "The selected notification action is unavailable."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "status": {
+        "name": "Status"
+      },
+      "current_step": {
+        "name": "Current step"
+      },
+      "next_step": {
+        "name": "Next step"
+      },
+      "next_due": {
+        "name": "Next due"
+      },
+      "progress": {
+        "name": "Progress"
+      },
+      "overdue_count": {
+        "name": "Overdue count"
+      }
+    },
+    "button": {
+      "start": {
+        "name": "Start"
+      },
+      "start_prepared": {
+        "name": "Start with prepared starter"
+      },
+      "complete_current": {
+        "name": "Complete current"
+      },
+      "snooze_current": {
+        "name": "Snooze current"
+      },
+      "pause": {
+        "name": "Pause"
+      },
+      "resume": {
+        "name": "Resume"
+      },
+      "cancel": {
+        "name": "Cancel"
+      }
+    }
+  }
+}
