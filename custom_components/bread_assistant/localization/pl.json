@@ -27,7 +27,8 @@
     "last_sync": "Ostatnia synchronizacja",
     "none": "brak",
     "unlinked": "niepowiązany",
-    "no_errors": "Brak błędów dostarczania powiadomień."
+    "no_errors": "Brak błędów dostarczania powiadomień.",
+    "when_to_confirm": "Kiedy potwierdzić"
   },
   "notifications": {
     "done": "Wykonano: {title}",
@@ -64,89 +65,132 @@
         "steps": {
           "feed_starter": {
             "title": "Dokarm zakwas",
-            "instructions": "Połącz składniki do dokarmienia zakwasu. Potwierdź wykonanie po dokarmieniu; gotowość potwierdzisz osobno."
+            "instructions": "DOKARMIENIE ZAKWASU: Do uśpionego zakwasu z lodówki dodać obydwie mąki (po 40 g) oraz wodę (80 g), wymieszać do połączenia. Przełożyć do wysokiego przeźroczystego naczynia, poziom zakwasu zaznaczyć gumką recepturą. Naczynie nakryć folią spożywczą, ponakłuwać widelcem i pozostawić w temperaturze pokojowej na kilka godzin, aż zakwas co najmniej dwukrotnie zwiększy swoją objętość, będzie wyraźnie napowietrzony i wybrzuszony na powierzchni (u mnie trwało to 4-5 h, zazwyczaj zostawiam zakwas na lodówce lub na szafce w kuchni tuż pod sufitem- tam mam najcieplej). Jeśli zakwas wyrósł, a potem się zapadł, znaczy to, że wyrastał za długo i przegapiliśmy moment, gdy był u szczytu formy. Następnym razem należy skrócić czas wyrastania i być bardziej uważnym. Jeśli natomiast zakwas ledwo co uniósł się ponad gumkę recepturkę, to powinno być to dla nas sygnałem, że coś jest nie tak- przyczyny trzeba szukać w samym zakwasie (starterze) lub w warunkach panujących w pomieszczeniu (jeśli pieczecie chleb zimną, to w kuchni jest dużo niższa temperatura niż latem, więc możliwe, że zakwas będzie dojrzewał dłużej). Gumka recepturka i przeźroczyste naczynie ułatwiają ocenić aktywność i dojrzałość zakwasu.",
+            "summary": "Połącz 40 g zakwasu z lodówki, po 40 g obu mąk i 80 g wody. Zaznacz poziom w przezroczystym naczyniu i odstaw pod przykryciem.",
+            "confirmation_hint": "Potwierdź po dokarmieniu i odstawieniu zakwasu. Dojrzałość potwierdzisz osobno; 4–5 godzin to czas orientacyjny."
           },
           "autolyse_start": {
             "title": "Rozpocznij autolizę",
-            "instructions": "Wymieszaj mąkę i wodę na ciasto, aż znikną suche miejsca. Przykryj i odstaw; zakwas i sól dodasz później."
+            "instructions": "AUTOLIZA: do większej miski wsypać mąkę pszenną chlebową (350 g) i wlać wodę (235 g). Składniki wymieszać wilgotną dłonią tylko do połączenia (przez około minutę). Miskę nakryć folią spożywczą, pozostawić w temperaturze pokojowej na 60 minut. Autolizę (wymieszanie mąki z wodą) należy przeprowadzić w czasie, gdy dokarmiony zakwas dochodzi do szczytowej formy (gdy już prawie dwukrotnie zwiększył objętość i jest mocno napowietrzony).",
+            "summary": "Wymieszaj 350 g mąki chlebowej z 235 g wody. Przykryj i pozostaw na 60 minut, gdy zakwas zbliża się do szczytu aktywności.",
+            "confirmation_hint": "Potwierdź po wymieszaniu i przykryciu. Zakończenie godzinnego odpoczynku potwierdzisz w osobnym etapie; oceń też dojrzałość zakwasu."
           },
           "starter_ready": {
             "title": "Potwierdź gotowość zakwasu",
-            "instructions": "Samodzielnie oceń zakwas. Kontynuuj tylko, gdy jest aktywny i nadaje się do pieczenia; szacowane cztery godziny nie potwierdzają gotowości."
+            "instructions": "DOKARMIENIE ZAKWASU: Do uśpionego zakwasu z lodówki dodać obydwie mąki (po 40 g) oraz wodę (80 g), wymieszać do połączenia. Przełożyć do wysokiego przeźroczystego naczynia, poziom zakwasu zaznaczyć gumką recepturą. Naczynie nakryć folią spożywczą, ponakłuwać widelcem i pozostawić w temperaturze pokojowej na kilka godzin, aż zakwas co najmniej dwukrotnie zwiększy swoją objętość, będzie wyraźnie napowietrzony i wybrzuszony na powierzchni (u mnie trwało to 4-5 h, zazwyczaj zostawiam zakwas na lodówce lub na szafce w kuchni tuż pod sufitem- tam mam najcieplej). Jeśli zakwas wyrósł, a potem się zapadł, znaczy to, że wyrastał za długo i przegapiliśmy moment, gdy był u szczytu formy. Następnym razem należy skrócić czas wyrastania i być bardziej uważnym. Jeśli natomiast zakwas ledwo co uniósł się ponad gumkę recepturkę, to powinno być to dla nas sygnałem, że coś jest nie tak- przyczyny trzeba szukać w samym zakwasie (starterze) lub w warunkach panujących w pomieszczeniu (jeśli pieczecie chleb zimną, to w kuchni jest dużo niższa temperatura niż latem, więc możliwe, że zakwas będzie dojrzewał dłużej). Gumka recepturka i przeźroczyste naczynie ułatwiają ocenić aktywność i dojrzałość zakwasu.",
+            "summary": "Oceń wzrost względem gumki: zakwas powinien co najmniej podwoić objętość, być napowietrzony i wypukły na powierzchni.",
+            "confirmation_hint": "Potwierdź wyłącznie po ocenie aktywności zakwasu. Upływ szacowanego czasu nie potwierdza jego dojrzałości."
           },
           "autolyse_complete": {
             "title": "Potwierdź zakończenie autolizy",
-            "instructions": "Potwierdź, że ciasto odpoczywało przez godzinę, aby mąka wchłonęła wodę."
+            "instructions": "AUTOLIZA: do większej miski wsypać mąkę pszenną chlebową (350 g) i wlać wodę (235 g). Składniki wymieszać wilgotną dłonią tylko do połączenia (przez około minutę). Miskę nakryć folią spożywczą, pozostawić w temperaturze pokojowej na 60 minut. Autolizę (wymieszanie mąki z wodą) należy przeprowadzić w czasie, gdy dokarmiony zakwas dochodzi do szczytowej formy (gdy już prawie dwukrotnie zwiększył objętość i jest mocno napowietrzony).",
+            "summary": "Sprawdź, czy minęło 60 minut odpoczynku mąki z wodą. Do wyrabiania potrzebny jest też gotowy zakwas.",
+            "confirmation_hint": "Potwierdź po godzinie odpoczynku ciasta. Wyrabianie wymaga również osobnego potwierdzenia gotowości zakwasu."
           },
           "knead_start": {
             "title": "Rozpocznij wyrabianie",
-            "instructions": "Dodaj aktywny zakwas i sól do ciasta po autolizie. Wyrabiaj do równomiernego połączenia składników."
+            "instructions": "WYRABIANIE: po godzinie autolizy, gdy dotkniecie ciasta, poczujecie, jak diametralnie się zmieniło! Jego plastyczność znacznie wzrosła, mimo iż nie zadziałaliśmy przez tę godzinę ani razu swoją siłą fizyczną wyrabiając czy zagniatając ciasto. To jest właśnie fenomen autolizy. Warto pamiętać o tym etapie. Miskę z ciastem postawić na wadze. Odważyć zakwas (120 g) wylewając go na ciasto. Na zakwas rozsypać sól (10 g).\n\nZwilżając delikatnie dłonie w wodzie, wyrabiać ciasto ręcznie przez około 5 minut rozciągając, składając i ściskając ciasto metodą szczypcową. Rozwijamy w ten sposób siatkę glutenową, a ciasto z minuty na minutę staje się bardziej elastyczne, silne i przyjemne w dotyku. Końcowa temperatura ciasta powinna wynosić 24-27 s.C. Jeśli jest poniżej 24 st.C, to następnym razem należy użyć cieplejszej wody (analogicznie, jeśli powyżej 27 st.C- kolejnym razem wziąć trochę zimniejszą wodę).",
+            "summary": "Dodaj 120 g aktywnego zakwasu i 10 g soli. Wyrabiaj wilgotnymi dłońmi przez około 5 minut; docelowa temperatura ciasta to 24–27 °C.",
+            "confirmation_hint": "Potwierdź rozpoczęcie wyrabiania. Kolejny etap zapisze początek fermentacji po wyrabianiu; jego termin jest za około 5 minut."
           },
           "bulk_start": {
             "title": "Rozpocznij fermentację wstępną",
-            "instructions": "Po wyrabianiu przełóż ciasto do lekko naoliwionego pojemnika i przykryj. Potwierdź wykonanie, aby zapisać rzeczywisty początek fermentacji wstępnej."
+            "instructions": "Po wyrobieniu przełożyć ciasto do czystej natłuszczonej oliwą dużej miski lub do naczynia (najlepiej o szerokiej podstawie, wtedy składanie ciasta będzie prostsze i dokładniejsze). Nakryć folią spożywczą i pozostawić na około 4-5 godzin. Czas uzależniony jest od wielu czynników, należy go kontrolować, odsyłam w tym momencie do wstępu tego wpisu.",
+            "summary": "Przełóż wyrobione ciasto do czystego, naoliwionego naczynia o szerokiej podstawie i przykryj folią.",
+            "confirmation_hint": "Potwierdź po przełożeniu wyrobionego ciasta do naczynia. Od tego rzeczywistego czasu liczone są terminy obu składań."
           },
           "fold_1": {
             "title": "Pierwsze rozciąganie i składanie",
-            "instructions": "Wilgotnymi dłońmi delikatnie rozciągnij i złóż ciasto. Ponownie przykryj."
+            "instructions": "SKŁADANIE: ciasto wymaga dwukrotnego składania w odstępie 30 minut. Składamy po pierwszych 30 minutach wyrastania i po 60 minutach (przykładowo, jeśli ciasto wyrasta od 14:00, to składamy o 14:30 i 15:00). Składanie to niezwykle ważny etap, który wzmacnia siatkę glutenową i przyczynia się do końcowego kształtu bochenka (dzięki składaniu unikniemy płaskiego, niewyrośniętego chleba). Jak składać? Dłonie zwilżyć w wodzie, chwycić brzeg ciasta, naciągnąć od dołu do góry i nałożyć na wierzch po przeciwnej stronie (patrz ilustracja poniżej). To samo zrobić z trzech pozostałych stron obracając miskę za każdym razem o 90 stopni. Po dwóch składaniach zostawić ciasto (miska przykryta folią) na dalsze wyrastanie (jeszcze na około 3-4 godziny).",
+            "summary": "Po 30 minutach fermentacji wykonaj pierwsze składanie: wilgotnymi dłońmi rozciągnij i złóż ciasto z czterech stron.",
+            "confirmation_hint": "Potwierdź po pierwszym składaniu. Termin drugiego pozostaje liczony od początku fermentacji, a nie od tej czynności."
           },
           "fold_2": {
             "title": "Drugie rozciąganie i składanie",
-            "instructions": "Powtórz rozciąganie i składanie. Termin przypada godzinę po rozpoczęciu fermentacji wstępnej, niezależnie od czasu pierwszego składania."
+            "instructions": "SKŁADANIE: ciasto wymaga dwukrotnego składania w odstępie 30 minut. Składamy po pierwszych 30 minutach wyrastania i po 60 minutach (przykładowo, jeśli ciasto wyrasta od 14:00, to składamy o 14:30 i 15:00). Składanie to niezwykle ważny etap, który wzmacnia siatkę glutenową i przyczynia się do końcowego kształtu bochenka (dzięki składaniu unikniemy płaskiego, niewyrośniętego chleba). Jak składać? Dłonie zwilżyć w wodzie, chwycić brzeg ciasta, naciągnąć od dołu do góry i nałożyć na wierzch po przeciwnej stronie (patrz ilustracja poniżej). To samo zrobić z trzech pozostałych stron obracając miskę za każdym razem o 90 stopni. Po dwóch składaniach zostawić ciasto (miska przykryta folią) na dalsze wyrastanie (jeszcze na około 3-4 godziny).",
+            "summary": "Po 60 minutach od początku fermentacji wykonaj drugie składanie z czterech stron. Przykryj i pozostaw do dalszego wyrastania.",
+            "confirmation_hint": "Potwierdź po drugim składaniu. Następnie pozostaw przykryte ciasto do dalszego wyrastania."
           },
           "bulk_ready": {
             "title": "Potwierdź koniec fermentacji wstępnej",
-            "instructions": "Oceń przyrost objętości i napowietrzenie ciasta. W razie potrzeby poczekaj dłużej; potwierdź dopiero po własnej ocenie."
+            "instructions": "Po wyrobieniu przełożyć ciasto do czystej natłuszczonej oliwą dużej miski lub do naczynia (najlepiej o szerokiej podstawie, wtedy składanie ciasta będzie prostsze i dokładniejsze). Nakryć folią spożywczą i pozostawić na około 4-5 godzin. Czas uzależniony jest od wielu czynników, należy go kontrolować, odsyłam w tym momencie do wstępu tego wpisu.\n\nSKŁADANIE: ciasto wymaga dwukrotnego składania w odstępie 30 minut. Składamy po pierwszych 30 minutach wyrastania i po 60 minutach (przykładowo, jeśli ciasto wyrasta od 14:00, to składamy o 14:30 i 15:00). Składanie to niezwykle ważny etap, który wzmacnia siatkę glutenową i przyczynia się do końcowego kształtu bochenka (dzięki składaniu unikniemy płaskiego, niewyrośniętego chleba). Jak składać? Dłonie zwilżyć w wodzie, chwycić brzeg ciasta, naciągnąć od dołu do góry i nałożyć na wierzch po przeciwnej stronie (patrz ilustracja poniżej). To samo zrobić z trzech pozostałych stron obracając miskę za każdym razem o 90 stopni. Po dwóch składaniach zostawić ciasto (miska przykryta folią) na dalsze wyrastanie (jeszcze na około 3-4 godziny).",
+            "summary": "Samodzielnie oceń zakończenie fermentacji. Przepis przewiduje około 4–5 godzin łącznie, w tym dalsze wyrastanie po dwóch składaniach.",
+            "confirmation_hint": "Potwierdź dopiero po własnej ocenie ciasta. Jeśli potrzebuje więcej czasu, poczekaj; przypomnienie nie kończy fermentacji automatycznie."
           },
           "preshape": {
             "title": "Formowanie wstępne",
-            "instructions": "Delikatnie wyłóż ciasto i uformuj luźną kulę. Potwierdź wykonanie, aby rozpocząć odpoczynek na blacie."
+            "instructions": "FORMOWANIE WSTĘPNE: etap ten to zaledwie kilka zdecydowanych ruchów. Wyjąć ciasto z miski na blat (mąka nie jest potrzebna), skrobką uformować w kulę podważając ciasto od spodu i zaokrąglając. Oprószyć mąką, nakryć folią spożywczą lub foliowym woreczkiem i pozostawić na 10 minut.\n\nW tym czasie przygotować koszyczek rozrostowy do chleba. Na tę porcję ciasta używam podłużnego koszyka o dolnych wymiarach 21×9 cm i wysokości 6 cm. Dokładnie oprószyć go mąką ryżową tak, by każdy zakamarek koszyka został nią pokryty. Na końcu palcem przejechać po rantach, dociskając jeszcze mąkę w szczeliny. Źle przygotowany koszyk skutkuje przywarciem ciasta, a tym samym późniejszymi problemami z wyjęciem bochenka i niepotrzebnym odgazowywaniem ciasta.",
+            "summary": "Na nieoprószonym blacie uformuj skrobką kulę. Oprósz, przykryj i odstaw na 10 minut; przygotuj koszyk z mąką ryżową.",
+            "confirmation_hint": "Potwierdź po uformowaniu i przykryciu kuli. Od tego momentu liczony jest 10-minutowy odpoczynek; przygotuj w tym czasie koszyk."
           },
           "final_shape": {
             "title": "Formowanie końcowe",
-            "instructions": "Po dziesięciu minutach odpoczynku na blacie uformuj bochenek, delikatnie napinając powierzchnię ciasta."
+            "instructions": "FORMOWANIE KOŃCOWE: ciasto oprószyć z góry mąką, obok obsypać mąką również blat. Ciasto odwrócić skrobką na omączoną powierzchnię, delikatnie rozciągnąć dłońmi. 1/3 ciasta złożyć do środka, to samo zrobić z naprzeciwległym brzegiem kładąc go na złożoną część. Krótszy bok powstałego prostokąta chwycić, unieść i zwinąć jak w roladę formując owalny bochenek (patrz zdjęcia poniżej). Przydadzą się tu delikatne dłonie i precyzja. Kilka zdecydowanych ruchów i gotowe. Jest to ważny etap, jeśli będziemy formować chleb z dużą siłą, to możemy go odgazować i zapomnieć o dużych dziurach w miąższu (ciasto po prostu straci swą siłę).\n\nPonownie sięgnąć po skrobkę, podważając odwrócić do góry nogami, wziąć ciasto w dłonie i przenieść do koszyczka (złączeniem do góry). Palcami skleić miejsce złączenia. Ciasto posypać mąką pszenną, również w miejscach przylegania do koszyka.",
+            "summary": "Delikatnie złóż ciasto do środka, zwiń w owalny bochenek i przenieś do koszyka złączeniem do góry. Sklej złączenie i oprósz mąką.",
+            "confirmation_hint": "Potwierdź po ostatecznym uformowaniu i przeniesieniu bochenka do koszyka. Wstawienie do lodówki zapiszesz w kolejnym etapie."
           },
           "cold_proof_start": {
             "title": "Wstaw uformowane ciasto do lodówki",
-            "instructions": "Ułóż bochenek łączeniem do góry w oprószonym mąką koszyku, przykryj i wstaw do lodówki. Potwierdź wykonanie po wstawieniu do lodówki."
+            "instructions": "DOJRZEWANIE W LODÓWCE: Koszyk włożyć do foliowej torebki lub woreczka, szczelnie zamknąć, np. wspomagając się klipsem. To ważne, w innym wypadku ciasto może obeschnąć. Często wkładam do foliowego woreczka i jeszcze dodatkowo do reklamówki. Koszyk z ciastem umieścić w lodówce na około 12 godzin (ponownie zalecam przeczytanie wstępu tego wpisu, gdzie wyjaśniam, jak istotnym elementem pieczenia chleba jest właśnie temperatura, która wpływa na czas wyrastania, garowania i dojrzewania naszego pieczywa. Czas ten może się wydłużyć lub skrócić. Kontrolujcie).",
+            "summary": "Szczelnie zapakuj koszyk w woreczek i wstaw do lodówki. Około 12 godzin to wskazówka; czas zależy od temperatury i ciasta.",
+            "confirmation_hint": "Potwierdź, gdy szczelnie zapakowany koszyk znajdzie się w lodówce. Gotowość ciasta do pieczenia wymaga późniejszej własnej oceny."
           },
           "preheat_oven": {
             "title": "Rozgrzej piekarnik i garnek żeliwny",
-            "instructions": "Rozgrzej piekarnik i przykryty garnek żeliwny do 250 °C. Używaj suchych rękawic kuchennych; gorące żeliwo grozi poważnym oparzeniem."
+            "instructions": "ROZGRZEWANIE PIEKARNIKA I GARNKA: Piekarnik wraz z żeliwnym garem rozgrzać do 250 st.C. Garnek musi być naprawdę dobrze rozgrzany! Potrwa to co najmniej 30 minut.",
+            "summary": "Rozgrzej piekarnik razem z garnkiem żeliwnym do 250 °C. Przepis wymaga co najmniej 30 minut rozgrzewania.",
+            "confirmation_hint": "Potwierdź rozpoczęcie nagrzewania. Rozgrzanie piekarnika i garnka sprawdzisz i potwierdzisz osobno przed nacinaniem."
           },
           "dough_ready": {
             "title": "Potwierdź gotowość ciasta",
-            "instructions": "Oceń bochenek po wyrastaniu w lodówce i potwierdź gotowość. Dwanaście godzin to wskazówka, a nie automatyczne potwierdzenie."
+            "instructions": "OCENA GOTOWOŚCI CIASTA: by sprawdzić, czy chleb jest już gotowy do pieczenia, wystarczy omączonym palcem ucisnąć ciasto na głębokość około 1 cm:\n\nciasto szybko powróciło do pierwotnej postaci, ślad ucisku nie jest widoczny– ciasto potrzebuje jeszcze czasu na garowanie, nie jest dostatecznie wyrośnięte.\n\nciasto stopniowo, ale niecałkowicie powraca do poprzedniego kształtu– chleb jest gotowy do pieczenia, nie jest ani przerośnięty, ani niedorozwinięty, Zachował wystarczająco siły, by w piekarniku „wystrzelić” jeszcze do góry i pięknie się otworzyć (tzw. oven spring)\n\nwgłębienie w cieście pozostało– ciasto wyrastało za długo, jest przerośnięte, może to skutkować opadnięciem bochenka po wyjęciu z koszyczka. Następnym razem należy skrócić czas wyrastania. Na tym etapie nie należy oczywiście wpaść w panikę lub w rozgoryczenie wyrzucając ciasto do kosza… Należy kontynuować pracę z bochenkiem, jakby nic się nie stało, a nuż nadmierne wyrastanie nie wpłynie niekorzystnie na końcowy kształt i strukturę chleba. Zapewniam, że i tak będzie smaczny! ;).",
+            "summary": "Omączonym palcem wciśnij ciasto na około 1 cm. Oceń szybkość i stopień powrotu wgłębienia według trzech wariantów z przepisu.",
+            "confirmation_hint": "Potwierdź po własnej ocenie ciasta. Dwanaście godzin to wskazówka, nie automatyczny test gotowości."
           },
           "oven_ready": {
             "title": "Potwierdź rozgrzanie piekarnika",
-            "instructions": "Sprawdź, czy piekarnik i garnek żeliwny są w pełni rozgrzane. Garnek o temperaturze 250 °C chwytaj suchymi rękawicami odpornymi na ciepło."
+            "instructions": "ROZGRZEWANIE PIEKARNIKA I GARNKA: Piekarnik wraz z żeliwnym garem rozgrzać do 250 st.C. Garnek musi być naprawdę dobrze rozgrzany! Potrwa to co najmniej 30 minut.",
+            "summary": "Sprawdź, czy piekarnik i garnek są naprawdę dobrze rozgrzane do 250 °C. Używaj suchych rękawic odpornych na ciepło.",
+            "confirmation_hint": "Potwierdź po sprawdzeniu rozgrzania piekarnika i garnka. Samo przypomnienie nie jest pomiarem temperatury."
           },
           "score_loaf": {
             "title": "Natnij bochenek",
-            "instructions": "Wyłóż bochenek na papier do pieczenia i ostrożnie natnij przed włożeniem. Trzymaj dłonie z dala od gorącego garnka."
+            "instructions": "NACINANIE: do tego kroku należy przystąpić dopiero wtedy, gdy garnek w piecu jest już rozgrzany. Koszyczek z ciastem wyjąć z lodówki, odpakować z worków. Na wierzch koszyka położyć kawałek papieru do pieczenia, na papier deskę lub łopatkę do pizzy. Szybkim ruchem odwrócić piramidę do góry nogami tak, by bochenek znalazł się na deseczce z papierem. Zdjąć koszyk. Żyletką naciąć ciasto. Na początku swojej drogi z pieczeniem domowego chleba składanego na zakwasie polecam nacięcie podstawowe, dzięki któremu uzyskamy to efektowne otwarcie z charakterystycznym uszkiem. W tym celu żyletkę należy trzymać pod kątem ok. 30 stopni względem płaszczyzny poziomej. Naciąć delikatnie po lewej bądź po prawej stronie od góry do dołu jednym dynamicznym ruchem. Wraz z doświadczeniem w pieczeniu, można eksperymentować w nacinaniu, tworząc coraz to piękniejsze i przykuwające oko nacięcia. Pamiętajcie, że nie robimy tego tylko dla końcowego wyglądu skórki. Nienacięty chleb popęka w niekontrolowany sposób w słabych miejscach skórki, chleb może też krzywo urosnąć i nie być tak pulchny.",
+            "summary": "Wyłóż zimny bochenek na papier, używając deski lub łopatki. Natnij żyletką pod kątem około 30°, gdy garnek jest już rozgrzany.",
+            "confirmation_hint": "Potwierdź po nacięciu bochenka. Umieszczenie go pod przykryciem w piekarniku zapiszesz w kolejnym etapie."
           },
           "bake_start": {
             "title": "Rozpocznij pieczenie pod przykryciem",
-            "instructions": "Ostrożnie włóż bochenek do gorącego garnka. Przykryj i piecz w 250 °C przez 20 minut. Potwierdź wykonanie po włożeniu."
+            "instructions": "PIECZENIE: na początku napiszę- uważajcie! Ten etap często kończy się niechcianymi poparzeniami. Miejcie pod ręką grube rękawice, zobaczcie, czy nie macie na sobie żadnych łańcuszków, czy bransoletek, które nagrzewają się w tempie błyskawicznym! Pracujemy z bardzo gorącym piekarnikiem i garnkiem. Należy zachować SZCZEGÓLNĄ ostrożność. Od jakiegoś czasu, by zminimalizować poparzenia i usprawnić sobie pracę, nie piekę tego chleba bezpośrednio w garze przykrywając pokrywką. Większość prób przełożenia chleba z deseczki do gara (lub bezpośrednio z koszyczka do gara i nacinanie w garze) kończyło się zdeformowanym bochenkiem i oparzonymi rękami. Dlatego też aktualnie zsuwam chleb wraz z papierem z deski/łopatki do pizzy na rozgrzaną blachę z wyposażenia piekarnika i nakrywam rozgrzanym garem (pokrywka jest mi niepotrzebna). Efekt końcowy jest taki sam jak przy pieczeniu bezpośrednio w garze, a dla mnie o wiele mniej stresu, mniej poparzeń i mniej niekształtnych bochenków ;). Sami zdecydujcie, który sposób najbardziej Wam odpowiada. Wracając…. rozgrzany gar wyjąc z pieca przy pomocy grubych rękawic. Nacięty chleb przełożyć z papierem do gorącego gara (lub na blachę przykrywając garem). Piec pod przykryciem przez 20 minut w 250 st.C (zalecam umieścić w piekarniku termometr, dzięki któremu będziecie mogli kontrolować temperaturę). Po 20 minutach zdjąć pokrywkę (lub gar, jeśli pieczecie na blaszce), zmniejszając temperaturę do 230 st.C i piec jeszcze przez 15-20 minut lub dłużej do uzyskania takiego koloru skórki, który będzie Was satysfakcjonować. Niektórzy lubią złociste bochenki, inni wręcz przeciwnie- ciemnobrązowa, a nawet przypalona skóra to to, czego oczekują od prawdziwego bochenka. Gusta mamy różne, ale jedno jest pewne, chleb musi być dopieczony, by po wystudzeniu skórka pozostała chrupiąca, a nie gumowa…",
+            "summary": "Włóż nacięty bochenek do gorącego garnka lub na gorącą blachę pod odwrócony garnek. Piecz pod przykryciem 20 minut w 250 °C.",
+            "confirmation_hint": "Potwierdź po umieszczeniu bochenka w piekarniku pod przykryciem. Od tego momentu liczony jest 20-minutowy etap pieczenia."
           },
           "remove_lid": {
             "title": "Zdejmij pokrywkę; piecz bez przykrycia",
-            "instructions": "Suchymi rękawicami kuchennymi zdejmij gorącą pokrywkę. Zmniejsz temperaturę do 230 °C i piecz bez przykrycia przez 15–20 minut."
+            "instructions": "PIECZENIE: na początku napiszę- uważajcie! Ten etap często kończy się niechcianymi poparzeniami. Miejcie pod ręką grube rękawice, zobaczcie, czy nie macie na sobie żadnych łańcuszków, czy bransoletek, które nagrzewają się w tempie błyskawicznym! Pracujemy z bardzo gorącym piekarnikiem i garnkiem. Należy zachować SZCZEGÓLNĄ ostrożność. Od jakiegoś czasu, by zminimalizować poparzenia i usprawnić sobie pracę, nie piekę tego chleba bezpośrednio w garze przykrywając pokrywką. Większość prób przełożenia chleba z deseczki do gara (lub bezpośrednio z koszyczka do gara i nacinanie w garze) kończyło się zdeformowanym bochenkiem i oparzonymi rękami. Dlatego też aktualnie zsuwam chleb wraz z papierem z deski/łopatki do pizzy na rozgrzaną blachę z wyposażenia piekarnika i nakrywam rozgrzanym garem (pokrywka jest mi niepotrzebna). Efekt końcowy jest taki sam jak przy pieczeniu bezpośrednio w garze, a dla mnie o wiele mniej stresu, mniej poparzeń i mniej niekształtnych bochenków ;). Sami zdecydujcie, który sposób najbardziej Wam odpowiada. Wracając…. rozgrzany gar wyjąc z pieca przy pomocy grubych rękawic. Nacięty chleb przełożyć z papierem do gorącego gara (lub na blachę przykrywając garem). Piec pod przykryciem przez 20 minut w 250 st.C (zalecam umieścić w piekarniku termometr, dzięki któremu będziecie mogli kontrolować temperaturę). Po 20 minutach zdjąć pokrywkę (lub gar, jeśli pieczecie na blaszce), zmniejszając temperaturę do 230 st.C i piec jeszcze przez 15-20 minut lub dłużej do uzyskania takiego koloru skórki, który będzie Was satysfakcjonować. Niektórzy lubią złociste bochenki, inni wręcz przeciwnie- ciemnobrązowa, a nawet przypalona skóra to to, czego oczekują od prawdziwego bochenka. Gusta mamy różne, ale jedno jest pewne, chleb musi być dopieczony, by po wystudzeniu skórka pozostała chrupiąca, a nie gumowa…",
+            "summary": "Po 20 minutach ostrożnie zdejmij pokrywkę lub przykrywający garnek. Zmniejsz temperaturę do 230 °C i piecz dalej bez przykrycia.",
+            "confirmation_hint": "Potwierdź po zdjęciu pokrywki lub przykrywającego garnka i obniżeniu temperatury. Przypomnienie o wyjęciu nastąpi po 20 minutach; przepis podaje 15–20 minut lub dłużej według wypieczenia."
           },
           "bake_finish": {
             "title": "Wyjmij bochenek",
-            "instructions": "Sprawdź bochenek po 15–20 minutach pieczenia bez przykrycia (termin wynosi 20 minut). Używając rękawic kuchennych, przełóż go na kratkę."
+            "instructions": "PIECZENIE: na początku napiszę- uważajcie! Ten etap często kończy się niechcianymi poparzeniami. Miejcie pod ręką grube rękawice, zobaczcie, czy nie macie na sobie żadnych łańcuszków, czy bransoletek, które nagrzewają się w tempie błyskawicznym! Pracujemy z bardzo gorącym piekarnikiem i garnkiem. Należy zachować SZCZEGÓLNĄ ostrożność. Od jakiegoś czasu, by zminimalizować poparzenia i usprawnić sobie pracę, nie piekę tego chleba bezpośrednio w garze przykrywając pokrywką. Większość prób przełożenia chleba z deseczki do gara (lub bezpośrednio z koszyczka do gara i nacinanie w garze) kończyło się zdeformowanym bochenkiem i oparzonymi rękami. Dlatego też aktualnie zsuwam chleb wraz z papierem z deski/łopatki do pizzy na rozgrzaną blachę z wyposażenia piekarnika i nakrywam rozgrzanym garem (pokrywka jest mi niepotrzebna). Efekt końcowy jest taki sam jak przy pieczeniu bezpośrednio w garze, a dla mnie o wiele mniej stresu, mniej poparzeń i mniej niekształtnych bochenków ;). Sami zdecydujcie, który sposób najbardziej Wam odpowiada. Wracając…. rozgrzany gar wyjąc z pieca przy pomocy grubych rękawic. Nacięty chleb przełożyć z papierem do gorącego gara (lub na blachę przykrywając garem). Piec pod przykryciem przez 20 minut w 250 st.C (zalecam umieścić w piekarniku termometr, dzięki któremu będziecie mogli kontrolować temperaturę). Po 20 minutach zdjąć pokrywkę (lub gar, jeśli pieczecie na blaszce), zmniejszając temperaturę do 230 st.C i piec jeszcze przez 15-20 minut lub dłużej do uzyskania takiego koloru skórki, który będzie Was satysfakcjonować. Niektórzy lubią złociste bochenki, inni wręcz przeciwnie- ciemnobrązowa, a nawet przypalona skóra to to, czego oczekują od prawdziwego bochenka. Gusta mamy różne, ale jedno jest pewne, chleb musi być dopieczony, by po wystudzeniu skórka pozostała chrupiąca, a nie gumowa…\n\nSTUDZENIE: upieczony chleb przenieść na kratkę do studzenia. Wiem, że pisząc o krojeniu dopiero, gdy chleb się wystudzi jest strzałem w kolano i raczej nikt nie weźmie sobie tego do serca, ale uzbrójcie się w cierpliwość i odczekajcie, choć te 20 minut ;). W tym czasie możecie sobie popatrzeć na Wasz cudowny bochenek i posłuchać, jak skórka apetycznie chrupie. Wyjmijcie masło z lodówki, by zdążyło się delikatnie ocieplić, przyszykujcie ulubione pasty, oliwę, warzywa. Zwołajcie całą rodzinę i… zasiądźcie do stołu delektując się smakiem tego doskonałego chleba. To jest Wasz poranek!",
+            "summary": "Oceń wypieczenie i kolor skórki po 15–20 minutach bez przykrycia; w razie potrzeby piecz dłużej. Przenieś bochenek na kratkę.",
+            "confirmation_hint": "Potwierdź dopiero po ocenie wypieczenia i wyjęciu chleba. Przypomnienie nie oznacza automatycznie gotowego bochenka."
           },
           "cooling_start": {
             "title": "Rozpocznij studzenie",
-            "instructions": "Umieść bochenek na kratce, aby powietrze docierało od spodu. Odstaw gorący garnek i pokrywkę w bezpieczne miejsce."
+            "instructions": "STUDZENIE: upieczony chleb przenieść na kratkę do studzenia. Wiem, że pisząc o krojeniu dopiero, gdy chleb się wystudzi jest strzałem w kolano i raczej nikt nie weźmie sobie tego do serca, ale uzbrójcie się w cierpliwość i odczekajcie, choć te 20 minut ;). W tym czasie możecie sobie popatrzeć na Wasz cudowny bochenek i posłuchać, jak skórka apetycznie chrupie. Wyjmijcie masło z lodówki, by zdążyło się delikatnie ocieplić, przyszykujcie ulubione pasty, oliwę, warzywa. Zwołajcie całą rodzinę i… zasiądźcie do stołu delektując się smakiem tego doskonałego chleba. To jest Wasz poranek!",
+            "summary": "Przenieś chleb na kratkę do studzenia. Odstaw gorące naczynia bezpiecznie i zaczekaj z krojeniem.",
+            "confirmation_hint": "Potwierdź po odłożeniu bochenka na kratkę. Aplikacja planuje kontrolę ostygnięcia po 2 godzinach; to ustawienie przypomnienia, nie czas z cytowanego fragmentu przepisu."
           },
           "cooling_check": {
             "title": "Sprawdź ostygnięcie przed krojeniem",
-            "instructions": "Przed krojeniem pozwól miękiszowi ostygnąć. Samodzielnie sprawdź bochenek; przypomnienie po dwóch godzinach jest orientacyjne."
+            "instructions": "STUDZENIE: upieczony chleb przenieść na kratkę do studzenia. Wiem, że pisząc o krojeniu dopiero, gdy chleb się wystudzi jest strzałem w kolano i raczej nikt nie weźmie sobie tego do serca, ale uzbrójcie się w cierpliwość i odczekajcie, choć te 20 minut ;). W tym czasie możecie sobie popatrzeć na Wasz cudowny bochenek i posłuchać, jak skórka apetycznie chrupie. Wyjmijcie masło z lodówki, by zdążyło się delikatnie ocieplić, przyszykujcie ulubione pasty, oliwę, warzywa. Zwołajcie całą rodzinę i… zasiądźcie do stołu delektując się smakiem tego doskonałego chleba. To jest Wasz poranek!",
+            "summary": "Samodzielnie oceń ostygnięcie przed krojeniem. Przepis wspomina co najmniej 20 minut; przypomnienie aplikacji po 2 godzinach jest orientacyjne.",
+            "confirmation_hint": "Potwierdź po samodzielnym sprawdzeniu ostygnięcia. Przepis mówi o odczekaniu choć 20 minut; aplikacja przypomina po 2 godzinach. Żaden z tych czasów nie zastępuje własnej oceny."
           }
-        }
+        },
+        "instructions_attribution": "Justyna Dragan · fragment oryginalnego przepisu"
       }
     }
   }

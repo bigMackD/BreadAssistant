@@ -107,8 +107,18 @@ to review overdue estimates. Cancel archives a summary and stops further alerts.
 After the cooling checkpoint the bake completes; then you can start another.
 
 The source recipe is [Justyna Dragan's basic wheat sourdough](https://justynadragan.pl/2020/08/podstawowy-chleb-pszenny-na-zakwasie.html).
-Instructions here are concise original guidance; consult the full method for
-technique. The bundled recipe makes one small loaf. **Use dry heatproof gloves for
+All stages include the relevant original Polish passages supplied by the user and
+English translations. Expand **Read full stage instructions** below the current
+summary before confirming the action. Attribution identifies the source text;
+**When to confirm** explains the corresponding app checkpoint separately. The
+source link provides the photos referenced in the original instructions.
+
+Confirm feeding after mixing and setting the starter aside; assess maturity at
+the separate starter-readiness checkpoint. The baking text includes both the
+pot-with-lid and tray-under-inverted-pot methods. The cooling text mentions waiting
+at least 20 minutes; the app retains its two-hour cooling-check reminder as a
+separately explained estimate. Existing schedules and saved bakes remain intact.
+The bundled recipe makes one small loaf. **Use dry heatproof gloves for
 250 °C cast iron, watch for steam and keep hot lids on a safe surface.**
 
 ## Canonical actions

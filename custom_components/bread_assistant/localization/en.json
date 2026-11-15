@@ -27,7 +27,8 @@
     "last_sync": "Last sync",
     "none": "none",
     "unlinked": "unlinked",
-    "no_errors": "No delivery errors."
+    "no_errors": "No delivery errors.",
+    "when_to_confirm": "When to confirm"
   },
   "notifications": {
     "done": "Done: {title}",
@@ -64,89 +65,132 @@
         "steps": {
           "feed_starter": {
             "title": "Feed starter",
-            "instructions": "Combine the starter feeding ingredients. Mark Done after feeding; readiness is confirmed separately."
+            "instructions": "FEEDING THE STARTER: Add both flours (40 g each) and the water (80 g) to the dormant starter from the refrigerator, and mix until combined. Transfer to a tall, transparent container and mark the starter's level with a rubber band. Cover the container with cling film, prick it with a fork, and leave it at room temperature for several hours until the starter has at least doubled in volume, is visibly aerated, and has a domed surface (this took me 4-5 hours; I usually leave the starter on top of the refrigerator or on a kitchen cupboard just below the ceiling, where it is warmest). If the starter rose and then collapsed, it was left to rise for too long and we missed its peak. Next time, shorten the rising time and watch it more closely. If, on the other hand, the starter has barely risen above the rubber band, this should signal that something is wrong: look for the cause in the starter itself or in the room conditions (if you bake bread in winter, the kitchen is much cooler than in summer, so the starter may take longer to mature). The rubber band and transparent container make it easier to assess the starter's activity and maturity.",
+            "summary": "Combine 40 g refrigerated starter, 40 g of each flour and 80 g water. Mark its level in a transparent container and leave it covered.",
+            "confirmation_hint": "Confirm after feeding and setting the starter aside. Assess maturity separately; 4–5 hours is an estimate."
           },
           "autolyse_start": {
             "title": "Start autolyse",
-            "instructions": "Mix the dough flour and water until no dry patches remain. Cover and rest; keep starter and salt aside."
+            "instructions": "AUTOLYSE: Put the wheat bread flour (350 g) in a larger bowl and pour in the water (235 g). Mix the ingredients with a damp hand just until combined (for about a minute). Cover the bowl with cling film and leave at room temperature for 60 minutes. Autolyse (mixing the flour and water) should take place while the fed starter is approaching its peak (when it has almost doubled in volume and is well aerated).",
+            "summary": "Mix 350 g bread flour with 235 g water. Cover and rest for 60 minutes while the starter approaches peak activity.",
+            "confirmation_hint": "Confirm after mixing and covering. Confirm the end of the one-hour rest separately; also assess the starter's maturity."
           },
           "starter_ready": {
             "title": "Confirm starter readiness",
-            "instructions": "Check the starter yourself. Continue only when active and suitable for baking; the four-hour estimate is not a readiness test."
+            "instructions": "FEEDING THE STARTER: Add both flours (40 g each) and the water (80 g) to the dormant starter from the refrigerator, and mix until combined. Transfer to a tall, transparent container and mark the starter's level with a rubber band. Cover the container with cling film, prick it with a fork, and leave it at room temperature for several hours until the starter has at least doubled in volume, is visibly aerated, and has a domed surface (this took me 4-5 hours; I usually leave the starter on top of the refrigerator or on a kitchen cupboard just below the ceiling, where it is warmest). If the starter rose and then collapsed, it was left to rise for too long and we missed its peak. Next time, shorten the rising time and watch it more closely. If, on the other hand, the starter has barely risen above the rubber band, this should signal that something is wrong: look for the cause in the starter itself or in the room conditions (if you bake bread in winter, the kitchen is much cooler than in summer, so the starter may take longer to mature). The rubber band and transparent container make it easier to assess the starter's activity and maturity.",
+            "summary": "Assess growth against the rubber band: the starter should have at least doubled, be aerated and have a domed surface.",
+            "confirmation_hint": "Confirm only after assessing the starter's activity. Elapsed estimated time does not establish maturity."
           },
           "autolyse_complete": {
             "title": "Confirm autolyse complete",
-            "instructions": "Confirm the dough has completed its one-hour hydration rest."
+            "instructions": "AUTOLYSE: Put the wheat bread flour (350 g) in a larger bowl and pour in the water (235 g). Mix the ingredients with a damp hand just until combined (for about a minute). Cover the bowl with cling film and leave at room temperature for 60 minutes. Autolyse (mixing the flour and water) should take place while the fed starter is approaching its peak (when it has almost doubled in volume and is well aerated).",
+            "summary": "Check that the flour and water have rested for 60 minutes. Kneading also requires a ready starter.",
+            "confirmation_hint": "Confirm after the dough's one-hour rest. Kneading also requires a separate confirmation that the starter is ready."
           },
           "knead_start": {
             "title": "Begin kneading",
-            "instructions": "Work the active starter and salt into the rested dough until evenly incorporated."
+            "instructions": "KNEADING: After an hour of autolyse, when you touch the dough, you will feel how dramatically it has changed! Its pliability has increased considerably, even though we have not used any physical effort to work or knead it during that hour. That is the phenomenon of autolyse. It is worth remembering this stage. Put the bowl of dough on the scales. Weigh out the starter (120 g), pouring it onto the dough. Sprinkle the salt (10 g) over the starter.\n\nLightly dampen your hands with water and knead the dough by hand for about 5 minutes, stretching, folding and squeezing it using the pincer method. This develops the gluten network, and minute by minute the dough becomes more elastic, strong and pleasant to touch. The final dough temperature should be 24-27 °C. If it is below 24 °C, use warmer water next time (similarly, if it is above 27 °C, use slightly cooler water next time).",
+            "summary": "Add 120 g active starter and 10 g salt. Knead with damp hands for about 5 minutes; aim for a final dough temperature of 24–27 °C.",
+            "confirmation_hint": "Confirm when you begin kneading. The next stage records the start of bulk fermentation after kneading; it is due in about 5 minutes."
           },
           "bulk_start": {
             "title": "Begin bulk fermentation",
-            "instructions": "After kneading, place dough in a lightly oiled covered container. Mark Done to record the actual bulk start."
+            "instructions": "After kneading, transfer the dough to a clean, large bowl greased with olive oil, or to a container (preferably with a wide base, which will make folding the dough easier and more thorough). Cover with cling film and leave for about 4-5 hours. The time depends on many factors and must be monitored; at this point I refer you to the introduction to this post.",
+            "summary": "Transfer the kneaded dough to a clean, oiled container with a wide base and cover with cling film.",
+            "confirmation_hint": "Confirm after transferring the kneaded dough to its container. Both folding deadlines are measured from this actual start time."
           },
           "fold_1": {
             "title": "First stretch-and-fold",
-            "instructions": "With damp hands, stretch and fold the dough gently. Cover again."
+            "instructions": "FOLDING: The dough needs two sets of folds, 30 minutes apart. Fold after the first 30 minutes of rising and after 60 minutes (for example, if the dough starts rising at 14:00, fold at 14:30 and 15:00). Folding is an extremely important stage that strengthens the gluten network and contributes to the loaf's final shape (folding helps us avoid flat bread that has not risen properly). How do you fold? Dampen your hands with water, take an edge of the dough, stretch it upwards from underneath and lay it over the top on the opposite side (see the illustration below). Do the same with the other three sides, turning the bowl 90 degrees each time. After the two sets of folds, leave the dough to continue rising (with the bowl covered in cling film) for about another 3-4 hours.",
+            "summary": "After 30 minutes of bulk fermentation, perform the first set of folds: use damp hands to stretch and fold from all four sides.",
+            "confirmation_hint": "Confirm after the first set of folds. The second set remains timed from the start of bulk fermentation, rather than from this action."
           },
           "fold_2": {
             "title": "Second stretch-and-fold",
-            "instructions": "Repeat the stretch-and-fold. Its target is one hour after bulk began, independent of the first fold timestamp."
+            "instructions": "FOLDING: The dough needs two sets of folds, 30 minutes apart. Fold after the first 30 minutes of rising and after 60 minutes (for example, if the dough starts rising at 14:00, fold at 14:30 and 15:00). Folding is an extremely important stage that strengthens the gluten network and contributes to the loaf's final shape (folding helps us avoid flat bread that has not risen properly). How do you fold? Dampen your hands with water, take an edge of the dough, stretch it upwards from underneath and lay it over the top on the opposite side (see the illustration below). Do the same with the other three sides, turning the bowl 90 degrees each time. After the two sets of folds, leave the dough to continue rising (with the bowl covered in cling film) for about another 3-4 hours.",
+            "summary": "After 60 minutes from the start of bulk fermentation, perform the second set of four-sided folds. Cover and leave to rise further.",
+            "confirmation_hint": "Confirm after the second set of folds. Then leave the covered dough to continue rising."
           },
           "bulk_ready": {
             "title": "Confirm bulk fermentation readiness",
-            "instructions": "Assess dough expansion and aeration. Wait longer if needed; confirm only after your own assessment."
+            "instructions": "After kneading, transfer the dough to a clean, large bowl greased with olive oil, or to a container (preferably with a wide base, which will make folding the dough easier and more thorough). Cover with cling film and leave for about 4-5 hours. The time depends on many factors and must be monitored; at this point I refer you to the introduction to this post.\n\nFOLDING: The dough needs two sets of folds, 30 minutes apart. Fold after the first 30 minutes of rising and after 60 minutes (for example, if the dough starts rising at 14:00, fold at 14:30 and 15:00). Folding is an extremely important stage that strengthens the gluten network and contributes to the loaf's final shape (folding helps us avoid flat bread that has not risen properly). How do you fold? Dampen your hands with water, take an edge of the dough, stretch it upwards from underneath and lay it over the top on the opposite side (see the illustration below). Do the same with the other three sides, turning the bowl 90 degrees each time. After the two sets of folds, leave the dough to continue rising (with the bowl covered in cling film) for about another 3-4 hours.",
+            "summary": "Assess the end of bulk fermentation yourself. The recipe suggests about 4–5 hours in total, including further rising after both sets of folds.",
+            "confirmation_hint": "Confirm only after your own assessment of the dough. Wait longer if needed; the reminder does not end fermentation automatically."
           },
           "preshape": {
             "title": "Pre-shape",
-            "instructions": "Gently turn out the dough and form a loose round. Record completion to begin the bench rest."
+            "instructions": "PRE-SHAPING: This stage takes just a few decisive movements. Turn the dough out of the bowl onto the worktop (no flour is needed), and use a dough scraper to form a ball by lifting it from underneath and rounding it. Dust with flour, cover with cling film or a plastic bag and leave for 10 minutes.\n\nMeanwhile, prepare the bread proofing basket. For this amount of dough I use an oval basket measuring 21×9 cm at the base and 6 cm high. Dust it thoroughly with rice flour so that every nook of the basket is covered. Finally, run a finger along the edges, pressing more flour into the gaps. A poorly prepared basket causes the dough to stick, leading to problems removing the loaf later and unnecessarily knocking the air out of the dough.",
+            "summary": "Use a scraper to round the dough on an unfloured worktop. Dust, cover and rest for 10 minutes; prepare the basket with rice flour.",
+            "confirmation_hint": "Confirm after rounding and covering the dough. The 10-minute rest starts from that moment; prepare the basket during the rest."
           },
           "final_shape": {
             "title": "Final shape",
-            "instructions": "After the ten-minute bench rest, shape the loaf with gentle surface tension."
+            "instructions": "FINAL SHAPING: Dust the top of the dough with flour and flour the worktop beside it as well. Use the scraper to turn the dough over onto the floured surface and gently stretch it with your hands. Fold one third of the dough into the middle, then do the same with the opposite edge, laying it on top of the folded part. Take the short side of the resulting rectangle, lift it and roll it up like a roulade to form an oval loaf (see the photos below). Gentle hands and precision will help here. A few decisive movements and it is ready. This is an important stage: shaping the bread too forcefully can knock the air out and put an end to those large holes in the crumb (the dough simply loses its strength).\n\nTake the scraper again, lift the dough from underneath and turn it upside down, then lift it in your hands and transfer it to the basket (seam side up). Pinch the seam together with your fingers. Sprinkle the dough with wheat flour, including where it touches the basket.",
+            "summary": "Gently fold the dough towards the centre, roll into an oval loaf and transfer to the basket seam side up. Pinch the seam and dust with flour.",
+            "confirmation_hint": "Confirm after final shaping and transferring the loaf to its basket. Record refrigeration in the next stage."
           },
           "cold_proof_start": {
             "title": "Refrigerate shaped dough",
-            "instructions": "Place the shaped loaf seam-up in a floured basket, cover and refrigerate. Mark Done when refrigerated."
+            "instructions": "MATURING IN THE REFRIGERATOR: Put the basket inside a plastic bag and seal it tightly, for example using a clip. This is important; otherwise the dough may dry out. I often put it in one plastic bag and then inside another shopping bag as well. Place the basket of dough in the refrigerator for about 12 hours (again, I recommend reading the introduction to this post, where I explain how important temperature is in bread baking, affecting the time our bread takes to rise, proof and mature. This time can become longer or shorter. Keep checking).",
+            "summary": "Seal the basket inside a plastic bag and refrigerate. About 12 hours is a guide; timing depends on temperature and the dough.",
+            "confirmation_hint": "Confirm when the tightly bagged basket is in the refrigerator. Assess whether the dough is ready to bake yourself at the later checkpoint."
           },
           "preheat_oven": {
             "title": "Preheat oven and cast iron",
-            "instructions": "Preheat the oven and covered cast iron pot to 250 C. Use dry oven gloves; hot iron can cause severe burns."
+            "instructions": "PREHEATING THE OVEN AND POT: Heat the oven together with the cast iron pot to 250 °C. The pot must be really well heated! This will take at least 30 minutes.",
+            "summary": "Preheat the oven together with the cast iron pot to 250 °C. The recipe requires at least 30 minutes of preheating.",
+            "confirmation_hint": "Confirm when you start preheating. Check and separately confirm that the oven and pot are hot before scoring."
           },
           "dough_ready": {
             "title": "Confirm dough readiness",
-            "instructions": "Inspect the cold-proofed loaf and confirm it is ready. Twelve hours is a suggested proof, not automatic release."
+            "instructions": "ASSESSING DOUGH READINESS: To check whether the bread is ready to bake, press a floured finger about 1 cm into the dough:\n\nThe dough quickly returned to its original shape and the indentation is no longer visible: the dough needs more proofing time and has not risen sufficiently.\n\nThe dough gradually, but not completely, returns to its previous shape: the bread is ready to bake; it is neither overproofed nor underproofed. It has retained enough strength to spring upwards in the oven and open beautifully (known as oven spring).\n\nThe indentation remains: the dough has risen for too long and is overproofed; this may cause the loaf to collapse when removed from the basket. Shorten the rising time next time. At this stage, of course, do not panic or throw the dough in the bin in frustration… Continue working with the loaf as though nothing has happened; perhaps the excessive rising will not harm the bread's final shape and structure. I assure you it will still taste good! ;).",
+            "summary": "Press a floured finger about 1 cm into the dough. Assess how quickly and fully the indentation returns using the recipe's three outcomes.",
+            "confirmation_hint": "Confirm after assessing the dough yourself. Twelve hours is a guide, rather than an automatic readiness test."
           },
           "oven_ready": {
             "title": "Confirm oven readiness",
-            "instructions": "Verify the oven and cast iron are fully heated. Handle the 250 C pot with dry heatproof gloves."
+            "instructions": "PREHEATING THE OVEN AND POT: Heat the oven together with the cast iron pot to 250 °C. The pot must be really well heated! This will take at least 30 minutes.",
+            "summary": "Check that the oven and pot are really well heated to 250 °C. Use dry heatproof oven gloves.",
+            "confirmation_hint": "Confirm after checking that the oven and pot are heated. The reminder itself does not measure temperature."
           },
           "score_loaf": {
             "title": "Score loaf",
-            "instructions": "Turn the loaf onto parchment and score carefully before loading. Keep hands clear of the hot pot."
+            "instructions": "SCORING: Only begin this step once the pot in the oven is hot. Take the basket of dough out of the refrigerator and remove the bags. Lay a piece of baking parchment over the basket, then put a board or pizza peel on top of the paper. Quickly turn the whole stack upside down so that the loaf rests on the board with the paper. Remove the basket. Score the dough with a razor blade. At the start of your journey baking homemade folded sourdough bread, I recommend a basic score that produces that impressive opening with its characteristic ear. Hold the blade at an angle of about 30 degrees to the horizontal plane. Score gently along the left or right side, from top to bottom, in one decisive movement. As you gain baking experience, you can experiment with scoring and create increasingly beautiful, eye-catching cuts. Remember that we do not do this just for the final appearance of the crust. Unscored bread will crack uncontrollably at weak points in the crust; it may also rise unevenly and be less airy.",
+            "summary": "Turn the cold loaf out onto parchment using a board or peel. Score with a razor at about 30° once the pot is hot.",
+            "confirmation_hint": "Confirm after scoring the loaf. Record loading it into the oven under cover in the next stage."
           },
           "bake_start": {
             "title": "Begin covered baking",
-            "instructions": "Carefully load the loaf into the hot pot. Cover and bake at 250 C for 20 minutes. Mark Done once loaded."
+            "instructions": "BAKING: First of all, be careful! This stage often ends in unwanted burns. Have thick oven gloves ready, and check that you are not wearing necklaces or bracelets, which heat up extremely quickly! We are working with a very hot oven and pot. Take PARTICULAR care. For some time now, to reduce burns and make the work easier, I have stopped baking this bread directly inside the pot with a lid on top. Most attempts to transfer the bread from the board into the pot (or directly from the basket into the pot and score it there) ended with a misshapen loaf and burned hands. So now I slide the bread, together with its paper, from the board or pizza peel onto a preheated oven tray and cover it with the hot pot (I do not need the lid). The final result is the same as baking directly in the pot, but for me there is much less stress, fewer burns and fewer misshapen loaves ;). Decide for yourselves which method suits you best. Returning to the instructions… take the hot pot out of the oven using thick oven gloves. Transfer the scored bread with its paper into the hot pot (or onto the tray and cover it with the pot). Bake covered for 20 minutes at 250 °C (I recommend putting a thermometer in the oven so that you can monitor the temperature). After 20 minutes, remove the lid (or the pot if baking on a tray), reduce the temperature to 230 °C and bake for another 15-20 minutes, or longer, until the crust has the colour you want. Some people like golden loaves; others prefer the opposite: a dark brown or even scorched crust is what they expect from a proper loaf. Tastes differ, but one thing is certain: the bread must be baked through so that after cooling the crust stays crisp rather than rubbery…",
+            "summary": "Load the scored loaf into the hot pot or onto a hot tray under the inverted pot. Bake covered for 20 minutes at 250 °C.",
+            "confirmation_hint": "Confirm after placing the covered loaf in the oven. The 20-minute covered baking stage is measured from that moment."
           },
           "remove_lid": {
             "title": "Remove lid; bake uncovered",
-            "instructions": "Use dry oven gloves to remove the hot lid. Reduce the oven to 230 C and bake uncovered for 15-20 minutes."
+            "instructions": "BAKING: First of all, be careful! This stage often ends in unwanted burns. Have thick oven gloves ready, and check that you are not wearing necklaces or bracelets, which heat up extremely quickly! We are working with a very hot oven and pot. Take PARTICULAR care. For some time now, to reduce burns and make the work easier, I have stopped baking this bread directly inside the pot with a lid on top. Most attempts to transfer the bread from the board into the pot (or directly from the basket into the pot and score it there) ended with a misshapen loaf and burned hands. So now I slide the bread, together with its paper, from the board or pizza peel onto a preheated oven tray and cover it with the hot pot (I do not need the lid). The final result is the same as baking directly in the pot, but for me there is much less stress, fewer burns and fewer misshapen loaves ;). Decide for yourselves which method suits you best. Returning to the instructions… take the hot pot out of the oven using thick oven gloves. Transfer the scored bread with its paper into the hot pot (or onto the tray and cover it with the pot). Bake covered for 20 minutes at 250 °C (I recommend putting a thermometer in the oven so that you can monitor the temperature). After 20 minutes, remove the lid (or the pot if baking on a tray), reduce the temperature to 230 °C and bake for another 15-20 minutes, or longer, until the crust has the colour you want. Some people like golden loaves; others prefer the opposite: a dark brown or even scorched crust is what they expect from a proper loaf. Tastes differ, but one thing is certain: the bread must be baked through so that after cooling the crust stays crisp rather than rubbery…",
+            "summary": "After 20 minutes, carefully remove the lid or covering pot. Reduce the temperature to 230 °C and continue baking uncovered.",
+            "confirmation_hint": "Confirm after removing the lid or covering pot and reducing the temperature. The removal reminder is set for 20 minutes; the recipe gives 15–20 minutes or longer according to doneness."
           },
           "bake_finish": {
             "title": "Remove loaf",
-            "instructions": "Check the loaf after 15-20 minutes uncovered (the target is 20). Use oven gloves to lift it onto a rack."
+            "instructions": "BAKING: First of all, be careful! This stage often ends in unwanted burns. Have thick oven gloves ready, and check that you are not wearing necklaces or bracelets, which heat up extremely quickly! We are working with a very hot oven and pot. Take PARTICULAR care. For some time now, to reduce burns and make the work easier, I have stopped baking this bread directly inside the pot with a lid on top. Most attempts to transfer the bread from the board into the pot (or directly from the basket into the pot and score it there) ended with a misshapen loaf and burned hands. So now I slide the bread, together with its paper, from the board or pizza peel onto a preheated oven tray and cover it with the hot pot (I do not need the lid). The final result is the same as baking directly in the pot, but for me there is much less stress, fewer burns and fewer misshapen loaves ;). Decide for yourselves which method suits you best. Returning to the instructions… take the hot pot out of the oven using thick oven gloves. Transfer the scored bread with its paper into the hot pot (or onto the tray and cover it with the pot). Bake covered for 20 minutes at 250 °C (I recommend putting a thermometer in the oven so that you can monitor the temperature). After 20 minutes, remove the lid (or the pot if baking on a tray), reduce the temperature to 230 °C and bake for another 15-20 minutes, or longer, until the crust has the colour you want. Some people like golden loaves; others prefer the opposite: a dark brown or even scorched crust is what they expect from a proper loaf. Tastes differ, but one thing is certain: the bread must be baked through so that after cooling the crust stays crisp rather than rubbery…\n\nCOOLING: Transfer the baked bread to a cooling rack. I know that saying you should only slice the bread once it has cooled is shooting myself in the foot and probably nobody will take it to heart, but be patient and wait at least those 20 minutes ;). Meanwhile, you can look at your wonderful loaf and listen to the crust crackling appetisingly. Take the butter out of the refrigerator so it has time to soften a little, and prepare your favourite spreads, olive oil and vegetables. Call the whole family and… sit down together to enjoy the taste of this excellent bread. This is your morning!",
+            "summary": "Assess doneness and crust colour after 15–20 minutes uncovered; bake longer if needed. Transfer the loaf to a rack.",
+            "confirmation_hint": "Confirm only after assessing doneness and removing the bread. The reminder does not automatically mean the loaf is ready."
           },
           "cooling_start": {
             "title": "Begin cooling",
-            "instructions": "Place the loaf on a rack with air underneath. Keep the hot pot and lid safely away from hands."
+            "instructions": "COOLING: Transfer the baked bread to a cooling rack. I know that saying you should only slice the bread once it has cooled is shooting myself in the foot and probably nobody will take it to heart, but be patient and wait at least those 20 minutes ;). Meanwhile, you can look at your wonderful loaf and listen to the crust crackling appetisingly. Take the butter out of the refrigerator so it has time to soften a little, and prepare your favourite spreads, olive oil and vegetables. Call the whole family and… sit down together to enjoy the taste of this excellent bread. This is your morning!",
+            "summary": "Transfer the bread to a cooling rack. Put the hot cookware somewhere safe and wait before slicing.",
+            "confirmation_hint": "Confirm after placing the loaf on the rack. The app schedules a cooling check after 2 hours; this is a reminder setting, rather than a time from the quoted recipe passage."
           },
           "cooling_check": {
             "title": "Check cooling before slicing",
-            "instructions": "Allow the crumb to cool before slicing. Confirm by checking the loaf yourself; this two-hour reminder is an estimate."
+            "instructions": "COOLING: Transfer the baked bread to a cooling rack. I know that saying you should only slice the bread once it has cooled is shooting myself in the foot and probably nobody will take it to heart, but be patient and wait at least those 20 minutes ;). Meanwhile, you can look at your wonderful loaf and listen to the crust crackling appetisingly. Take the butter out of the refrigerator so it has time to soften a little, and prepare your favourite spreads, olive oil and vegetables. Call the whole family and… sit down together to enjoy the taste of this excellent bread. This is your morning!",
+            "summary": "Assess cooling yourself before slicing. The recipe mentions at least 20 minutes; the app's 2-hour reminder is an estimate.",
+            "confirmation_hint": "Confirm after assessing cooling yourself. The recipe asks you to wait at least 20 minutes; the app reminds you after 2 hours. Neither time replaces your own assessment."
           }
-        }
+        },
+        "instructions_attribution": "Justyna Dragan · recipe excerpt translated from Polish"
       }
     }
   }

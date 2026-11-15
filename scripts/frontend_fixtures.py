@@ -55,6 +55,7 @@ def advance_to(step_id):
 
 
 scenarios = {}
+stage_scenarios = {}
 for language in ["en", "pl"]:
     due = scheduler.create_bake(recipe, NOW)
     waiting = scheduler.create_bake(recipe, NOW - timedelta(minutes=30))
@@ -93,6 +94,9 @@ for language in ["en", "pl"]:
         "sensor.bread_assistant_status": {"state": "unavailable", "attributes": {}}
     }
     scenarios[language]["disconnected"] = presentation(overdue, language)
+    stage_scenarios[language] = {
+        step.id: presentation(advance_to(step.id), language) for step in recipe.steps
+    }
 
 reference = yaml.safe_load(
     Path("docs/design-reference/maciek_ios/maciek_ios.yaml").read_text("utf-8")
@@ -104,6 +108,7 @@ output.mkdir(parents=True, exist_ok=True)
         {
             "now": NOW.isoformat(),
             "scenarios": scenarios,
+            "stage_scenarios": stage_scenarios,
             "reference_theme": reference["Maciek iOS"]["modes"]["dark"],
         },
         ensure_ascii=False,

@@ -161,7 +161,7 @@ export class BreadAssistantCard extends HTMLElement {
   _hero(current) {
     const circumference = 2 * Math.PI * 54;
     const instructions = this._step.instructions || this._ui.start_hint || "";
-    const concise = instructions.match(/^.*?[.!?](?:\s|$)/)?.[0] || instructions;
+    const concise = this._step.instructions_summary || instructions.match(/^.*?[.!?](?:\s|$)/)?.[0] || instructions;
     const title = current && !["unknown", "unavailable"].includes(current.state) ? current.state : this._ui.no_task;
     return `<ha-card class="hero">
       <div class="hero-top">
@@ -182,6 +182,13 @@ export class BreadAssistantCard extends HTMLElement {
       </div>
       <p class="eyebrow">${escapeHTML(this._text("current"))}</p><h2 class="stage" tabindex="-1">${escapeHTML(title)}</h2>
       <p class="stage-copy">${copy(concise)}</p>
+      ${this._step.instructions ? `<details class="stage-instructions" data-detail="current-instructions">
+        <summary>${escapeHTML(this._text("stage_instructions"))}</summary>
+        ${this._step.instructions_attribution ? `<p class="eyebrow">${escapeHTML(this._step.instructions_attribution)}</p>` : ""}
+        <p class="current-instructions-copy">${copy(this._step.instructions)}</p>
+        ${this._sourceLink() ? `<p class="footnote">${this._sourceLink()}</p><p class="footnote">${escapeHTML(this._text("recipe_illustrations"))}</p>` : ""}
+      </details>` : ""}
+      ${this._step.confirmation_hint ? `<p class="footnote confirmation-hint"><strong>${escapeHTML(this._ui.when_to_confirm || this._text("when_to_confirm"))}</strong><br>${copy(this._step.confirmation_hint)}</p>` : ""}
       <div class="actions">${this._status === "paused" ? this._button("resume", "resume", true) :
         `${this._button("complete", "done", true, true)}${this._button("snooze", "snooze", false, true)}`}</div>
       <p class="footnote" data-waiting></p><p class="footnote">${copy(this._ui.confirm || this._text("check"))}</p>
@@ -234,15 +241,20 @@ export class BreadAssistantCard extends HTMLElement {
         ${escapeHTML(this._text(this._expandedTimeline ? "collapse_timeline" : "show_timeline"))}${!this._expandedTimeline ? ` · ${this._timeline.length}` : ""}</button>` : ""}</ha-card>`;
   }
 
-  _recipe() {
-    const ingredients = Array.isArray(this._attrs.ingredients) ? this._attrs.ingredients : [];
+  _sourceLink() {
     let url;
     try { url = new URL(this._attrs.recipe_url); } catch { /* Missing source URL. */ }
-    const link = url && ["https:", "http:"].includes(url.protocol) ? `<p><a href="${escapeHTML(url.href)}" target="_blank" rel="noopener noreferrer">${escapeHTML(this._text("source"))} ↗</a></p>` : "";
+    return url && ["https:", "http:"].includes(url.protocol) ? `<a href="${escapeHTML(url.href)}" target="_blank" rel="noopener noreferrer">${escapeHTML(this._text("source"))} ↗</a>` : "";
+  }
+
+  _recipe() {
+    const ingredients = Array.isArray(this._attrs.ingredients) ? this._attrs.ingredients : [];
+    const link = this._sourceLink();
     return this._disclosure("ingredients", "ingredients", "bowl-mix-outline", `<ul>${ingredients.map((item) => `<li>${copy(item)}</li>`).join("")}</ul>`) +
       this._disclosure("instructions", "instructions", "book-open-page-variant-outline", `
-        ${this._step.instructions ? `<p>${copy(this._step.instructions)}</p>` : ""}
-        <p>${copy(this._ui.attribution)} ${copy(this._ui.source)}</p>${link}<p>${copy(this._ui.method)}</p>
+        ${this._step.instructions_attribution ? `<p class="eyebrow">${escapeHTML(this._step.instructions_attribution)}</p>` : ""}
+        ${this._step.instructions ? `<p class="current-instructions-copy">${copy(this._step.instructions)}</p>` : ""}
+        <p>${copy(this._ui.attribution)} ${copy(this._ui.source)}</p>${link ? `<p>${link}</p>` : ""}<p>${copy(this._ui.method)}</p>
         <p>${copy(this._ui.baking)}</p><div class="safety">${icon("heat-wave")}<p>${copy(this._ui.safety)}</p></div>`);
   }
 

@@ -217,6 +217,16 @@ The original native dashboard is retained as a fallback.
 `hass`, `getCardSize`, `getGridOptions`). `styles.js` centralizes scoped theme tokens
 and responsive components; `strings.js` owns English/Polish card chrome. Recipe,
 safety and diagnostic content comes from existing localized sensor attributes.
+Each bundled recipe step now has a complete source `instructions` string plus
+separate `summary` and `confirmation_hint` strings. The current-step sensor exposes
+these as `instructions`, `instructions_summary`, `confirmation_hint`, and a
+recipe-level `instructions_attribution`. These additive presentation attributes
+are resolved through versioned localization keys, including for legacy snapshots;
+there is no model, snapshot, migration or scheduler change. Unknown/custom recipes
+retain their own instructions and fall back to the previous summary rendering.
+Only the current step's text is published; timeline attributes remain bounded and
+do not contain all source passages. The native dashboard also shows source text
+and confirmation guidance separately.
 Content follows the backend language preference, including automatic HA system
 language selection. Contributors adding a language should translate both the
 backend bundles and `frontend/strings.js`; browser checks enforce matching keys.

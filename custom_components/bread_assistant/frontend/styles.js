@@ -56,6 +56,11 @@ export const styles = `
   .due-time { font-size: 12px; color: var(--ba-muted); }
   .stage { margin: 10px 0 12px; }
   .stage-copy { color: var(--ba-muted); margin-bottom: 20px; }
+  .stage-instructions { margin: -8px 0 20px; }
+  .stage-instructions > summary { color: var(--ba-ink); min-height: 44px; padding: 12px 0; font-size: 14px; font-weight: 600; }
+  .stage-instructions[open] > summary { margin-bottom: 8px; }
+  .current-instructions-copy { white-space: pre-line; margin-top: 12px; }
+  .confirmation-hint { margin: 0 0 18px; }
   .actions { display: grid; gap: 10px; }
   button {
     font: inherit; font-size: 14px; font-weight: 620; border: 1px solid transparent; border-radius: 14px;

@@ -126,6 +126,21 @@ class BreadSensor(BreadEntity, SensorEntity):
             )
             if bake and current
             else None,
+            "instructions_summary": tr.recipe(
+                bake.recipe_snapshot, f"steps.{current.step_id}.summary"
+            )
+            if bake and current
+            else None,
+            "confirmation_hint": tr.recipe(
+                bake.recipe_snapshot, f"steps.{current.step_id}.confirmation_hint"
+            )
+            if bake and current
+            else None,
+            "instructions_attribution": tr.recipe(
+                bake.recipe_snapshot, "instructions_attribution"
+            )
+            if bake and current
+            else None,
             "step_status": current.status if current else None,
             "due_at": current.due_at if current else None,
             "snoozed_until": current.snoozed_until if current else None,

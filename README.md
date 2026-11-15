@@ -69,6 +69,22 @@ Ingredients, full current instructions, recipe attribution, oven safety and bake
 diagnostics expand on demand. Idle, paused, completed, canceled, unavailable and
 delivery/action error states include appropriate guidance and controls.
 
+Open **Read full stage instructions** directly below the current-stage summary to
+read the complete source passage before confirming a step. All 21 stages include
+the relevant original Polish text supplied from Justyna's recipe, with English
+translations. When several app checkpoints belong to one recipe section, that
+section is repeated so the technique and context remain available. Paragraph
+spacing is normalized; the Polish wording and punctuation are preserved.
+
+The stage summary and **When to confirm** guidance are separate from the quoted
+recipe. This keeps the author's instructions intact while explaining the app's
+checkpoints: feeding and starter maturity, preheating and oven readiness, loading
+and uncovering the loaf, and cooling. The quote includes both pot/lid and tray/
+inverted-pot baking methods. Images referenced in the text are available through
+the original recipe link. The cooling passage mentions waiting at least 20
+minutes; the app retains its existing two-hour cooling-check reminder and clearly
+labels it as an app estimate. No timing, dependencies or readiness rules change.
+
 The card inherits HA colors, typography, borders, shadows and corner radius in a
 shadow root, so its styles cannot affect other dashboards. Baking uses the theme's
 warning amber; optionally set `bread-assistant-accent-color` in any theme. Both
@@ -279,3 +295,9 @@ plus service arguments, retry identities, focus, countdowns, connection recovery
 timeline expansion, narrow columns and timezone behavior. See
 [UI validation](docs/ui-validation.md) for reproducible commands, screenshots and
 the remaining physical iPhone/Safari and staging HA shell checks.
+
+Complete recipe instructions (15 November 2026): all 21 stages include the supplied
+Polish recipe passages and English translations, with separate summaries and
+confirmation guidance. 119 Python tests and 612 browser combinations pass (234
+lifecycle plus 378 full-instruction combinations). Ruff lint/format and strict
+mypy pass. Existing bake snapshots, recipe timings and action contracts are retained.

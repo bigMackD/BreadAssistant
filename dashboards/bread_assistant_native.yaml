@@ -46,7 +46,12 @@ views:
     content: |
       {% set ui = state_attr('sensor.kitchen_bread_assistant_status', 'ui') or {} %}
       ## {{ states('sensor.kitchen_bread_assistant_current_step') if has_value('sensor.kitchen_bread_assistant_current_step') else ui.no_task }}
+      {{ state_attr('sensor.kitchen_bread_assistant_current_step', 'instructions_attribution') or '' }}
+
       {{ state_attr('sensor.kitchen_bread_assistant_current_step', 'instructions') or ui.start_hint }}
+
+      {% set hint = state_attr('sensor.kitchen_bread_assistant_current_step', 'confirmation_hint') %}
+      {% if hint %}**{{ ui.when_to_confirm }}:** {{ hint }}{% endif %}
 
       {% set due = state_attr('sensor.kitchen_bread_assistant_current_step', 'due_at') %}
       {% if due %}{{ ui.due }}: **{{ as_local(as_datetime(due)).strftime('%d.%m.%Y %I:%M %p %Z' if state_attr('sensor.kitchen_bread_assistant_status', 'time_format') == '12h' else '%d.%m.%Y %H:%M %Z') }}**{% endif %}

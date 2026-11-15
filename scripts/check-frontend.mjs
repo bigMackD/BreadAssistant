@@ -66,6 +66,7 @@ const themes = {
   maciek: fixtures.reference_theme,
 };
 let count = 0;
+let instructionCount = 0;
 try {
   const page = await browser.newPage({ deviceScaleFactor: 1 });
   page.on("pageerror", error => errors.push(error.message));
@@ -112,6 +113,22 @@ try {
             }
             if (scenario === "disconnected") assert.equal(await card.locator('button[data-action]:enabled:not([data-action="timeline"])').count(), 0);
             assert.equal(await card.locator(".step").count(), states["sensor.bread_assistant_current_step"].attributes.timeline.length);
+            if (["due", "overdue", "snoozed"].includes(scenario)) {
+              const fullInstructions = states["sensor.bread_assistant_current_step"].attributes.instructions;
+              await card.locator('[data-detail="current-instructions"] > summary').click();
+              assert.equal(await card.locator('[data-detail="current-instructions"] .current-instructions-copy').innerText(), fullInstructions);
+              assert.match(fullInstructions, /40 g/);
+              assert.match(fullInstructions, /80 g/);
+              assert.match(fullInstructions, language === "pl" ? /dwukrotnie/ : /doubled/);
+              assert.match(fullInstructions, language === "pl" ? /się zapadł/ : /collapsed/);
+              assert.match(await card.locator(".confirmation-hint").innerText(), language === "pl" ? /po dokarmieniu/ : /after feeding/);
+              assert.equal(await card.locator('[data-action="complete"]').isEnabled(), true);
+              const overflow = await card.evaluate(element => element.scrollWidth > innerWidth);
+              assert.equal(overflow, false, `${size}/${theme}/${language}: expanded instructions overflow`);
+              if (scenario === "due" && theme === "maciek" && language === "pl") {
+                await page.screenshot({path:resolve(output, `${size}-feeding-full-instructions.png`), fullPage:true, animations:"disabled"});
+              }
+            }
           }
           // Capture representative states, with folded disclosures for the overview.
           if ((scenario === "active" && (theme === "maciek" || theme === "light")) ||
@@ -120,6 +137,38 @@ try {
             await page.screenshot({ path: resolve(output, `${size}-${theme}-${language}-${scenario}.png`), fullPage: true, animations: "disabled" });
           }
           count++;
+        }
+      }
+    }
+  }
+  // Every stage's source passage renders in full, separately from its summary and
+  // confirmation guidance, including long multi-paragraph and multi-method text.
+  for (const [size, width, height] of [["mobile",402,874], ["tablet",834,1194], ["desktop",1440,1000]]) {
+    await page.setViewportSize({width,height});
+    for (const [theme, variables] of Object.entries(themes)) {
+      await page.evaluate(vars => {
+        document.documentElement.removeAttribute("style");
+        for (const [key, value] of Object.entries(vars)) document.documentElement.style.setProperty(`--${key}`, value);
+      }, variables);
+      for (const [language, stages] of Object.entries(fixtures.stage_scenarios)) {
+        for (const [stepId, states] of Object.entries(stages)) {
+          await page.evaluate(({states,language}) => window.show(states,language), {states,language});
+          const attrs = states["sensor.bread_assistant_current_step"].attributes;
+          assert.equal(attrs.step_id, stepId);
+          assert.equal(await card.locator(".stage-copy").innerText(), attrs.instructions_summary);
+          const details = card.locator('[data-detail="current-instructions"]');
+          await details.locator("summary").click();
+          assert.equal(await details.locator(".current-instructions-copy").innerText(), attrs.instructions);
+          assert.equal(await details.locator(".eyebrow").textContent(), attrs.instructions_attribution);
+          assert.match(await card.locator(".confirmation-hint").innerText(), new RegExp(language === "pl" ? "Kiedy potwierdzić" : "When to confirm"));
+          assert.equal(await details.locator("a").getAttribute("href"), states["sensor.bread_assistant_status"].attributes.recipe_url);
+          assert.equal(await card.evaluate(element => element.scrollWidth <= innerWidth), true, `${size}/${theme}/${language}/${stepId}: instruction overflow`);
+          const due = await page.evaluate(value => Date.parse(value) <= Date.now(), attrs.due_at);
+          assert.equal(await card.locator('[data-action="complete"]').isEnabled(), due);
+          if (size === "mobile" && theme === "maciek" && language === "pl" && ["preshape","dough_ready","bake_start","cooling_check"].includes(stepId)) {
+            await page.screenshot({path:resolve(output, `${size}-${stepId}-full-instructions.png`), fullPage:true, animations:"disabled"});
+          }
+          instructionCount++;
         }
       }
     }
@@ -274,9 +323,9 @@ try {
   }), true);
   assert.deepEqual(errors, []);
   await mkdir(output, {recursive:true});
-  const report = { combinations:count, widths:[402,834,1440], themes:Object.keys(themes), languages:["en","pl"], scenarios:Object.keys(fixtures.scenarios.en), browser:browser.version(), errors };
+  const report = { combinations:count, instruction_combinations:instructionCount, widths:[402,834,1440], themes:Object.keys(themes), languages:["en","pl"], scenarios:Object.keys(fixtures.scenarios.en), stages:Object.keys(fixtures.stage_scenarios.en), browser:browser.version(), errors };
   await writeFile(resolve(output, "report.json"), JSON.stringify(report, null, 2));
-  console.log(`${count} layout/state/language/theme combinations passed; actions, retry identities, countdown, disconnect, scoped themes and reduced motion passed.`);
+  console.log(`${count} lifecycle combinations and ${instructionCount} full-instruction combinations passed; actions, retry identities, countdown, disconnect, scoped themes and reduced motion passed.`);
 } finally {
   await browser.close(); await new Promise(resolve => server.close(resolve));
 }
