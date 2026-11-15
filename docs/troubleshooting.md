@@ -39,7 +39,16 @@ minimum duration (15 minutes for the uncovered stage, 20 for covered baking).
 
 Check that the integration loaded, compare actual entity IDs with the YAML and
 update references after language-specific naming or collisions. No HACS components
-are required. In paused state controls are unavailable while current-step/timeline
+are required beyond the integration itself. For the redesigned card, update
+`entity_prefix` or individual `entities` overrides (see [setup](deployment.md#baking-dashboard)).
+If HA reports “Custom element doesn't exist: bread-assistant-card”, verify the
+integration's `frontend/` files were included, restart staging HA and refresh its
+frontend cache. The module URL is
+`/bread_assistant/frontend/bread-assistant-card.js?v=1`; see the resource fallback
+instructions if your frontend does not load it automatically. The built-in-only
+`bread_assistant_native.yaml` remains available.
+
+In paused state completion/snooze are unavailable while current-step/timeline
 information remains visible. Local times follow HA Settings → System → General;
 all persisted timestamps remain UTC. Confirm notification dashboard path if using
 a different dashboard URL.

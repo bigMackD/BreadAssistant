@@ -32,7 +32,7 @@ No integration YAML entry, extra containers, database or network access is neede
 for production. The manifest omits documentation/issue URLs because this repository
 has no known published project URL; local documentation is linked from README.
 
-## Native dashboard
+## Baking dashboard
 
 Copy `dashboards/bread_assistant.yaml` to
 `<config>/dashboards/bread_assistant.yaml`. Merge this example into your existing
@@ -54,11 +54,43 @@ is `/bread-assistant/overview`, matching the default notification link. Alternat
 create a new storage dashboard, open its raw configuration editor and paste the
 provided YAML. Set the corresponding dashboard path in integration options.
 
-Only native cards are used. The default entity IDs in the YAML match the tested
-English entity registration. If HA assigns different IDs (language, existing name
-collision or renaming), update the YAML references in cards **and templates**.
-The dashboard stacks on narrow screens and uses compact timeline paragraphs rather
-than a wide table. Physical iPhone/browser layout still needs staging verification.
+The integration serves and loads `custom:bread-assistant-card` automatically when
+HA's HTTP and frontend integrations are enabled. Copy the entire integration,
+including its `frontend/` folder, for manual or HACS installation. No button-card,
+layout-card, card-mod or custom theme is required. Restart staging HA after an
+upgrade and refresh the browser/Companion frontend cache if the old card persists.
+
+This workspace's YAML uses `entity_prefix: kitchen_bread_assistant`. For default
+registry names, change it to `bread_assistant`. Inspect your sensors in Developer
+Tools → States. For individually renamed sensors, override only the relevant keys:
+
+```yaml
+type: custom:bread-assistant-card
+entity_prefix: bread_assistant
+entities:
+  status: sensor.my_bake_status
+  current_step: sensor.my_current_baking_step
+```
+
+The other supported keys are `next_step`, `next_due`, `progress`, `overdue_count`.
+Actions use the canonical Bread Assistant services with captured bake/step IDs;
+button entity names do not need configuring. The panel view uses the whole available
+width; the card also works inside existing sections or other Lovelace views.
+It stacks at 760px available card width, including on iPhone 16 Pro (402 CSS px).
+
+For frontend configurations that do not load the module automatically, add this
+**JavaScript module** under Settings → Dashboards → Resources (advanced mode), or
+merge it into `lovelace.resources` when resources are managed in YAML:
+
+```yaml
+url: /bread_assistant/frontend/bread-assistant-card.js?v=1
+type: module
+```
+
+Use one registration method. The HTTP integration must be enabled to serve assets.
+If you prefer entirely built-in cards, install
+`dashboards/bread_assistant_native.yaml` instead; adjust its entity references in
+both cards and Jinja templates. Existing dashboards and automations keep working.
 
 ## Starting and progressing a bake
 

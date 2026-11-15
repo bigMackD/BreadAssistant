@@ -1,0 +1,153 @@
+{
+  "ui": {
+    "intro": "Wybierz **Dokarm zakwas** lub **Gotowy zakwas**, aby rozpocząć. Gotowy zakwas pomija dokarmianie; nadal potwierdzasz jego gotowość.",
+    "paused_title": "Przypomnienia wstrzymane",
+    "paused": "Fermentacja, wyrastanie i czas pieczenia nadal biegną. Wznów przypomnienia, aby sprawdzić zaległe zadania. Nigdy nie zostawiaj gorącego piekarnika bez nadzoru.",
+    "no_task": "Brak aktywnego zadania",
+    "start_hint": "Rozpocznij wypiek lub wznów przypomnienia, aby zobaczyć następne zadanie.",
+    "due": "Termin",
+    "snoozed": "Przypomnienie odroczone do",
+    "confirm": "Potwierdzenie oznacza, że wykonano czynność lub oceniono gotowość.",
+    "next_progress": "Następne etapy i postęp",
+    "timeline": "Harmonogram",
+    "estimates": "Szacowane czasy wymagają Twojej oceny. **Pogrubione nazwy** oznaczają 12 głównych etapów przepisu.",
+    "overdue": "przekroczony szacowany termin",
+    "plan": "Plan",
+    "actual": "Wykonano",
+    "recipe_safety": "Przepis i bezpieczeństwo",
+    "source": "Podstawowy chleb pszenny na zakwasie Justyny Dragan",
+    "attribution": "Na podstawie",
+    "method": "Przeczytaj pełny przepis autorki, aby poznać technikę. Podane czasy są orientacyjne.",
+    "safety": "Gorące żeliwo o temperaturze 250 °C grozi poważnym oparzeniem. Używaj suchych rękawic kuchennych, odkładaj pokrywkę na powierzchnię odporną na ciepło i uważaj na parę.",
+    "baking": "Pod przykryciem: 20 min w 250 °C. Bez przykrycia: 15–20 min w 230 °C; przypomnienie następuje po 20 minutach. Przed krojeniem samodzielnie sprawdź ostygnięcie.",
+    "diagnostics": "Diagnostyka",
+    "bake": "Wypiek",
+    "starter": "Zakwas",
+    "workflow": "Przygotowanie zakwasu",
+    "last_sync": "Ostatnia synchronizacja",
+    "none": "brak",
+    "unlinked": "niepowiązany",
+    "no_errors": "Brak błędów dostarczania powiadomień."
+  },
+  "notifications": {
+    "done": "Wykonano: {title}",
+    "snooze": "Przypomnij za 10 minut",
+    "outstanding": "Zaległe etapy ({count}): {steps}. Przyciski dotyczą etapu: {title}. Sprawdź harmonogram.",
+    "hot": "Gorące żeliwo: używaj suchych rękawic kuchennych; unikaj oparzeń.",
+    "title": "Bread Assistant — {title}",
+    "catchup": "zaległe zadania"
+  },
+  "live": {
+    "bake": "Wypiek",
+    "paused": "Wstrzymano (czas procesu nadal biegnie)",
+    "due": "Czas wykonać etap — potwierdź ręcznie",
+    "next": "Następna czynność",
+    "critical_paused": "Wstrzymano · {title}",
+    "message": "{title} · {status}"
+  },
+  "diagnostics": {
+    "storage": "Błąd zapisu lub harmonogramu: {error}",
+    "reminder": "Nie udało się dostarczyć przypomnienia: {error}",
+    "live_cleanup": "Nie udało się zakończyć Live Activity: {error}",
+    "live_delivery": "Nie udało się dostarczyć Live Activity: {error}"
+  },
+  "recipes": {
+    "justyna_basic_wheat_sourdough": {
+      "v1": {
+        "title": "Podstawowy chleb pszenny na zakwasie — według Justyny Dragan",
+        "description": "Chleb pszenny na zakwasie z autolizą, rozciąganiem i składaniem, nocnym wyrastaniem w lodówce oraz pieczeniem w garnku żeliwnym.",
+        "ingredients": {
+          "0": "Dokarmienie zakwasu: 40 g zakwasu z lodówki, 40 g mąki pszennej pełnoziarnistej, 40 g mąki pszennej chlebowej typ 750, 80 g wody.",
+          "1": "Ciasto: 350 g mąki pszennej chlebowej typ 750, 235 g wody (32–35 °C), 120 g aktywnego dokarmionego zakwasu, 10 g soli.",
+          "2": "Akcesoria: oliwa, mąka ryżowa, mąka do podsypywania, papier do pieczenia, koszyk do wyrastania, garnek żeliwny z pokrywką, suche rękawice kuchenne, kratka do studzenia."
+        },
+        "steps": {
+          "feed_starter": {
+            "title": "Dokarm zakwas",
+            "instructions": "Połącz składniki do dokarmienia zakwasu. Potwierdź wykonanie po dokarmieniu; gotowość potwierdzisz osobno."
+          },
+          "autolyse_start": {
+            "title": "Rozpocznij autolizę",
+            "instructions": "Wymieszaj mąkę i wodę na ciasto, aż znikną suche miejsca. Przykryj i odstaw; zakwas i sól dodasz później."
+          },
+          "starter_ready": {
+            "title": "Potwierdź gotowość zakwasu",
+            "instructions": "Samodzielnie oceń zakwas. Kontynuuj tylko, gdy jest aktywny i nadaje się do pieczenia; szacowane cztery godziny nie potwierdzają gotowości."
+          },
+          "autolyse_complete": {
+            "title": "Potwierdź zakończenie autolizy",
+            "instructions": "Potwierdź, że ciasto odpoczywało przez godzinę, aby mąka wchłonęła wodę."
+          },
+          "knead_start": {
+            "title": "Rozpocznij wyrabianie",
+            "instructions": "Dodaj aktywny zakwas i sól do ciasta po autolizie. Wyrabiaj do równomiernego połączenia składników."
+          },
+          "bulk_start": {
+            "title": "Rozpocznij fermentację wstępną",
+            "instructions": "Po wyrabianiu przełóż ciasto do lekko naoliwionego pojemnika i przykryj. Potwierdź wykonanie, aby zapisać rzeczywisty początek fermentacji wstępnej."
+          },
+          "fold_1": {
+            "title": "Pierwsze rozciąganie i składanie",
+            "instructions": "Wilgotnymi dłońmi delikatnie rozciągnij i złóż ciasto. Ponownie przykryj."
+          },
+          "fold_2": {
+            "title": "Drugie rozciąganie i składanie",
+            "instructions": "Powtórz rozciąganie i składanie. Termin przypada godzinę po rozpoczęciu fermentacji wstępnej, niezależnie od czasu pierwszego składania."
+          },
+          "bulk_ready": {
+            "title": "Potwierdź koniec fermentacji wstępnej",
+            "instructions": "Oceń przyrost objętości i napowietrzenie ciasta. W razie potrzeby poczekaj dłużej; potwierdź dopiero po własnej ocenie."
+          },
+          "preshape": {
+            "title": "Formowanie wstępne",
+            "instructions": "Delikatnie wyłóż ciasto i uformuj luźną kulę. Potwierdź wykonanie, aby rozpocząć odpoczynek na blacie."
+          },
+          "final_shape": {
+            "title": "Formowanie końcowe",
+            "instructions": "Po dziesięciu minutach odpoczynku na blacie uformuj bochenek, delikatnie napinając powierzchnię ciasta."
+          },
+          "cold_proof_start": {
+            "title": "Wstaw uformowane ciasto do lodówki",
+            "instructions": "Ułóż bochenek łączeniem do góry w oprószonym mąką koszyku, przykryj i wstaw do lodówki. Potwierdź wykonanie po wstawieniu do lodówki."
+          },
+          "preheat_oven": {
+            "title": "Rozgrzej piekarnik i garnek żeliwny",
+            "instructions": "Rozgrzej piekarnik i przykryty garnek żeliwny do 250 °C. Używaj suchych rękawic kuchennych; gorące żeliwo grozi poważnym oparzeniem."
+          },
+          "dough_ready": {
+            "title": "Potwierdź gotowość ciasta",
+            "instructions": "Oceń bochenek po wyrastaniu w lodówce i potwierdź gotowość. Dwanaście godzin to wskazówka, a nie automatyczne potwierdzenie."
+          },
+          "oven_ready": {
+            "title": "Potwierdź rozgrzanie piekarnika",
+            "instructions": "Sprawdź, czy piekarnik i garnek żeliwny są w pełni rozgrzane. Garnek o temperaturze 250 °C chwytaj suchymi rękawicami odpornymi na ciepło."
+          },
+          "score_loaf": {
+            "title": "Natnij bochenek",
+            "instructions": "Wyłóż bochenek na papier do pieczenia i ostrożnie natnij przed włożeniem. Trzymaj dłonie z dala od gorącego garnka."
+          },
+          "bake_start": {
+            "title": "Rozpocznij pieczenie pod przykryciem",
+            "instructions": "Ostrożnie włóż bochenek do gorącego garnka. Przykryj i piecz w 250 °C przez 20 minut. Potwierdź wykonanie po włożeniu."
+          },
+          "remove_lid": {
+            "title": "Zdejmij pokrywkę; piecz bez przykrycia",
+            "instructions": "Suchymi rękawicami kuchennymi zdejmij gorącą pokrywkę. Zmniejsz temperaturę do 230 °C i piecz bez przykrycia przez 15–20 minut."
+          },
+          "bake_finish": {
+            "title": "Wyjmij bochenek",
+            "instructions": "Sprawdź bochenek po 15–20 minutach pieczenia bez przykrycia (termin wynosi 20 minut). Używając rękawic kuchennych, przełóż go na kratkę."
+          },
+          "cooling_start": {
+            "title": "Rozpocznij studzenie",
+            "instructions": "Umieść bochenek na kratce, aby powietrze docierało od spodu. Odstaw gorący garnek i pokrywkę w bezpieczne miejsce."
+          },
+          "cooling_check": {
+            "title": "Sprawdź ostygnięcie przed krojeniem",
+            "instructions": "Przed krojeniem pozwól miękiszowi ostygnąć. Samodzielnie sprawdź bochenek; przypomnienie po dwóch godzinach jest orientacyjne."
+          }
+        }
+      }
+    }
+  }
+}

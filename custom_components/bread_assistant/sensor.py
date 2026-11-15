@@ -16,16 +16,24 @@ from .const import DEFAULT_RECIPE
 from .entity import BreadEntity
 
 DESCRIPTIONS = (
-    SensorEntityDescription(key="status", name="Status", icon="mdi:bread-slice"),
-    SensorEntityDescription(key="current_step", name="Current step"),
-    SensorEntityDescription(key="next_step", name="Next step"),
     SensorEntityDescription(
-        key="next_due", name="Next due", device_class=SensorDeviceClass.TIMESTAMP
+        key="status",
+        translation_key="status",
+        icon="mdi:bread-slice",
+        device_class=SensorDeviceClass.ENUM,
+        options=["idle", "active", "paused", "completed", "canceled"],
+    ),
+    SensorEntityDescription(key="current_step", translation_key="current_step"),
+    SensorEntityDescription(key="next_step", translation_key="next_step"),
+    SensorEntityDescription(
+        key="next_due",
+        translation_key="next_due",
+        device_class=SensorDeviceClass.TIMESTAMP,
     ),
     SensorEntityDescription(
-        key="progress", name="Progress", native_unit_of_measurement="%"
+        key="progress", translation_key="progress", native_unit_of_measurement="%"
     ),
-    SensorEntityDescription(key="overdue_count", name="Overdue count"),
+    SensorEntityDescription(key="overdue_count", translation_key="overdue_count"),
 )
 
 
@@ -63,11 +71,14 @@ class BreadSensor(BreadEntity, SensorEntity):
         index = 1 if key == "next_step" else 0
         if not bake or len(steps) <= index:
             return None
-        return bake.recipe_snapshot.by_id[steps[index].step_id].title
+        return self.coordinator.translator.step(
+            bake.recipe_snapshot, steps[index].step_id, "title"
+        )
 
     @property
     def extra_state_attributes(self) -> dict[str, Any] | None:
         bake = self.coordinator.bake
+        tr = self.coordinator.translator
         key = self.entity_description.key
         if key == "status":
             recipe = (
@@ -77,9 +88,13 @@ class BreadSensor(BreadEntity, SensorEntity):
             )
             return {
                 "bake_id": bake.id if bake else None,
-                "recipe_title": recipe.title,
+                "recipe_title": tr.recipe(recipe, "title", recipe.title),
+                "recipe_description": tr.recipe(recipe, "description"),
                 "recipe_url": recipe.url,
-                "ingredients": list(recipe.ingredients),
+                "ingredients": [
+                    tr.recipe(recipe, f"ingredients.{i}", ingredient)
+                    for i, ingredient in enumerate(recipe.ingredients)
+                ],
                 "starter_id": bake.starter_id if bake else None,
                 "starter_workflow": bake.starter_workflow if bake else None,
                 "archive_count": len(self.coordinator.archives),
@@ -87,6 +102,16 @@ class BreadSensor(BreadEntity, SensorEntity):
                 "last_error": self.coordinator.last_error,
                 "live_activity_error": self.coordinator.live_activities.error,
                 "time_format": self.coordinator.options["time_format"],
+                "language": tr.language,
+                "ui": tr.section("content.ui"),
+                "status_label": tr.text(
+                    f"entity.sensor.status.state.{bake.status if bake else 'idle'}"
+                ),
+                "workflow_label": tr.text(
+                    f"selector.starter_workflow.options.{bake.starter_workflow}"
+                )
+                if bake
+                else None,
             }
         if key != "current_step":
             return None
@@ -96,7 +121,9 @@ class BreadSensor(BreadEntity, SensorEntity):
         return {
             "bake_id": bake.id if bake else None,
             "step_id": current.step_id if current else None,
-            "instructions": bake.recipe_snapshot.by_id[current.step_id].instructions
+            "instructions": tr.step(
+                bake.recipe_snapshot, current.step_id, "instructions"
+            )
             if bake and current
             else None,
             "step_status": current.status if current else None,
@@ -105,8 +132,11 @@ class BreadSensor(BreadEntity, SensorEntity):
             "timeline": [
                 {
                     "id": s.id,
-                    "title": s.title,
+                    "title": tr.step(bake.recipe_snapshot, s.id, "title"),
                     "state": bake.step_runs[s.id].status,
+                    "state_label": tr.text(
+                        f"entity.sensor.current_step.state_attributes.step_status.state.{bake.step_runs[s.id].status}"
+                    ),
                     "planned_at": bake.step_runs[s.id].planned_at.isoformat(),
                     "due_at": bake.step_runs[s.id].due_at.isoformat(),
                     "completed_at": bake.step_runs[s.id].completed_at.isoformat()

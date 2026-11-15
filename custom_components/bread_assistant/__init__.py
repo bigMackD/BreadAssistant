@@ -9,6 +9,28 @@ if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant, ServiceCall
 
 from .const import DOMAIN, PLATFORMS, SERVICES
+from .i18n import load_translations
+
+
+def action_error(error: Exception) -> Any:
+    """Expose domain keys to HA so each frontend can translate the failure."""
+    from homeassistant.exceptions import HomeAssistantError
+
+    from .i18n import Translator
+
+    key = getattr(error, "translation_key", "invalid_action")
+    placeholders = {
+        key: Translator().error(value) if isinstance(value, Exception) else str(value)
+        for key, value in getattr(error, "placeholders", {}).items()
+    }
+    return HomeAssistantError(
+        Translator().error(error)
+        if hasattr(error, "translation_key")
+        else Translator().text("exceptions.invalid_action.message"),
+        translation_domain=DOMAIN,
+        translation_key=key,
+        translation_placeholders=placeholders,
+    )
 
 
 async def async_setup(hass: HomeAssistant, config: dict[str, Any]) -> bool:
@@ -18,6 +40,10 @@ async def async_setup(hass: HomeAssistant, config: dict[str, Any]) -> bool:
     from homeassistant.helpers import config_validation as cv
 
     hass.data.setdefault(DOMAIN, {})
+    await hass.async_add_executor_job(load_translations)
+    from .frontend import async_setup_frontend
+
+    await async_setup_frontend(hass)
     identity = {vol.Required("bake_id"): cv.string}
     step = identity | {vol.Required("step_id"): cv.string}
     schemas = {
@@ -51,11 +77,13 @@ async def async_setup(hass: HomeAssistant, config: dict[str, Any]) -> bool:
     async def handle(call: ServiceCall) -> None:
         coordinator = hass.data[DOMAIN].get("coordinator")
         if coordinator is None:
-            raise HomeAssistantError("Bread Assistant is not loaded")
+            raise HomeAssistantError(
+                translation_domain=DOMAIN, translation_key="not_loaded"
+            )
         try:
             await coordinator.async_action(call.service, dict(call.data))
         except (ValueError, KeyError) as err:
-            raise HomeAssistantError(str(err)) from err
+            raise action_error(err) from err
 
     for name in SERVICES:
         hass.services.async_register(DOMAIN, name, handle, schema=schemas[name])

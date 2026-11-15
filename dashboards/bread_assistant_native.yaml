@@ -1,0 +1,133 @@
+# Native controls follow the frontend language. Markdown uses the integration language option.
+title: Bread Assistant
+views:
+- title: Bread Assistant
+  path: overview
+  icon: mdi:bread-slice
+  cards:
+  - type: markdown
+    content: |
+      {% set ui = state_attr('sensor.kitchen_bread_assistant_status', 'ui') or {} %}
+      # Bread Assistant
+      **{{ state_attr('sensor.kitchen_bread_assistant_status', 'status_label') or '' }}**
+      {{ state_attr('sensor.kitchen_bread_assistant_status', 'recipe_title') or '' }}
+      {{ state_attr('sensor.kitchen_bread_assistant_status', 'recipe_description') or '' }}
+
+      {{ ui.intro }}
+  - type: grid
+    columns: 2
+    square: false
+    cards:
+    - type: button
+      entity: button.kitchen_bread_assistant_start
+      tap_action:
+        action: perform-action
+        perform_action: button.press
+        target:
+          entity_id: button.kitchen_bread_assistant_start
+    - type: button
+      entity: button.kitchen_bread_assistant_start_with_prepared_starter
+      tap_action:
+        action: perform-action
+        perform_action: button.press
+        target:
+          entity_id: button.kitchen_bread_assistant_start_with_prepared_starter
+  - type: conditional
+    conditions:
+    - entity: sensor.kitchen_bread_assistant_status
+      state: paused
+    card:
+      type: markdown
+      content: |
+        {% set ui = state_attr('sensor.kitchen_bread_assistant_status', 'ui') or {} %}
+        ## {{ ui.paused_title }}
+        {{ ui.paused }}
+  - type: markdown
+    content: |
+      {% set ui = state_attr('sensor.kitchen_bread_assistant_status', 'ui') or {} %}
+      ## {{ states('sensor.kitchen_bread_assistant_current_step') if has_value('sensor.kitchen_bread_assistant_current_step') else ui.no_task }}
+      {{ state_attr('sensor.kitchen_bread_assistant_current_step', 'instructions') or ui.start_hint }}
+
+      {% set due = state_attr('sensor.kitchen_bread_assistant_current_step', 'due_at') %}
+      {% if due %}{{ ui.due }}: **{{ as_local(as_datetime(due)).strftime('%d.%m.%Y %I:%M %p %Z' if state_attr('sensor.kitchen_bread_assistant_status', 'time_format') == '12h' else '%d.%m.%Y %H:%M %Z') }}**{% endif %}
+      {% set snooze = state_attr('sensor.kitchen_bread_assistant_current_step', 'snoozed_until') %}
+      {% if snooze %}{{ ui.snoozed }} {{ as_local(as_datetime(snooze)).strftime('%H:%M %Z') }}.{% endif %}
+
+      **{{ ui.confirm }}**
+  - type: button
+    entity: sensor.kitchen_bread_assistant_current_step
+    icon: mdi:book-open-page-variant
+    show_state: true
+    tap_action:
+      action: more-info
+  - type: grid
+    columns: 2
+    square: false
+    cards:
+    - type: button
+      entity: button.kitchen_bread_assistant_complete_current
+      tap_action:
+        action: perform-action
+        perform_action: button.press
+        target:
+          entity_id: button.kitchen_bread_assistant_complete_current
+    - type: button
+      entity: button.kitchen_bread_assistant_snooze_current
+      tap_action:
+        action: perform-action
+        perform_action: button.press
+        target:
+          entity_id: button.kitchen_bread_assistant_snooze_current
+  - type: markdown
+    content: |
+      {% set ui = state_attr('sensor.kitchen_bread_assistant_status', 'ui') or {} %}
+      ## {{ ui.next_progress }}
+  - type: entities
+    entities:
+    - entity: sensor.kitchen_bread_assistant_next_due
+      format: relative
+    - entity: sensor.kitchen_bread_assistant_next_step
+    - entity: sensor.kitchen_bread_assistant_progress
+    - entity: sensor.kitchen_bread_assistant_overdue_count
+    - entity: button.kitchen_bread_assistant_pause
+    - entity: button.kitchen_bread_assistant_resume
+    - entity: button.kitchen_bread_assistant_cancel
+  - type: markdown
+    content: |
+      {% set ui = state_attr('sensor.kitchen_bread_assistant_status', 'ui') or {} %}
+      ## {{ ui.timeline }}
+      {{ ui.estimates }}
+      {% set fmt = '%d.%m.%Y %I:%M %p %Z' if state_attr('sensor.kitchen_bread_assistant_status', 'time_format') == '12h' else '%d.%m.%Y %H:%M %Z' %}
+      {% for step in state_attr('sensor.kitchen_bread_assistant_current_step', 'timeline') or [] %}
+
+      {{ '✅' if step.state == 'done' else '⏭' if step.state == 'skipped' else '⚠' if step.overdue else '●' if step.state == 'ready' else '○' }} {{ '**' if step.reference else '' }}{{ step.title }}{{ '**' if step.reference else '' }} — {{ step.state_label }}{{ ' (' ~ ui.overdue ~ ')' if step.overdue else '' }}
+
+      {{ ui.plan }}: {{ as_local(as_datetime(step.planned_at)).strftime(fmt) }}
+      · {{ ui.due }}: {{ as_local(as_datetime(step.due_at)).strftime(fmt) }}
+      {% if step.completed_at %}· {{ ui.actual }}: {{ as_local(as_datetime(step.completed_at)).strftime(fmt) }}{% endif %}
+      {% endfor %}
+  - type: markdown
+    content: |
+      {% set ui = state_attr('sensor.kitchen_bread_assistant_status', 'ui') or {} %}
+      ## {{ ui.recipe_safety }}
+      {% for ingredient in state_attr('sensor.kitchen_bread_assistant_status', 'ingredients') or [] %}
+      - {{ ingredient }}
+      {% endfor %}
+
+      {{ ui.attribution }} [{{ ui.source }}]({{ state_attr('sensor.kitchen_bread_assistant_status', 'recipe_url') }}).
+      {{ ui.method }}
+
+      **{{ ui.safety }}**
+      {{ ui.baking }}
+  - type: markdown
+    content: |
+      {% set ui = state_attr('sensor.kitchen_bread_assistant_status', 'ui') or {} %}
+      ## {{ ui.diagnostics }}
+      {{ ui.bake }}: `{{ state_attr('sensor.kitchen_bread_assistant_status', 'bake_id') or ui.none }}`
+
+      {{ ui.starter }}: {{ state_attr('sensor.kitchen_bread_assistant_status', 'starter_id') or ui.unlinked }}
+      · {{ ui.workflow }}: {{ state_attr('sensor.kitchen_bread_assistant_status', 'workflow_label') or ui.none }}
+
+      {{ ui.last_sync }}: {{ state_attr('sensor.kitchen_bread_assistant_status', 'last_sync') or ui.none }}
+
+      {{ state_attr('sensor.kitchen_bread_assistant_status', 'last_error') or ui.no_errors }}

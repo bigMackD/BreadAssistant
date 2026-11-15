@@ -8,7 +8,11 @@ from datetime import datetime, timedelta
 from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import EVENT_HOMEASSISTANT_STARTED, EVENT_HOMEASSISTANT_STOP
+from homeassistant.const import (
+    EVENT_CORE_CONFIG_UPDATE,
+    EVENT_HOMEASSISTANT_STARTED,
+    EVENT_HOMEASSISTANT_STOP,
+)
 from homeassistant.core import Event, HomeAssistant, callback
 from homeassistant.exceptions import ConfigEntryError, HomeAssistantError
 from homeassistant.helpers.event import async_track_point_in_utc_time
@@ -16,6 +20,7 @@ from homeassistant.util import dt as dt_util
 
 from . import scheduler
 from .const import DEFAULT_OPTIONS, DEFAULT_RECIPE, DOMAIN
+from .i18n import Translator, load_translations, resolve_language
 from .live_activities import LiveActivities
 from .models import BakeRun, BakeStatus, DomainError, StepRun, parse_time, utc
 from .notifications import prepare_notification
@@ -42,7 +47,7 @@ class BakeCoordinator:
         self.bake: BakeRun | None = None
         self.archives: list[dict[str, Any]] = []
         self.catalog: dict[str, Any] = {}
-        self.last_error: str | None = None
+        self._last_error: tuple[str, Exception] | None = None
         self.last_sync: datetime | None = None
         self._lock = asyncio.Lock()
         self._listeners: set[Callable[[], None]] = set()
@@ -54,7 +59,23 @@ class BakeCoordinator:
             hass, self.storage, self.options, lambda: self.closed
         )
 
+    @property
+    def translator(self) -> Translator:
+        return Translator(
+            resolve_language(self.options["language"], self.hass.config.language)
+        )
+
+    @property
+    def last_error(self) -> str | None:
+        if self._last_error is None:
+            return None
+        kind, error = self._last_error
+        return self.translator.text(
+            f"content.diagnostics.{kind}", error=self.translator.error(error)
+        )
+
     async def async_load(self) -> None:
+        await self.hass.async_add_executor_job(load_translations)
         self.catalog = await self.hass.async_add_executor_job(load_catalog)
         try:
             self.bake, self.archives = await self.storage.async_load()
@@ -62,10 +83,20 @@ class BakeCoordinator:
                 scheduler.recompute(self.bake, self.clock())
         except (ValueError, KeyError, TypeError) as err:
             raise ConfigEntryError(
-                f"Cannot restore Bread Assistant; check storage backup: {err}"
+                self.translator.text(
+                    "exceptions.restore.message", error=self.translator.error(err)
+                ),
+                translation_domain=DOMAIN,
+                translation_key="restore",
+                translation_placeholders={"error": self.translator.error(err)},
             ) from err
 
     async def async_start(self) -> None:
+        self._unsubscribers.append(
+            self.hass.bus.async_listen(
+                EVENT_CORE_CONFIG_UPDATE, self._async_language_updated
+            )
+        )
         self._unsubscribers.append(
             self.hass.bus.async_listen(
                 "service_registered", self._async_notify_available
@@ -90,6 +121,13 @@ class BakeCoordinator:
                 )
             )
 
+    async def _async_language_updated(self, event: Event) -> None:
+        if self.options["language"] != "auto":
+            return
+        async with self._lock:
+            await self._async_sync_live_activity(force=True)
+            self._publish("language_changed")
+
     async def _async_started(self, event: Event) -> None:
         await self._async_recover()
 
@@ -108,7 +146,7 @@ class BakeCoordinator:
         try:
             await self.async_tick(catchup=True)
         except (HomeAssistantError, OSError) as err:
-            self.last_error = f"Storage/scheduler error: {err}"
+            self._last_error = ("storage", err)
             _LOGGER.error("%s; retrying in one minute", self.last_error)
             self._publish("storage_error")
             self._schedule(not_before=utc(self.clock()) + timedelta(minutes=1))
@@ -157,8 +195,8 @@ class BakeCoordinator:
                 )
         await self.storage.async_save(bake, archives)
         self.bake, self.archives = bake, archives[-50:]
-        if self.last_error and self.last_error.startswith("Storage/scheduler"):
-            self.last_error = None
+        if self._last_error and self._last_error[0] == "storage":
+            self._last_error = None
         self._publish(cause)
         if cause not in ("deadline", "catchup"):
             self.live_activities.retry_at = None
@@ -179,17 +217,17 @@ class BakeCoordinator:
     async def async_action(self, action: str, data: dict[str, Any]) -> None:
         async with self._lock:
             if self.closed:
-                raise DomainError("Bread Assistant is unloading")
+                raise DomainError("unloading")
             now = utc(self.clock())
             if action == "start_bake":
                 if self.bake and self.bake.status in (
                     BakeStatus.ACTIVE,
                     BakeStatus.PAUSED,
                 ):
-                    raise DomainError("A bake is already active")
+                    raise DomainError("active_bake")
                 recipe_id = data.get("recipe_id", DEFAULT_RECIPE)
                 if recipe_id not in self.catalog:
-                    raise DomainError("Unknown recipe ID")
+                    raise DomainError("unknown_recipe")
                 bake = scheduler.create_bake(
                     self.catalog[recipe_id],
                     parse_time(data["start_time"]) if "start_time" in data else now,
@@ -199,12 +237,12 @@ class BakeCoordinator:
                 )
             else:
                 if self.bake is None or data.get("bake_id") != self.bake.id:
-                    raise DomainError("Unknown or stale bake ID")
+                    raise DomainError("stale_bake")
                 bake = deepcopy(self.bake)
                 step_id = data.get("step_id", "")
                 if action in ("complete_step", "snooze_step", "adjust_step"):
                     if step_id not in bake.step_runs:
-                        raise DomainError("Unknown step ID")
+                        raise DomainError("unknown_step_id")
                     if action == "complete_step":
                         # A repeated completion after finalization is also harmless.
                         if bake.step_runs[step_id].finished:
@@ -270,7 +308,7 @@ class BakeCoordinator:
             try:
                 await self.async_tick()
             except (HomeAssistantError, OSError) as err:
-                self.last_error = f"Storage/scheduler error: {err}"
+                self._last_error = ("storage", err)
                 _LOGGER.error("%s; retrying in one minute", self.last_error)
                 self._publish("storage_error")
                 if not self.closed and generation == self._timer_generation:
@@ -311,6 +349,7 @@ class BakeCoordinator:
                     [r.step_id for r in due],
                     catchup,
                     self.options["dashboard_path"],
+                    self.translator,
                 )
                 if due and self.options["notifications_enabled"]
                 else None
@@ -339,17 +378,17 @@ class BakeCoordinator:
             return
         try:
             if not target.startswith("notify.mobile_app_"):
-                raise DomainError("Only mobile_app notification targets are supported")
+                raise DomainError("mobile_only")
             domain, service = target.split(".", 1)
             if not self.hass.services.has_service(domain, service):
-                raise DomainError("Mobile notification destination is unavailable")
+                raise DomainError("mobile_unavailable")
             async with asyncio.timeout(15):
                 await self.hass.services.async_call(
                     domain, service, payload, blocking=True
                 )
-            self.last_error = None
+            self._last_error = None
         except (ValueError, TimeoutError, HomeAssistantError) as err:
-            self.last_error = f"Reminder delivery failed: {err}"
+            self._last_error = ("reminder", err)
             _LOGGER.warning("%s; retrying at reminder interval", self.last_error)
         self._publish("notification_delivery")
 

@@ -28,11 +28,11 @@ def create_bake(
     validate_recipe(recipe)
     started_at = utc(started_at)
     if starter_workflow not in ("feed", "prepared"):
-        raise DomainError("Unknown starter workflow")
+        raise DomainError("workflow")
     if starter_ready and starter_workflow != "prepared":
-        raise DomainError("Readiness at start is only valid for a prepared starter")
+        raise DomainError("prepared_only")
     if starter_id is not None and (not starter_id.strip() or len(starter_id) > 128):
-        raise DomainError("Starter ID must contain 1–128 characters")
+        raise DomainError("starter_id")
     bake = BakeRun(
         id=str(uuid4()),
         recipe_snapshot=recipe,
@@ -136,28 +136,28 @@ def recompute(bake: BakeRun, now: datetime) -> None:
 
 def require_active(bake: BakeRun) -> None:
     if bake.status != BakeStatus.ACTIVE:
-        raise DomainError("Bake must be active")
+        raise DomainError("active_required")
 
 
 def complete(bake: BakeRun, step_id: str, now: datetime) -> bool:
     require_active(bake)
     now = utc(now)
     if now < bake.started_at:
-        raise DomainError("Bake has not started yet")
+        raise DomainError("not_started")
     if step_id not in bake.step_runs:
-        raise DomainError("Unknown step")
+        raise DomainError("unknown_step")
     run = bake.step_runs[step_id]
     if run.finished:
         return False
     step = bake.recipe_snapshot.by_id[step_id]
     if not eligible(bake, step):
-        raise DomainError("Confirm or complete all prerequisites first")
+        raise DomainError("prerequisites")
     # Readiness estimates can be confirmed early; fixed baking/rest timers cannot.
     earliest = run.due_at
     if step.minimum_minutes is not None:
         earliest -= timedelta(minutes=step.duration_minutes - step.minimum_minutes)
     if step.kind.value == "timer" and now < earliest:
-        raise DomainError("This timed stage has not reached its deadline")
+        raise DomainError("too_early")
     run.status = StepStatus.DONE
     run.started_at = run.completed_at = run.acknowledged_at = now
     run.snoozed_until = None
@@ -179,7 +179,7 @@ def complete(bake: BakeRun, step_id: str, now: datetime) -> bool:
 def snooze(bake: BakeRun, step_id: str, minutes: int, now: datetime) -> bool:
     require_active(bake)
     if not 1 <= minutes <= 1440:
-        raise DomainError("Snooze must be 1–1440 minutes")
+        raise DomainError("snooze_range")
     run = bake.step_runs[step_id]
     if run.finished:
         return False
@@ -199,7 +199,7 @@ def adjust(bake: BakeRun, step_id: str, due_at: datetime, now: datetime) -> None
     require_active(bake)
     run = bake.step_runs[step_id]
     if run.finished:
-        raise DomainError("Cannot reschedule a finished step")
+        raise DomainError("finished_step")
     run.adjusted_at = utc(due_at)
     run.snoozed_until = None
     run.notification_generation += 1
@@ -218,7 +218,7 @@ def lifecycle(bake: BakeRun, action: str, now: datetime) -> bool:
     if bake.status == target:
         return False
     if bake.status not in (BakeStatus.ACTIVE, BakeStatus.PAUSED):
-        raise DomainError("Bake is already finished")
+        raise DomainError("finished_bake")
     bake.status = target
     bake.pause_started_at = now if target == BakeStatus.PAUSED else None
     bake.revision += 1

@@ -5,15 +5,25 @@ from datetime import UTC, datetime
 from enum import StrEnum
 from typing import Any
 
+from .i18n import Translator
+
 
 class DomainError(ValueError):
     """An invalid user transition or recipe."""
+
+    def __init__(self, translation_key: str, **placeholders: Any) -> None:
+        self.translation_key = translation_key
+        self.placeholders = placeholders
+        super().__init__(translation_key)
+
+    def __str__(self) -> str:
+        return Translator().error(self)
 
 
 def utc(value: datetime) -> datetime:
     """Reject ambiguous local timestamps; normalize elapsed-time arithmetic to UTC."""
     if value.tzinfo is None or value.utcoffset() is None:
-        raise DomainError("A timestamp must include a timezone offset")
+        raise DomainError("timestamp_timezone")
     return value.astimezone(UTC)
 
 
@@ -21,7 +31,7 @@ def parse_time(value: str) -> datetime:
     try:
         return utc(datetime.fromisoformat(value))
     except (TypeError, ValueError) as err:
-        raise DomainError("Use an ISO datetime with a timezone offset") from err
+        raise DomainError("invalid_datetime") from err
 
 
 class BakeStatus(StrEnum):

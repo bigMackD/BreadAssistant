@@ -38,7 +38,7 @@ class BakeStorage:
         if payload is None:
             return None, []
         if not isinstance(payload, dict):
-            raise DomainError("Storage payload must be an object")
+            raise DomainError("storage_object")
         payload = migrate_payload(payload, payload.get("schema_version", 1))
         self.live_activities = live_activities_from_dict(
             payload.get("live_activities", [])
@@ -47,7 +47,7 @@ class BakeStorage:
         if not isinstance(archives, list) or any(
             not isinstance(a, dict) for a in archives
         ):
-            raise DomainError("Invalid archive summaries")
+            raise DomainError("archives")
         bake = bake_from_dict(payload["bake"]) if payload.get("bake") else None
         return bake, archives[-50:]
 

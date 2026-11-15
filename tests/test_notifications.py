@@ -129,3 +129,21 @@ async def test_disabled_notifications(phone):
     c.options["notifications_enabled"] = False
     await c.async_action("start_bake", {})
     assert deliveries == []
+
+
+async def test_localized_notifications_through_coordinator(phone):
+    c, deliveries = phone
+    c.options["language"] = "pl"
+    await c.async_action("start_bake", {})
+    token = deliveries[-1]["data"]["actions"][0]["action"]
+    assert "Dokarm zakwas" in deliveries[-1]["title"]
+    # Language does not invalidate a persisted action capability.
+    c.options["language"] = "en"
+    await c._async_mobile_action(
+        Event("mobile_app_notification_action", {"action": token})
+    )
+    assert c.bake.step_runs["feed_starter"].completed_at == START
+    c.options["language"] = "pl"
+    c.clock = lambda: START + timedelta(hours=3)
+    await c.async_tick()
+    assert "Rozpocznij autolizę" in deliveries[-1]["title"]

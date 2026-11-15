@@ -6,6 +6,79 @@ party dependency. The catalog reads only bundled JSON; HA runs that IO in an
 executor. Frozen recipe definitions are embedded in every bake, so upgrading the
 bundled recipe never rewrites an existing bake's instructions or original plan.
 
+## Translations
+
+`i18n.py` is a pure Python presentation adapter. It loads bundled UTF-8 JSON once,
+in an HA executor during setup, and centralizes language normalization, lookup,
+placeholder validation, and per-key English fallback. No translation lookup runs
+inside the scheduler. Unknown recipes retain their snapshot text as a final
+fallback. Identifiers, enums, dependencies, UTC times, and event names stay stable.
+
+There are two complementary asset types, with no copied runtime dictionaries:
+
+- `translations/en.json` and `translations/pl.json` use the official HA schema for
+  flows, selectors, entity names/states/attributes, actions, and exceptions.
+  `strings.json` mirrors the English source for maintenance; this custom integration
+  ships resolved translation files, without core-only translation references.
+- `localization/en.json` and `localization/pl.json` contain recipe presentation,
+  dashboard text, reminder templates, Live Activity text, and diagnostic wrappers.
+  They are separate because arbitrary recipe/frontend sections are outside the
+  native translation schema. Runtime lookup reuses native states and exception
+  messages rather than duplicating them here.
+
+Bundled recipe display fields contain stable keys such as
+`content.recipes.justyna_basic_wheat_sourdough.v1.steps.feed_starter.title`.
+The presentation adapter also derives these keys from the recipe ID/version and
+step ID for legacy English snapshots. Existing stored snapshots are never rewritten
+to change their language. Preserve old versioned translations when changing a
+recipe's method; introduce a new recipe version for changes to instructions or
+timing. Ordinary spelling/translation corrections can update existing assets.
+Recipe descriptions are presentation-only. User-provided IDs, references and notes
+are displayed verbatim. Third-party transport error details are retained verbatim
+inside translated diagnostic messages.
+
+`language` is an additive config/options preference: `auto` (default), `en`, or
+`pl`. Automatic mode reads `hass.config.language`; regional variants normalize to
+their base language and unsupported languages use English. System configuration
+events republish attributes and synchronize Live Activities without mutating the
+bake. Options changes use the existing save/reload lifecycle. Native HA translation
+keys let HA localize frontend controls independently. Stable entity object ID
+suggestions preserve the original IDs even on first setup in Polish; existing
+registry customizations continue to take precedence.
+
+Static Lovelace Jinja has no frontend profile language context. The built-in
+dashboard uses a localized `ui` attribute on the status sensor for headings and
+copy, native names for buttons, and additive `state_label` timeline fields. Raw
+status/timeline enums remain unchanged for automations. Markdown, recipe text, and
+push content follow the backend preference; HA-owned dialogs and controls use HA's
+frontend localization. No custom card or external translation fetch is required.
+
+To add a language:
+
+1. Copy both English JSON files to the new base language code in `translations/`
+   and `localization/`. Translate every leaf, keeping keys and `{placeholders}`
+   unchanged. Use UTF-8. Do not put runtime sections in the native file.
+2. Add the code to the language selector in `config_flow.py`, and add its localized
+   option label to each native translation file (and the English `strings.json`).
+   Automatic mode discovers shipped native language files without a Python
+   dictionary of supported locales.
+3. Keep recipe IDs, versions, step IDs, ingredient indices, and service identifiers
+   unchanged. Translate terminology, readiness conditions, and all safety warnings.
+   Keep English complete and retain translations for every persisted recipe version.
+4. Extend `tests/test_i18n.py` to compare the new locale's key sets and placeholders
+   with English, exercise its recipes/notifications, and render dashboard templates.
+   Run `python scripts/check.py` in the documented test environment.
+5. Ship both files inside the integration directory. HACS distributes that directory
+   recursively; there is no external locale package or build step. Restart HA and
+   refresh frontend caches when installing edited assets.
+
+Domain failures carry translation keys and parameters. The HA boundary adds
+`translation_domain`, `translation_key`, and `translation_placeholders` to action
+errors so the frontend can translate them. English `str(error)` remains readable
+for logs and existing Python callers. Nested domain errors can be translated by
+the backend presentation adapter. Missing or mismatched translated placeholders
+fall back to English, and missing unknown-recipe keys fall back to snapshot text.
+
 ```mermaid
 flowchart TD
     UI[Native dashboard and mobile actions] --> HA[Validated HA actions / buttons]
@@ -132,6 +205,37 @@ starts autolyse immediately, and retains readiness confirmation. Passing
 user confirmation. Original reference offsets remain available for comparison.
 
 ## API references checked
+
+The redesigned dashboard uses a dependency-free ES module in `frontend/`, registered
+by `frontend.py` through HA's async static-path API and extra-module loader. HTTP
+and frontend are optional `after_dependencies`; headless installs keep working.
+The HACS integration package includes all three JS files. There is no build step,
+network fetch of libraries, mandatory theme, or separate HACS frontend package.
+The original native dashboard is retained as a fallback.
+
+`bread-assistant-card.js` implements HA's custom-element card contract (`setConfig`,
+`hass`, `getCardSize`, `getGridOptions`). `styles.js` centralizes scoped theme tokens
+and responsive components; `strings.js` owns English/Polish card chrome. Recipe,
+safety and diagnostic content comes from existing localized sensor attributes.
+Content follows the backend language preference, including automatic HA system
+language selection. Contributors adding a language should translate both the
+backend bundles and `frontend/strings.js`; browser checks enforce matching keys.
+
+The card subscribes through HA's normal `hass` setter and renders only for relevant
+sensor/connection changes. A connected-only interval changes countdown text and
+time-dependent presentation, without polling the server or writing entities. It
+preserves expanded details and keyboard focus across updates, clamps unavailable
+progress, disables unavailable actions, and respects reduced-motion preferences.
+Dates use HA's system timezone and the integration's time-format preference.
+
+Actions call the existing canonical services with the displayed bake/step IDs.
+Failures are shown inline; a retry retains those IDs rather than retargeting another
+step. A busy guard prevents overlapping submissions. Cancel asks for confirmation.
+Snoozing changes reminder delivery only, pause does not freeze process time, and
+no readiness gate is auto-confirmed. No domain or scheduling logic changes.
+Dynamic text is HTML-escaped and source URLs permit only HTTP(S). All CSS is in a
+shadow root. Local browser fixtures exercise the real sensor presentations;
+see [UI validation](ui-validation.md).
 
 Implementation was checked against installed HA 2026.10.4 source and real fixtures:
 [actions](https://developers.home-assistant.io/docs/dev_101_services/),

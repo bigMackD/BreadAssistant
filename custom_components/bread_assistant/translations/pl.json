@@ -12,12 +12,14 @@
           "dashboard_path": "Ścieżka pulpitu",
           "time_format": "Format czasu",
           "live_activities_enabled": "Włącz Live Activities (iOS)",
-          "live_activity_notify_target": "Powiadomienia Live Activity na iPhone"
+          "live_activity_notify_target": "Powiadomienia Live Activity na iPhone",
+          "language": "Język treści integracji"
         }
       }
     },
     "error": {
-      "notify_missing": "Wybrana usługa powiadomień jest niedostępna."
+      "notify_missing": "Wybrana usługa powiadomień jest niedostępna.",
+      "invalid_language": "Wybierz język automatyczny, angielski lub polski."
     },
     "abort": {
       "already_configured": "Bread Assistant jest już skonfigurowany."
@@ -26,7 +28,7 @@
   "options": {
     "step": {
       "init": {
-        "title": "Bread Assistant preferences",
+        "title": "Ustawienia Bread Assistant",
         "data": {
           "notify_target": "Powiadomienia na telefon",
           "notifications_enabled": "Włącz przypomnienia",
@@ -34,21 +36,122 @@
           "dashboard_path": "Ścieżka pulpitu",
           "time_format": "Format czasu",
           "live_activities_enabled": "Włącz Live Activities (iOS)",
-          "live_activity_notify_target": "Powiadomienia Live Activity na iPhone"
+          "live_activity_notify_target": "Powiadomienia Live Activity na iPhone",
+          "language": "Język treści integracji"
         }
       }
     },
     "error": {
-      "notify_missing": "Wybrana usługa powiadomień jest niedostępna."
+      "notify_missing": "Wybrana usługa powiadomień jest niedostępna.",
+      "invalid_language": "Wybierz język automatyczny, angielski lub polski."
     }
   },
   "entity": {
     "sensor": {
       "status": {
-        "name": "Stan"
+        "name": "Stan",
+        "state": {
+          "idle": "Bezczynny",
+          "active": "W trakcie",
+          "paused": "Wstrzymany",
+          "completed": "Zakończony",
+          "canceled": "Anulowany"
+        },
+        "state_attributes": {
+          "bake_id": {
+            "name": "Identyfikator wypieku"
+          },
+          "recipe_title": {
+            "name": "Przepis"
+          },
+          "recipe_description": {
+            "name": "Opis przepisu"
+          },
+          "recipe_url": {
+            "name": "Źródło przepisu"
+          },
+          "ingredients": {
+            "name": "Składniki"
+          },
+          "starter_id": {
+            "name": "Odwołanie do zakwasu"
+          },
+          "starter_workflow": {
+            "name": "Przygotowanie zakwasu",
+            "state": {
+              "feed": "Dokarm zakwas",
+              "prepared": "Gotowy zakwas"
+            }
+          },
+          "archive_count": {
+            "name": "Zarchiwizowane wypieki"
+          },
+          "last_sync": {
+            "name": "Ostatnia synchronizacja"
+          },
+          "last_error": {
+            "name": "Błąd przypomnienia"
+          },
+          "live_activity_error": {
+            "name": "Błąd Live Activity"
+          },
+          "time_format": {
+            "name": "Format czasu",
+            "state": {
+              "24h": "24-godzinny",
+              "12h": "12-godzinny"
+            }
+          },
+          "language": {
+            "name": "Język treści",
+            "state": {
+              "en": "Angielski",
+              "pl": "Polski"
+            }
+          },
+          "ui": {
+            "name": "Teksty pulpitu"
+          },
+          "status_label": {
+            "name": "Opis stanu"
+          },
+          "workflow_label": {
+            "name": "Opis przygotowania zakwasu"
+          }
+        }
       },
       "current_step": {
-        "name": "Bieżący etap"
+        "name": "Bieżący etap",
+        "state_attributes": {
+          "step_status": {
+            "name": "Stan etapu",
+            "state": {
+              "pending": "Oczekuje",
+              "ready": "Gotowy",
+              "in_progress": "W trakcie",
+              "done": "Wykonany",
+              "skipped": "Pominięty"
+            }
+          },
+          "bake_id": {
+            "name": "Identyfikator wypieku"
+          },
+          "step_id": {
+            "name": "Identyfikator etapu"
+          },
+          "instructions": {
+            "name": "Instrukcje"
+          },
+          "due_at": {
+            "name": "Termin"
+          },
+          "snoozed_until": {
+            "name": "Przypomnienie odroczone do"
+          },
+          "timeline": {
+            "name": "Harmonogram"
+          }
+        }
       },
       "next_step": {
         "name": "Następny etap"
@@ -65,13 +168,13 @@
     },
     "button": {
       "start": {
-        "name": "Rozpocznij"
+        "name": "Dokarm zakwas"
       },
       "start_prepared": {
-        "name": "Rozpocznij z gotowym zakwasem"
+        "name": "Gotowy zakwas"
       },
       "complete_current": {
-        "name": "Potwierdź etap"
+        "name": "Wykonano / Potwierdź gotowość"
       },
       "snooze_current": {
         "name": "Przypomnij za 10 minut"
@@ -84,6 +187,309 @@
       },
       "cancel": {
         "name": "Anuluj"
+      }
+    }
+  },
+  "selector": {
+    "language": {
+      "options": {
+        "auto": "Automatycznie (język systemu Home Assistant)",
+        "en": "Angielski",
+        "pl": "Polski"
+      }
+    },
+    "time_format": {
+      "options": {
+        "24h": "24-godzinny",
+        "12h": "12-godzinny"
+      }
+    },
+    "notify_target": {
+      "options": {
+        "none": "Bez powiadomień na telefon"
+      }
+    },
+    "starter_workflow": {
+      "options": {
+        "feed": "Dokarm zakwas",
+        "prepared": "Gotowy zakwas"
+      }
+    }
+  },
+  "exceptions": {
+    "timestamp_timezone": {
+      "message": "Znacznik czasu musi zawierać przesunięcie strefy czasowej"
+    },
+    "invalid_datetime": {
+      "message": "Użyj daty i czasu ISO z przesunięciem strefy czasowej"
+    },
+    "unloading": {
+      "message": "Bread Assistant jest wyłączany"
+    },
+    "active_bake": {
+      "message": "Wypiek jest już w toku"
+    },
+    "unknown_recipe": {
+      "message": "Nieznany identyfikator przepisu"
+    },
+    "stale_bake": {
+      "message": "Nieznany lub nieaktualny identyfikator wypieku"
+    },
+    "unknown_step_id": {
+      "message": "Nieznany identyfikator etapu"
+    },
+    "mobile_only": {
+      "message": "Obsługiwane są tylko powiadomienia mobile_app"
+    },
+    "mobile_unavailable": {
+      "message": "Urządzenie docelowe powiadomień jest niedostępne"
+    },
+    "live_unavailable": {
+      "message": "Urządzenie docelowe Live Activity jest niedostępne"
+    },
+    "workflow": {
+      "message": "Nieznany sposób przygotowania zakwasu"
+    },
+    "prepared_only": {
+      "message": "Gotowość na początku można potwierdzić tylko dla gotowego zakwasu"
+    },
+    "starter_id": {
+      "message": "Identyfikator zakwasu musi mieć od 1 do 128 znaków"
+    },
+    "active_required": {
+      "message": "Wypiek musi być aktywny"
+    },
+    "not_started": {
+      "message": "Wypiek jeszcze się nie rozpoczął"
+    },
+    "unknown_step": {
+      "message": "Nieznany etap"
+    },
+    "prerequisites": {
+      "message": "Najpierw potwierdź lub wykonaj wszystkie wymagane wcześniejsze etapy"
+    },
+    "too_early": {
+      "message": "Nie upłynął jeszcze wymagany czas tego etapu"
+    },
+    "snooze_range": {
+      "message": "Odroczenie musi wynosić od 1 do 1440 minut"
+    },
+    "finished_step": {
+      "message": "Nie można zmienić terminu zakończonego etapu"
+    },
+    "finished_bake": {
+      "message": "Wypiek jest już zakończony"
+    },
+    "cycle": {
+      "message": "Zależność cykliczna"
+    },
+    "step_count": {
+      "message": "Przepis musi zawierać od 1 do 64 etapów"
+    },
+    "recipe_id": {
+      "message": "Nieprawidłowy identyfikator przepisu"
+    },
+    "recipe_version": {
+      "message": "Nieprawidłowa wersja przepisu"
+    },
+    "duplicate_step": {
+      "message": "Powtórzone identyfikatory etapów"
+    },
+    "step_id": {
+      "message": "Nieprawidłowy identyfikator etapu"
+    },
+    "missing_text": {
+      "message": "Brak nazwy lub instrukcji albo zbyt długa nazwa"
+    },
+    "long_instructions": {
+      "message": "Instrukcje muszą być zwięzłe"
+    },
+    "alert_policy": {
+      "message": "Nieznana zasada powiadamiania"
+    },
+    "dependency_missing": {
+      "message": "Brak jawnej zależności"
+    },
+    "duration": {
+      "message": "Nieprawidłowy lub ujemny czas trwania albo przesunięcie"
+    },
+    "duplicate_prerequisite": {
+      "message": "Powtórzony warunek wstępny"
+    },
+    "minimum_duration": {
+      "message": "Nieprawidłowy minimalny czas trwania"
+    },
+    "dependency_offset": {
+      "message": "Nieprawidłowe przesunięcie zależności"
+    },
+    "duplicate_anchor": {
+      "message": "Niejednoznaczny powtórzony punkt odniesienia"
+    },
+    "anchor": {
+      "message": "Niejednoznaczny punkt odniesienia"
+    },
+    "absolute_time": {
+      "message": "Zależności bezwzględne wymagają wyłącznie czasu ze strefą czasową"
+    },
+    "catalog": {
+      "message": "Pusty katalog lub powtórzony identyfikator przepisu"
+    },
+    "live_records": {
+      "message": "Nieprawidłowe dane Live Activity"
+    },
+    "live_destination": {
+      "message": "Nieprawidłowe urządzenie docelowe Live Activity"
+    },
+    "missing_times": {
+      "message": "Brak planowanego czasu lub terminu"
+    },
+    "step_identity": {
+      "message": "Niezgodny identyfikator etapu"
+    },
+    "generation": {
+      "message": "Nieprawidłowa generacja powiadomienia"
+    },
+    "actual_time": {
+      "message": "Zakończony etap nie ma rzeczywistego czasu wykonania"
+    },
+    "stored_steps": {
+      "message": "Zapisane etapy różnią się od migawki przepisu"
+    },
+    "stored_workflow": {
+      "message": "Nieznany zapisany sposób przygotowania zakwasu"
+    },
+    "revision": {
+      "message": "Nieprawidłowa rewizja wypieku"
+    },
+    "starter_reference": {
+      "message": "Nieprawidłowe odwołanie do zakwasu"
+    },
+    "stored_action": {
+      "message": "Nieprawidłowa zapisana akcja powiadomienia"
+    },
+    "storage_object": {
+      "message": "Zapisane dane muszą być obiektem"
+    },
+    "archives": {
+      "message": "Nieprawidłowe podsumowania archiwalne"
+    },
+    "not_loaded": {
+      "message": "Bread Assistant nie jest załadowany"
+    },
+    "control_unavailable": {
+      "message": "Ten przycisk jest niedostępny w bieżącym stanie"
+    },
+    "invalid_recipe": {
+      "message": "Nieprawidłowy przepis: {error}"
+    },
+    "invalid_live_records": {
+      "message": "Nieprawidłowe dane Live Activity: {error}"
+    },
+    "invalid_stored_bake": {
+      "message": "Nieprawidłowe zapisane dane wypieku: {error}"
+    },
+    "storage_version": {
+      "message": "Nieobsługiwana wersja danych {version}; przywróć kopię zapasową"
+    },
+    "step_unknown": {
+      "message": "Nieznany etap {step_id}"
+    },
+    "restore": {
+      "message": "Nie można przywrócić Bread Assistant; sprawdź kopię zapasową: {error}"
+    },
+    "invalid_action": {
+      "message": "Nie udało się wykonać akcji"
+    }
+  },
+  "services": {
+    "start_bake": {
+      "name": "Rozpocznij wypiek",
+      "description": "Rozpocznij jeden wypiek. Gotowy zakwas pomija dokarmianie, ale wymaga potwierdzenia gotowości.",
+      "fields": {
+        "recipe_id": {
+          "name": "Przepis"
+        },
+        "start_time": {
+          "name": "Czas rozpoczęcia (ISO z przesunięciem strefy)"
+        },
+        "starter_id": {
+          "name": "Opcjonalne odwołanie do zakwasu"
+        },
+        "starter_workflow": {
+          "name": "Przygotowanie zakwasu"
+        },
+        "starter_ready": {
+          "name": "Jawnie potwierdzam gotowość przygotowanego zakwasu"
+        }
+      }
+    },
+    "complete_step": {
+      "name": "Potwierdź etap",
+      "description": "Zapisz rzeczywiste wykonanie lub ręcznie potwierdź gotowość.",
+      "fields": {
+        "bake_id": {
+          "name": "Identyfikator wypieku"
+        },
+        "step_id": {
+          "name": "Identyfikator etapu"
+        }
+      }
+    },
+    "snooze_step": {
+      "name": "Odrocz przypomnienie",
+      "description": "Odrocz tylko przypomnienie; czas procesu nie zmienia się.",
+      "fields": {
+        "bake_id": {
+          "name": "Identyfikator wypieku"
+        },
+        "step_id": {
+          "name": "Identyfikator etapu"
+        },
+        "minutes": {
+          "name": "Minuty"
+        }
+      }
+    },
+    "adjust_step": {
+      "name": "Zmień termin etapu",
+      "description": "Ustaw najwcześniejszy termin; warunki wcześniejszych etapów nadal obowiązują.",
+      "fields": {
+        "bake_id": {
+          "name": "Identyfikator wypieku"
+        },
+        "step_id": {
+          "name": "Identyfikator etapu"
+        },
+        "due_at": {
+          "name": "Termin (ISO z przesunięciem strefy)"
+        }
+      }
+    },
+    "pause_bake": {
+      "name": "Wstrzymaj przypomnienia",
+      "description": "Wstrzymaj przypomnienia. Fermentacja i czas pieczenia nadal biegną.",
+      "fields": {
+        "bake_id": {
+          "name": "Identyfikator wypieku"
+        }
+      }
+    },
+    "resume_bake": {
+      "name": "Wznów przypomnienia",
+      "description": "Uwzględnij upływ czasu i podsumuj zaległe etapy.",
+      "fields": {
+        "bake_id": {
+          "name": "Identyfikator wypieku"
+        }
+      }
+    },
+    "cancel_bake": {
+      "name": "Anuluj wypiek",
+      "description": "Zarchiwizuj podsumowanie i anuluj oczekujące przypomnienia.",
+      "fields": {
+        "bake_id": {
+          "name": "Identyfikator wypieku"
+        }
       }
     }
   }

@@ -94,6 +94,21 @@ async def test_creation_step_completion_countdown_and_dedup(live):
     assert len(deliveries) == 2  # No clock/reminder-only pushes.
 
 
+async def test_language_change_updates_live_activity_without_reset(live):
+    from custom_components.bread_assistant.serialization import bake_to_dict
+
+    c, deliveries = live
+    await c.async_action("start_bake", {})
+    before = bake_to_dict(c.bake)
+    identity = list(c.storage.live_activities)
+    c.options["language"] = "pl"
+    await c._async_sync_live_activity()
+    assert "Dokarm zakwas" in deliveries[-1]["message"]
+    assert deliveries[-1]["data"]["critical_text"] == "Dokarm zakwas"
+    assert list(c.storage.live_activities) == identity
+    assert bake_to_dict(c.bake) == before
+
+
 async def test_dynamic_schedule_adjustment_and_late_dependency(live):
     c, deliveries = live
     await c.async_action("start_bake", {})

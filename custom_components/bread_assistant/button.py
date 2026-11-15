@@ -8,17 +8,20 @@ from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
+from . import action_error
 from .entity import BreadEntity
 from .models import BakeStatus
 
 DESCRIPTIONS = (
-    ButtonEntityDescription(key="start", name="Start", icon="mdi:bread-slice"),
-    ButtonEntityDescription(key="start_prepared", name="Start with prepared starter"),
-    ButtonEntityDescription(key="complete_current", name="Complete current"),
-    ButtonEntityDescription(key="snooze_current", name="Snooze current"),
-    ButtonEntityDescription(key="pause", name="Pause"),
-    ButtonEntityDescription(key="resume", name="Resume"),
-    ButtonEntityDescription(key="cancel", name="Cancel"),
+    ButtonEntityDescription(
+        key="start", translation_key="start", icon="mdi:bread-slice"
+    ),
+    ButtonEntityDescription(key="start_prepared", translation_key="start_prepared"),
+    ButtonEntityDescription(key="complete_current", translation_key="complete_current"),
+    ButtonEntityDescription(key="snooze_current", translation_key="snooze_current"),
+    ButtonEntityDescription(key="pause", translation_key="pause"),
+    ButtonEntityDescription(key="resume", translation_key="resume"),
+    ButtonEntityDescription(key="cancel", translation_key="cancel"),
 )
 
 
@@ -56,7 +59,8 @@ class BreadButton(BreadEntity, ButtonEntity):
     async def async_press(self) -> None:
         if not self.available:
             raise HomeAssistantError(
-                "This control is not available in the current state"
+                translation_domain="bread_assistant",
+                translation_key="control_unavailable",
             )
         key = self.entity_description.key
         data: dict[str, Any] = {}
@@ -75,4 +79,4 @@ class BreadButton(BreadEntity, ButtonEntity):
         try:
             await self.coordinator.async_action(action, data)
         except ValueError as err:
-            raise HomeAssistantError(str(err)) from err
+            raise action_error(err) from err

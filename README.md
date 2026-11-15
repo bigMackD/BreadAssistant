@@ -14,9 +14,74 @@ required. Bake snapshots survive restarts and recipe upgrades.
 - [Phase checklist and verification report](docs/implementation_checklist.md)
 
 Quick install: copy `custom_components/bread_assistant` into your staging HA config,
-restart HA and add **Bread Assistant** in Devices & Services. Install the native
+restart HA and add **Bread Assistant** in Devices & Services. Install the bundled
 [dashboard YAML](dashboards/bread_assistant.yaml) using the linked deployment guide.
 The repository does not deploy to production.
+
+## English and Polish
+
+Open **Settings → Devices & Services → Bread Assistant → Configure → Backend
+content language** (Polish: **Język treści integracji**). Choose:
+
+- **Automatic** (`auto`, the default): use the Home Assistant **system** language.
+- **English** (`en`) or **Polish** (`pl`): override the language of recipes,
+  instructions, dashboard Markdown, reminders, and Live Activities.
+
+Unsupported system languages fall back to English. Regional variants such as
+`pl-PL` use Polish. Saving preferences safely reloads the integration: active bake
+progress, actual timestamps, snoozes, IDs, and notification actions are retained.
+Changing the system language in automatic mode refreshes backend presentation
+without changing the bake. Previously delivered reminders are replaced at the next
+reminder; language changes do not trigger an extra actionable push. Live Activities
+use the current language on their next synchronization.
+
+Home Assistant translates config/options forms, action descriptions, selectors,
+entity names/states, errors, dialogs, and built-in controls through its
+[native translation mechanism](https://developers.home-assistant.io/docs/internationalization/core/).
+Native frontend controls use the language supported by Home Assistant for the
+current profile. The backend language preference does not override profile settings.
+
+The supplied dashboard uses a **bundled Lovelace card**, with no separate frontend
+installation, personal theme or optional HACS plugin required. Its labels and
+recipe content follow the integration language preference above. Dates use the
+integration's 12/24-hour preference and HA system timezone. Native dialogs retain
+the viewer's HA profile language. Multiple viewers share the recipe language;
+backend-generated notifications also have no per-viewer language context.
+
+Copy the updated [dashboard YAML](dashboards/bread_assistant.yaml) to obtain the
+redesigned overview. Set `entity_prefix` to match your registered sensors;
+this workspace's sample uses `kitchen_bread_assistant`. Existing dashboards and
+automations continue using the same entity IDs, service names, and enum states.
+Use `step_id` for automation logic rather than a translated step title.
+
+All language and frontend assets ship inside `custom_components/bread_assistant`,
+including HACS installs; no downloaded dictionaries or third-party cards are required.
+See [the translation architecture and contributor guide](docs/architecture.md#translations)
+for adding another language.
+
+## Baking dashboard
+
+The iOS-inspired overview includes a circular progress indicator, live countdown,
+current stage, explicit completion and ten-minute reminder snooze, compact status
+cards, and a timeline with completed, active, upcoming and overdue states. It shows
+nearby steps first; **Show all steps** reveals the complete timeline and timestamps.
+Ingredients, full current instructions, recipe attribution, oven safety and bake
+diagnostics expand on demand. Idle, paused, completed, canceled, unavailable and
+delivery/action error states include appropriate guidance and controls.
+
+The card inherits HA colors, typography, borders, shadows and corner radius in a
+shadow root, so its styles cannot affect other dashboards. Baking uses the theme's
+warning amber; optionally set `bread-assistant-accent-color` in any theme. Both
+standard light/dark themes and the supplied `Maciek iOS` dark reference work. The
+reference only defines dark mode; light mode uses the active HA light theme.
+Buttons have 48px minimum height, layouts adapt to the card's available width, and
+animations honor reduced-motion settings. No countdown writes to HA state.
+
+The original built-in-card dashboard remains available as
+[bread_assistant_native.yaml](dashboards/bread_assistant_native.yaml). It retains
+all controls and is usable without JavaScript from this integration. See the
+[setup instructions](docs/deployment.md#baking-dashboard) and
+[UI validation report](docs/ui-validation.md) for browser coverage and limitations.
 
 ## iOS Live Activities (optional)
 
@@ -189,8 +254,9 @@ absent; only the optional domain interface/reference is implemented.
 
 Push delivery is rate limited and reserved durably before sending; a crash between
 reservation and external delivery can postpone a reminder until its next repeat
-interval. Physical iPhone delivery, remote connectivity and browser layout have
-not been tested here. Real HA backend fixtures cover setup, reload, entities,
+interval. Physical iPhone delivery and remote connectivity have not been tested
+here. Browser layout is checked in the isolated UI harness described above.
+Real HA backend fixtures cover setup, reload, entities,
 services, timers, Store and Companion event handling. Production HA has not been
 contacted or changed. No compatibility beyond the stated test baseline is claimed.
 
@@ -199,3 +265,17 @@ Ruff lint/format and strict domain/Live Activity adapter typing. Coverage includ
 creation, dynamic changes, pause/resume, completion/cancellation, restart and expiry,
 independent/disabled channels, removed destinations, bounded retries, storage
 failures and shutdown races. The phone-side behavior above remains a manual check.
+
+Multilingual extension (15 November 2026): 107 automated tests pass, with Ruff
+lint/format and strict mypy. Coverage includes English/Polish native assets,
+placeholder/key completeness, fallback, automatic/manual selection, recipe and
+notification content, Live Activity language updates, both dashboard languages,
+and switching languages during an active bake without changing stored progress.
+Browser and physical iPhone verification remain manual staging checks.
+
+UI redesign (15 November 2026): 112 Python tests pass with Ruff lint/format and
+strict mypy. Chromium checks pass for 234 viewport/theme/language/state combinations
+plus service arguments, retry identities, focus, countdowns, connection recovery,
+timeline expansion, narrow columns and timezone behavior. See
+[UI validation](docs/ui-validation.md) for reproducible commands, screenshots and
+the remaining physical iPhone/Safari and staging HA shell checks.

@@ -4,6 +4,7 @@ import re
 import secrets
 from typing import Any
 
+from .i18n import Translator
 from .models import BakeRun
 
 
@@ -19,8 +20,10 @@ def prepare_notification(
     step_ids: list[str],
     catchup: bool,
     dashboard_path: str,
+    translator: Translator | None = None,
 ) -> dict[str, Any]:
     """Buttons target the first listed step; a summary never completes a group."""
+    tr = translator or Translator()
     first = step_ids[0]
     run = bake.step_runs[first]
     bake.notification_actions = {
@@ -29,8 +32,11 @@ def prepare_notification(
         if value["step_id"] not in step_ids
     }
     actions = []
-    title = bake.recipe_snapshot.by_id[first].title
-    for action, label in (("done", f"Done: {title}"), ("snooze", "Remind in 10 min")):
+    title = tr.step(bake.recipe_snapshot, first, "title")
+    for action, label in (
+        ("done", tr.text("content.notifications.done", title=title)),
+        ("snooze", tr.text("content.notifications.snooze")),
+    ):
         token = f"BA_{secrets.token_urlsafe(24)}"
         bake.notification_actions[token] = {
             "bake_id": bake.id,
@@ -41,23 +47,31 @@ def prepare_notification(
         actions.append(
             {"action": token, "title": label, "authenticationRequired": True}
         )
-    definitions = bake.recipe_snapshot.by_id
     if len(step_ids) > 1 or catchup:
-        message = f"{len(step_ids)} outstanding: " + "; ".join(
-            definitions[step_id].title for step_id in step_ids
+        message = tr.text(
+            "content.notifications.outstanding",
+            count=len(step_ids),
+            title=title,
+            steps="; ".join(
+                tr.step(bake.recipe_snapshot, step_id, "title") for step_id in step_ids
+            ),
         )
-        message += f". Buttons apply to {title}. Review the timeline."
     else:
-        message = definitions[first].instructions
+        message = tr.step(bake.recipe_snapshot, first, "instructions")
+    hot_warning = ""
     if any(
         step_id
         in ("preheat_oven", "oven_ready", "bake_start", "remove_lid", "bake_finish")
         for step_id in step_ids
     ):
-        message += " Hot cast iron: use dry oven gloves; avoid burns."
+        hot_warning = " " + tr.text("content.notifications.hot")
+    message = message[: 900 - len(hot_warning)] + hot_warning
     return {
-        "title": "Bread Assistant — " + ("catch-up" if catchup else title),
-        "message": message[:900],
+        "title": tr.text(
+            "content.notifications.title",
+            title=tr.text("content.notifications.catchup") if catchup else title,
+        ),
+        "message": message,
         "data": {
             "tag": f"bread_assistant_{bake.id}",
             "url": dashboard_path,

@@ -12,12 +12,14 @@
           "dashboard_path": "Dashboard path",
           "time_format": "Time format",
           "live_activities_enabled": "Enable Live Activities (iOS)",
-          "live_activity_notify_target": "iPhone notification action for Live Activities"
+          "live_activity_notify_target": "iPhone notification action for Live Activities",
+          "language": "Backend content language"
         }
       }
     },
     "error": {
-      "notify_missing": "The selected notification action is unavailable."
+      "notify_missing": "The selected notification action is unavailable.",
+      "invalid_language": "Choose automatic, English, or Polish."
     },
     "abort": {
       "already_configured": "Bread Assistant is already configured."
@@ -34,21 +36,122 @@
           "dashboard_path": "Dashboard path",
           "time_format": "Time format",
           "live_activities_enabled": "Enable Live Activities (iOS)",
-          "live_activity_notify_target": "iPhone notification action for Live Activities"
+          "live_activity_notify_target": "iPhone notification action for Live Activities",
+          "language": "Backend content language"
         }
       }
     },
     "error": {
-      "notify_missing": "The selected notification action is unavailable."
+      "notify_missing": "The selected notification action is unavailable.",
+      "invalid_language": "Choose automatic, English, or Polish."
     }
   },
   "entity": {
     "sensor": {
       "status": {
-        "name": "Status"
+        "name": "Status",
+        "state": {
+          "idle": "Idle",
+          "active": "Active",
+          "paused": "Paused",
+          "completed": "Completed",
+          "canceled": "Canceled"
+        },
+        "state_attributes": {
+          "bake_id": {
+            "name": "Bake ID"
+          },
+          "recipe_title": {
+            "name": "Recipe"
+          },
+          "recipe_description": {
+            "name": "Recipe description"
+          },
+          "recipe_url": {
+            "name": "Recipe source"
+          },
+          "ingredients": {
+            "name": "Ingredients"
+          },
+          "starter_id": {
+            "name": "Starter reference"
+          },
+          "starter_workflow": {
+            "name": "Starter workflow",
+            "state": {
+              "feed": "Feed starter",
+              "prepared": "Prepared starter"
+            }
+          },
+          "archive_count": {
+            "name": "Archived bakes"
+          },
+          "last_sync": {
+            "name": "Last sync"
+          },
+          "last_error": {
+            "name": "Reminder error"
+          },
+          "live_activity_error": {
+            "name": "Live Activity error"
+          },
+          "time_format": {
+            "name": "Time format",
+            "state": {
+              "24h": "24-hour",
+              "12h": "12-hour"
+            }
+          },
+          "language": {
+            "name": "Content language",
+            "state": {
+              "en": "English",
+              "pl": "Polish"
+            }
+          },
+          "ui": {
+            "name": "Dashboard text"
+          },
+          "status_label": {
+            "name": "Status label"
+          },
+          "workflow_label": {
+            "name": "Workflow label"
+          }
+        }
       },
       "current_step": {
-        "name": "Current step"
+        "name": "Current step",
+        "state_attributes": {
+          "step_status": {
+            "name": "Step status",
+            "state": {
+              "pending": "Pending",
+              "ready": "Ready",
+              "in_progress": "In progress",
+              "done": "Done",
+              "skipped": "Skipped"
+            }
+          },
+          "bake_id": {
+            "name": "Bake ID"
+          },
+          "step_id": {
+            "name": "Step ID"
+          },
+          "instructions": {
+            "name": "Instructions"
+          },
+          "due_at": {
+            "name": "Due"
+          },
+          "snoozed_until": {
+            "name": "Reminder snoozed until"
+          },
+          "timeline": {
+            "name": "Timeline"
+          }
+        }
       },
       "next_step": {
         "name": "Next step"
@@ -65,16 +168,16 @@
     },
     "button": {
       "start": {
-        "name": "Start"
+        "name": "Feed starter"
       },
       "start_prepared": {
-        "name": "Start with prepared starter"
+        "name": "Prepared starter"
       },
       "complete_current": {
-        "name": "Complete current"
+        "name": "Done / Confirm ready"
       },
       "snooze_current": {
-        "name": "Snooze current"
+        "name": "Remind in 10 min"
       },
       "pause": {
         "name": "Pause"
@@ -84,6 +187,309 @@
       },
       "cancel": {
         "name": "Cancel"
+      }
+    }
+  },
+  "selector": {
+    "language": {
+      "options": {
+        "auto": "Automatic (Home Assistant system language)",
+        "en": "English",
+        "pl": "Polish"
+      }
+    },
+    "time_format": {
+      "options": {
+        "24h": "24-hour",
+        "12h": "12-hour"
+      }
+    },
+    "notify_target": {
+      "options": {
+        "none": "No mobile destination"
+      }
+    },
+    "starter_workflow": {
+      "options": {
+        "feed": "Feed starter",
+        "prepared": "Prepared starter"
+      }
+    }
+  },
+  "exceptions": {
+    "timestamp_timezone": {
+      "message": "A timestamp must include a timezone offset"
+    },
+    "invalid_datetime": {
+      "message": "Use an ISO datetime with a timezone offset"
+    },
+    "unloading": {
+      "message": "Bread Assistant is unloading"
+    },
+    "active_bake": {
+      "message": "A bake is already active"
+    },
+    "unknown_recipe": {
+      "message": "Unknown recipe ID"
+    },
+    "stale_bake": {
+      "message": "Unknown or stale bake ID"
+    },
+    "unknown_step_id": {
+      "message": "Unknown step ID"
+    },
+    "mobile_only": {
+      "message": "Only mobile_app notification targets are supported"
+    },
+    "mobile_unavailable": {
+      "message": "Mobile notification destination is unavailable"
+    },
+    "live_unavailable": {
+      "message": "Live Activity notification destination is unavailable"
+    },
+    "workflow": {
+      "message": "Unknown starter workflow"
+    },
+    "prepared_only": {
+      "message": "Readiness at start is only valid for a prepared starter"
+    },
+    "starter_id": {
+      "message": "Starter ID must contain 1–128 characters"
+    },
+    "active_required": {
+      "message": "Bake must be active"
+    },
+    "not_started": {
+      "message": "Bake has not started yet"
+    },
+    "unknown_step": {
+      "message": "Unknown step"
+    },
+    "prerequisites": {
+      "message": "Confirm or complete all prerequisites first"
+    },
+    "too_early": {
+      "message": "This timed stage has not reached its deadline"
+    },
+    "snooze_range": {
+      "message": "Snooze must be 1–1440 minutes"
+    },
+    "finished_step": {
+      "message": "Cannot reschedule a finished step"
+    },
+    "finished_bake": {
+      "message": "Bake is already finished"
+    },
+    "cycle": {
+      "message": "Circular dependency"
+    },
+    "step_count": {
+      "message": "A recipe must contain 1–64 steps"
+    },
+    "recipe_id": {
+      "message": "Invalid recipe ID"
+    },
+    "recipe_version": {
+      "message": "Invalid recipe version"
+    },
+    "duplicate_step": {
+      "message": "Duplicate step IDs"
+    },
+    "step_id": {
+      "message": "Invalid step ID"
+    },
+    "missing_text": {
+      "message": "Missing title/instructions or overlong title"
+    },
+    "long_instructions": {
+      "message": "Instructions must be concise"
+    },
+    "alert_policy": {
+      "message": "Unknown alert policy"
+    },
+    "dependency_missing": {
+      "message": "Missing explicit dependency"
+    },
+    "duration": {
+      "message": "Invalid/negative duration or offset"
+    },
+    "duplicate_prerequisite": {
+      "message": "Duplicate prerequisite"
+    },
+    "minimum_duration": {
+      "message": "Invalid minimum duration"
+    },
+    "dependency_offset": {
+      "message": "Invalid dependency offset"
+    },
+    "duplicate_anchor": {
+      "message": "Ambiguous duplicate anchor"
+    },
+    "anchor": {
+      "message": "Ambiguous anchor"
+    },
+    "absolute_time": {
+      "message": "Absolute dependencies require only an aware timestamp"
+    },
+    "catalog": {
+      "message": "Empty catalog or duplicate recipe ID"
+    },
+    "live_records": {
+      "message": "Invalid live activity records"
+    },
+    "live_destination": {
+      "message": "Invalid live activity destination"
+    },
+    "missing_times": {
+      "message": "Missing planned/due time"
+    },
+    "step_identity": {
+      "message": "Mismatched step identity"
+    },
+    "generation": {
+      "message": "Invalid notification generation"
+    },
+    "actual_time": {
+      "message": "Finished step has no actual timestamp"
+    },
+    "stored_steps": {
+      "message": "Stored steps differ from recipe snapshot"
+    },
+    "stored_workflow": {
+      "message": "Unknown persisted starter workflow"
+    },
+    "revision": {
+      "message": "Invalid bake revision"
+    },
+    "starter_reference": {
+      "message": "Invalid starter reference"
+    },
+    "stored_action": {
+      "message": "Invalid persisted notification action"
+    },
+    "storage_object": {
+      "message": "Storage payload must be an object"
+    },
+    "archives": {
+      "message": "Invalid archive summaries"
+    },
+    "not_loaded": {
+      "message": "Bread Assistant is not loaded"
+    },
+    "control_unavailable": {
+      "message": "This control is not available in the current state"
+    },
+    "invalid_recipe": {
+      "message": "Invalid recipe: {error}"
+    },
+    "invalid_live_records": {
+      "message": "Invalid live activity records: {error}"
+    },
+    "invalid_stored_bake": {
+      "message": "Invalid stored bake: {error}"
+    },
+    "storage_version": {
+      "message": "Unsupported storage version {version}; restore a backup"
+    },
+    "step_unknown": {
+      "message": "Unknown step {step_id}"
+    },
+    "restore": {
+      "message": "Cannot restore Bread Assistant; check storage backup: {error}"
+    },
+    "invalid_action": {
+      "message": "The action could not be completed"
+    }
+  },
+  "services": {
+    "start_bake": {
+      "name": "Start bake",
+      "description": "Start one bake. Prepared starter skips feeding and retains readiness confirmation.",
+      "fields": {
+        "recipe_id": {
+          "name": "Recipe"
+        },
+        "start_time": {
+          "name": "Start time (ISO with offset)"
+        },
+        "starter_id": {
+          "name": "Optional starter reference"
+        },
+        "starter_workflow": {
+          "name": "Starter workflow"
+        },
+        "starter_ready": {
+          "name": "I explicitly confirm the prepared starter is ready"
+        }
+      }
+    },
+    "complete_step": {
+      "name": "Complete step",
+      "description": "Record actual completion or manually confirm a readiness checkpoint.",
+      "fields": {
+        "bake_id": {
+          "name": "Bake ID"
+        },
+        "step_id": {
+          "name": "Step ID"
+        }
+      }
+    },
+    "snooze_step": {
+      "name": "Snooze reminder",
+      "description": "Delay only the reminder; process timing remains unchanged.",
+      "fields": {
+        "bake_id": {
+          "name": "Bake ID"
+        },
+        "step_id": {
+          "name": "Step ID"
+        },
+        "minutes": {
+          "name": "Minutes"
+        }
+      }
+    },
+    "adjust_step": {
+      "name": "Adjust step deadline",
+      "description": "Set a requested earliest deadline; prerequisite constraints still apply.",
+      "fields": {
+        "bake_id": {
+          "name": "Bake ID"
+        },
+        "step_id": {
+          "name": "Step ID"
+        },
+        "due_at": {
+          "name": "Due time (ISO with offset)"
+        }
+      }
+    },
+    "pause_bake": {
+      "name": "Pause reminders",
+      "description": "Pause reminders while biological and oven time continue in real life.",
+      "fields": {
+        "bake_id": {
+          "name": "Bake ID"
+        }
+      }
+    },
+    "resume_bake": {
+      "name": "Resume reminders",
+      "description": "Reconcile actual time and summarize overdue tasks.",
+      "fields": {
+        "bake_id": {
+          "name": "Bake ID"
+        }
+      }
+    },
+    "cancel_bake": {
+      "name": "Cancel bake",
+      "description": "Archive a summary and cancel all pending reminders.",
+      "fields": {
+        "bake_id": {
+          "name": "Bake ID"
+        }
       }
     }
   }

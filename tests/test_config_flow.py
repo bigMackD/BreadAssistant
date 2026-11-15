@@ -89,3 +89,17 @@ async def test_options_can_remove_unavailable_live_activity_target(hass):
         result["flow_id"], values
     )
     assert result["type"] == data_entry_flow.FlowResultType.CREATE_ENTRY
+
+
+async def test_language_default_and_localized_selectors(hass):
+    from custom_components.bread_assistant.config_flow import _errors, _schema
+
+    schema = _schema(hass, DEFAULT_OPTIONS)
+    values = schema({})
+    assert values["language"] == "auto"
+    assert _errors(hass, values | {"language": "de"}) == {
+        "language": "invalid_language"
+    }
+    values["notify_target"] = "none"
+    assert not _errors(hass, values)
+    assert values["notify_target"] == ""

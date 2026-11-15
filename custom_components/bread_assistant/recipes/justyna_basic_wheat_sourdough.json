@@ -1,20 +1,20 @@
 {
   "id": "justyna_basic_wheat_sourdough",
   "version": 1,
-  "title": "Basic wheat sourdough - after Justyna Dragan",
+  "title": "content.recipes.justyna_basic_wheat_sourdough.v1.title",
   "url": "https://justynadragan.pl/2020/08/podstawowy-chleb-pszenny-na-zakwasie.html",
   "ingredients": [
-    "Starter feeding: 40 g refrigerated starter, 40 g whole wheat flour, 40 g wheat bread flour type 750, 80 g water.",
-    "Dough: 350 g wheat bread flour type 750, 235 g water (32-35 C), 120 g active fed starter, 10 g salt.",
-    "Accessories: olive oil, rice flour, bench flour, parchment, proofing basket, Dutch oven, dry oven gloves, cooling rack."
+    "content.recipes.justyna_basic_wheat_sourdough.v1.ingredients.0",
+    "content.recipes.justyna_basic_wheat_sourdough.v1.ingredients.1",
+    "content.recipes.justyna_basic_wheat_sourdough.v1.ingredients.2"
   ],
   "steps": [
     {
       "id": "feed_starter",
-      "title": "Feed starter",
+      "title": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.feed_starter.title",
       "kind": "action",
       "offset_minutes": 0,
-      "instructions": "Combine the starter feeding ingredients. Mark Done after feeding; readiness is confirmed separately.",
+      "instructions": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.feed_starter.instructions",
       "dependencies": [
         {
           "kind": "after_start",
@@ -30,10 +30,10 @@
     },
     {
       "id": "autolyse_start",
-      "title": "Start autolyse",
+      "title": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.autolyse_start.title",
       "kind": "action",
       "offset_minutes": 180,
-      "instructions": "Mix the dough flour and water until no dry patches remain. Cover and rest; keep starter and salt aside.",
+      "instructions": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.autolyse_start.instructions",
       "dependencies": [
         {
           "kind": "after_start",
@@ -49,10 +49,10 @@
     },
     {
       "id": "starter_ready",
-      "title": "Confirm starter readiness",
+      "title": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.starter_ready.title",
       "kind": "checkpoint",
       "offset_minutes": 240,
-      "instructions": "Check the starter yourself. Continue only when active and suitable for baking; the four-hour estimate is not a readiness test.",
+      "instructions": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.starter_ready.instructions",
       "dependencies": [
         {
           "kind": "after_completion",
@@ -71,10 +71,10 @@
     },
     {
       "id": "autolyse_complete",
-      "title": "Confirm autolyse complete",
+      "title": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.autolyse_complete.title",
       "kind": "timer",
       "offset_minutes": 240,
-      "instructions": "Confirm the dough has completed its one-hour hydration rest.",
+      "instructions": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.autolyse_complete.instructions",
       "dependencies": [
         {
           "kind": "after_completion",
@@ -93,10 +93,10 @@
     },
     {
       "id": "knead_start",
-      "title": "Begin kneading",
+      "title": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.knead_start.title",
       "kind": "action",
       "offset_minutes": 240,
-      "instructions": "Work the active starter and salt into the rested dough until evenly incorporated.",
+      "instructions": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.knead_start.instructions",
       "dependencies": [
         {
           "kind": "after_completion",
@@ -121,10 +121,10 @@
     },
     {
       "id": "bulk_start",
-      "title": "Begin bulk fermentation",
+      "title": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.bulk_start.title",
       "kind": "timer",
       "offset_minutes": 245,
-      "instructions": "After kneading, place dough in a lightly oiled covered container. Mark Done to record the actual bulk start.",
+      "instructions": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.bulk_start.instructions",
       "dependencies": [
         {
           "kind": "after_completion",
@@ -143,10 +143,10 @@
     },
     {
       "id": "fold_1",
-      "title": "First stretch-and-fold",
+      "title": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.fold_1.title",
       "kind": "action",
       "offset_minutes": 275,
-      "instructions": "With damp hands, stretch and fold the dough gently. Cover again.",
+      "instructions": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.fold_1.instructions",
       "dependencies": [
         {
           "kind": "parallel_anchor",
@@ -165,10 +165,10 @@
     },
     {
       "id": "fold_2",
-      "title": "Second stretch-and-fold",
+      "title": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.fold_2.title",
       "kind": "action",
       "offset_minutes": 305,
-      "instructions": "Repeat the stretch-and-fold. Its target is one hour after bulk began, independent of the first fold timestamp.",
+      "instructions": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.fold_2.instructions",
       "dependencies": [
         {
           "kind": "parallel_anchor",
@@ -187,10 +187,10 @@
     },
     {
       "id": "bulk_ready",
-      "title": "Confirm bulk fermentation readiness",
+      "title": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.bulk_ready.title",
       "kind": "checkpoint",
       "offset_minutes": 545,
-      "instructions": "Assess dough expansion and aeration. Wait longer if needed; confirm only after your own assessment.",
+      "instructions": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.bulk_ready.instructions",
       "dependencies": [
         {
           "kind": "after_completion",
@@ -209,10 +209,10 @@
     },
     {
       "id": "preshape",
-      "title": "Pre-shape",
+      "title": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.preshape.title",
       "kind": "action",
       "offset_minutes": 545,
-      "instructions": "Gently turn out the dough and form a loose round. Record completion to begin the bench rest.",
+      "instructions": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.preshape.instructions",
       "dependencies": [
         {
           "kind": "after_completion",
@@ -233,10 +233,10 @@
     },
     {
       "id": "final_shape",
-      "title": "Final shape",
+      "title": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.final_shape.title",
       "kind": "timer",
       "offset_minutes": 555,
-      "instructions": "After the ten-minute bench rest, shape the loaf with gentle surface tension.",
+      "instructions": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.final_shape.instructions",
       "dependencies": [
         {
           "kind": "after_completion",
@@ -255,10 +255,10 @@
     },
     {
       "id": "cold_proof_start",
-      "title": "Refrigerate shaped dough",
+      "title": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.cold_proof_start.title",
       "kind": "timer",
       "offset_minutes": 560,
-      "instructions": "Place the shaped loaf seam-up in a floured basket, cover and refrigerate. Mark Done when refrigerated.",
+      "instructions": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.cold_proof_start.instructions",
       "dependencies": [
         {
           "kind": "after_completion",
@@ -277,10 +277,10 @@
     },
     {
       "id": "preheat_oven",
-      "title": "Preheat oven and cast iron",
+      "title": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.preheat_oven.title",
       "kind": "action",
       "offset_minutes": 1240,
-      "instructions": "Preheat the oven and covered cast iron pot to 250 C. Use dry oven gloves; hot iron can cause severe burns.",
+      "instructions": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.preheat_oven.instructions",
       "dependencies": [
         {
           "kind": "parallel_anchor",
@@ -299,10 +299,10 @@
     },
     {
       "id": "dough_ready",
-      "title": "Confirm dough readiness",
+      "title": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.dough_ready.title",
       "kind": "checkpoint",
       "offset_minutes": 1280,
-      "instructions": "Inspect the cold-proofed loaf and confirm it is ready. Twelve hours is a suggested proof, not automatic release.",
+      "instructions": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.dough_ready.instructions",
       "dependencies": [
         {
           "kind": "after_completion",
@@ -321,10 +321,10 @@
     },
     {
       "id": "oven_ready",
-      "title": "Confirm oven readiness",
+      "title": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.oven_ready.title",
       "kind": "checkpoint",
       "offset_minutes": 1280,
-      "instructions": "Verify the oven and cast iron are fully heated. Handle the 250 C pot with dry heatproof gloves.",
+      "instructions": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.oven_ready.instructions",
       "dependencies": [
         {
           "kind": "after_completion",
@@ -343,10 +343,10 @@
     },
     {
       "id": "score_loaf",
-      "title": "Score loaf",
+      "title": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.score_loaf.title",
       "kind": "action",
       "offset_minutes": 1280,
-      "instructions": "Turn the loaf onto parchment and score carefully before loading. Keep hands clear of the hot pot.",
+      "instructions": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.score_loaf.instructions",
       "dependencies": [
         {
           "kind": "after_completion",
@@ -371,10 +371,10 @@
     },
     {
       "id": "bake_start",
-      "title": "Begin covered baking",
+      "title": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.bake_start.title",
       "kind": "action",
       "offset_minutes": 1280,
-      "instructions": "Carefully load the loaf into the hot pot. Cover and bake at 250 C for 20 minutes. Mark Done once loaded.",
+      "instructions": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.bake_start.instructions",
       "dependencies": [
         {
           "kind": "after_completion",
@@ -395,10 +395,10 @@
     },
     {
       "id": "remove_lid",
-      "title": "Remove lid; bake uncovered",
+      "title": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.remove_lid.title",
       "kind": "timer",
       "offset_minutes": 1300,
-      "instructions": "Use dry oven gloves to remove the hot lid. Reduce the oven to 230 C and bake uncovered for 15-20 minutes.",
+      "instructions": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.remove_lid.instructions",
       "dependencies": [
         {
           "kind": "after_completion",
@@ -417,10 +417,10 @@
     },
     {
       "id": "bake_finish",
-      "title": "Remove loaf",
+      "title": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.bake_finish.title",
       "kind": "timer",
       "offset_minutes": 1320,
-      "instructions": "Check the loaf after 15-20 minutes uncovered (the target is 20). Use oven gloves to lift it onto a rack.",
+      "instructions": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.bake_finish.instructions",
       "dependencies": [
         {
           "kind": "after_completion",
@@ -440,10 +440,10 @@
     },
     {
       "id": "cooling_start",
-      "title": "Begin cooling",
+      "title": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.cooling_start.title",
       "kind": "action",
       "offset_minutes": 1320,
-      "instructions": "Place the loaf on a rack with air underneath. Keep the hot pot and lid safely away from hands.",
+      "instructions": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.cooling_start.instructions",
       "dependencies": [
         {
           "kind": "after_completion",
@@ -462,10 +462,10 @@
     },
     {
       "id": "cooling_check",
-      "title": "Check cooling before slicing",
+      "title": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.cooling_check.title",
       "kind": "checkpoint",
       "offset_minutes": 1440,
-      "instructions": "Allow the crumb to cool before slicing. Confirm by checking the loaf yourself; this two-hour reminder is an estimate.",
+      "instructions": "content.recipes.justyna_basic_wheat_sourdough.v1.steps.cooling_check.instructions",
       "dependencies": [
         {
           "kind": "after_completion",

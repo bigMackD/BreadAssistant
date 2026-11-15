@@ -4,6 +4,7 @@ DOMAIN = "bread_assistant"
 DEFAULT_RECIPE = "justyna_basic_wheat_sourdough"
 PLATFORMS = ["sensor", "button"]
 DEFAULT_OPTIONS = {
+    "language": "auto",
     "notify_target": "",
     "notifications_enabled": True,
     "live_activities_enabled": False,

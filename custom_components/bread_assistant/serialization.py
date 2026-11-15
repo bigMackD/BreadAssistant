@@ -24,13 +24,13 @@ SCHEMA_VERSION = 2
 def live_activities_from_dict(data: Any) -> list[LiveActivity]:
     """Additive v2 metadata also retains cleanup work for previous bakes."""
     if not isinstance(data, list):
-        raise DomainError("Invalid live activity records")
+        raise DomainError("live_records")
     records = []
     try:
         for item in data:
             UUID(item["bake_id"])
             if not is_mobile_app_target(item["target"]):
-                raise DomainError("Invalid live activity destination")
+                raise DomainError("live_destination")
             records.append(
                 LiveActivity(
                     bake_id=item["bake_id"],
@@ -39,7 +39,7 @@ def live_activities_from_dict(data: Any) -> list[LiveActivity]:
                 )
             )
     except (KeyError, TypeError, ValueError, AttributeError) as err:
-        raise DomainError(f"Invalid live activity records: {err}") from err
+        raise DomainError("invalid_live_records", error=err) from err
     return records
 
 
@@ -79,20 +79,20 @@ def bake_from_dict(data: dict[str, Any]) -> BakeRun:
             ):
                 values[key] = parse_time(values[key]) if values.get(key) else None
             if values["planned_at"] is None or values["due_at"] is None:
-                raise DomainError("Missing planned/due time")
+                raise DomainError("missing_times")
             values["status"] = StepStatus(values["status"])
             if values["step_id"] != step_id:
-                raise DomainError("Mismatched step identity")
+                raise DomainError("step_identity")
             runs[step_id] = StepRun(**values)
             if (
                 type(runs[step_id].notification_generation) is not int
                 or runs[step_id].notification_generation < 0
             ):
-                raise DomainError("Invalid notification generation")
+                raise DomainError("generation")
             if runs[step_id].finished and runs[step_id].completed_at is None:
-                raise DomainError("Finished step has no actual timestamp")
+                raise DomainError("actual_time")
         if set(runs) != set(recipe.by_id):
-            raise DomainError("Stored steps differ from recipe snapshot")
+            raise DomainError("stored_steps")
         bake = BakeRun(
             id=data["id"],
             recipe_snapshot=recipe,
@@ -112,16 +112,16 @@ def bake_from_dict(data: dict[str, Any]) -> BakeRun:
             notification_actions=data.get("notification_actions", {}),
         )
         if bake.starter_workflow not in ("feed", "prepared"):
-            raise DomainError("Unknown persisted starter workflow")
+            raise DomainError("stored_workflow")
         UUID(bake.id)
         if type(bake.revision) is not int or bake.revision < 0:
-            raise DomainError("Invalid bake revision")
+            raise DomainError("revision")
         if bake.starter_id is not None and (
             not isinstance(bake.starter_id, str)
             or not bake.starter_id.strip()
             or len(bake.starter_id) > 128
         ):
-            raise DomainError("Invalid starter reference")
+            raise DomainError("starter_reference")
         for action in bake.notification_actions.values():
             if (
                 action["step_id"] not in runs
@@ -129,18 +129,18 @@ def bake_from_dict(data: dict[str, Any]) -> BakeRun:
                 or type(action["generation"]) is not int
                 or action["action"] not in ("done", "snooze")
             ):
-                raise DomainError("Invalid persisted notification action")
+                raise DomainError("stored_action")
         return bake
     except (ValueError, KeyError, TypeError, AttributeError) as err:
-        raise DomainError(f"Invalid stored bake: {err}") from err
+        raise DomainError("invalid_stored_bake", error=err) from err
 
 
 def migrate_payload(data: dict[str, Any], version: int) -> dict[str, Any]:
     """V1 bake snapshots remain valid; starter fields are additive defaults."""
     if version not in (1, SCHEMA_VERSION):
-        raise DomainError(f"Unsupported storage version {version}; restore a backup")
+        raise DomainError("storage_version", version=version)
     if not isinstance(data, dict):
-        raise DomainError("Storage payload must be an object")
+        raise DomainError("storage_object")
     result = dict(data)
     result["schema_version"] = SCHEMA_VERSION
     if result.get("bake"):

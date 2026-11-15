@@ -20,13 +20,19 @@ class BreadEntity(Entity):
             identifiers={(DOMAIN, DOMAIN)},
             name="Bread Assistant",
             manufacturer="Bread Assistant",
-            model="Local baking guide",
+            model="Bread Assistant",
             entry_type=DeviceEntryType.SERVICE,
         )
 
     @property
     def available(self) -> bool:
         return not self.coordinator.closed
+
+    @property
+    def suggested_object_id(self) -> str:
+        """Keep the original ID suffix independent of display language."""
+        key = self._attr_unique_id.removeprefix(f"{DOMAIN}_")
+        return "start_with_prepared_starter" if key == "start_prepared" else key
 
     async def async_added_to_hass(self) -> None:
         await super().async_added_to_hass()

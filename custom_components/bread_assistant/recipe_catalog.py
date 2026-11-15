@@ -57,7 +57,7 @@ def recipe_from_dict(data: dict[str, Any]) -> RecipeDefinition:
         validate_recipe(recipe)
         return recipe
     except (KeyError, TypeError, ValueError) as err:
-        raise DomainError(f"Invalid recipe: {err}") from err
+        raise DomainError("invalid_recipe", error=err) from err
 
 
 def topological_steps(recipe: RecipeDefinition) -> list[StepDefinition]:
@@ -68,11 +68,11 @@ def topological_steps(recipe: RecipeDefinition) -> list[StepDefinition]:
 
     def visit(step_id: str) -> None:
         if step_id in visiting:
-            raise DomainError("Circular dependency")
+            raise DomainError("cycle")
         if step_id in visited:
             return
         if step_id not in by_id:
-            raise DomainError(f"Unknown step {step_id}")
+            raise DomainError("step_unknown", step_id=step_id)
         visiting.add(step_id)
         step = by_id[step_id]
         for anchor in (*step.prerequisites, *(d.anchor for d in step.dependencies)):
@@ -89,54 +89,52 @@ def topological_steps(recipe: RecipeDefinition) -> list[StepDefinition]:
 
 def validate_recipe(recipe: RecipeDefinition) -> None:
     if not recipe.steps or len(recipe.steps) > 64:
-        raise DomainError("A recipe must contain 1–64 steps")
+        raise DomainError("step_count")
     if not re.fullmatch(r"[a-z][a-z0-9_]{0,63}", recipe.id):
-        raise DomainError("Invalid recipe ID")
+        raise DomainError("recipe_id")
     if type(recipe.version) is not int or recipe.version < 1:
-        raise DomainError("Invalid recipe version")
+        raise DomainError("recipe_version")
     if len(recipe.by_id) != len(recipe.steps):
-        raise DomainError("Duplicate step IDs")
+        raise DomainError("duplicate_step")
     for step in recipe.steps:
         if not re.fullmatch(r"[a-z][a-z0-9_]{0,63}", step.id):
-            raise DomainError("Invalid step ID")
+            raise DomainError("step_id")
         if not step.title or len(step.title) > 120 or not step.instructions:
-            raise DomainError("Missing title/instructions or overlong title")
+            raise DomainError("missing_text")
         if len(step.instructions) > 1000:
-            raise DomainError("Instructions must be concise")
+            raise DomainError("long_instructions")
         if step.alert_policy not in ("due", "silent"):
-            raise DomainError("Unknown alert policy")
+            raise DomainError("alert_policy")
         if not step.dependencies:
-            raise DomainError("Missing explicit dependency")
+            raise DomainError("dependency_missing")
         for minutes in (step.offset_minutes, step.duration_minutes):
             if type(minutes) is not int or not 0 <= minutes <= 525600:
-                raise DomainError("Invalid/negative duration or offset")
+                raise DomainError("duration")
         if len(step.prerequisites) != len(set(step.prerequisites)):
-            raise DomainError("Duplicate prerequisite")
+            raise DomainError("duplicate_prerequisite")
         if step.minimum_minutes is not None and (
             type(step.minimum_minutes) is not int
             or not 0 <= step.minimum_minutes <= step.duration_minutes
         ):
-            raise DomainError("Invalid minimum duration")
+            raise DomainError("minimum_duration")
         seen: set[tuple[DependencyKind, str | None]] = set()
         for dep in step.dependencies:
             if (
                 type(dep.offset_minutes) is not int
                 or not 0 <= dep.offset_minutes <= 525600
             ):
-                raise DomainError("Invalid dependency offset")
+                raise DomainError("dependency_offset")
             if (dep.kind, dep.anchor) in seen:
-                raise DomainError("Ambiguous duplicate anchor")
+                raise DomainError("duplicate_anchor")
             seen.add((dep.kind, dep.anchor))
             anchored = dep.kind in (
                 DependencyKind.AFTER_COMPLETION,
                 DependencyKind.PARALLEL_ANCHOR,
             )
             if anchored != (dep.anchor is not None):
-                raise DomainError("Ambiguous anchor")
+                raise DomainError("anchor")
             if (dep.kind == DependencyKind.ABSOLUTE) != (dep.at is not None):
-                raise DomainError(
-                    "Absolute dependencies require only an aware timestamp"
-                )
+                raise DomainError("absolute_time")
             if dep.at is not None:
                 utc(dep.at)
     topological_steps(recipe)
@@ -149,5 +147,5 @@ def load_catalog() -> dict[str, RecipeDefinition]:
         for path in sorted((Path(__file__).parent / "recipes").glob("*.json"))
     ]
     if not recipes or len({r.id for r in recipes}) != len(recipes):
-        raise DomainError("Empty catalog or duplicate recipe ID")
+        raise DomainError("catalog")
     return {r.id: r for r in recipes}

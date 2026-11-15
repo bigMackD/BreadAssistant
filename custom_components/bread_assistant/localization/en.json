@@ -1,0 +1,153 @@
+{
+  "ui": {
+    "intro": "Choose **Feed starter** or **Prepared starter** to begin. Prepared starter skips feeding; you still confirm readiness.",
+    "paused_title": "Reminders paused",
+    "paused": "Fermentation, proofing and oven time continue in real life. Resume to review outstanding work. Never leave a hot oven unattended.",
+    "no_task": "No active task",
+    "start_hint": "Start a bake or resume reminders to see the next task.",
+    "due": "Due",
+    "snoozed": "Reminder snoozed until",
+    "confirm": "Done confirms that you performed the action or assessed readiness.",
+    "next_progress": "Next and progress",
+    "timeline": "Timeline",
+    "estimates": "Estimates require your assessment. **Bold titles** are the 12 reference milestones.",
+    "overdue": "overdue estimate",
+    "plan": "Plan",
+    "actual": "Actual",
+    "recipe_safety": "Recipe and safety",
+    "source": "Justyna Dragan's basic wheat sourdough",
+    "attribution": "Adapted from",
+    "method": "Read the author's full method for technique. Reference times are estimates.",
+    "safety": "Hot cast iron at 250 °C can cause severe burns. Use dry oven gloves, keep the lid on a heatproof surface and handle steam carefully.",
+    "baking": "Covered baking: 20 min at 250 °C. Uncovered: 15–20 min at 230 °C; the reminder uses 20 minutes. Check cooling yourself before slicing.",
+    "diagnostics": "Diagnostics",
+    "bake": "Bake",
+    "starter": "Starter",
+    "workflow": "Workflow",
+    "last_sync": "Last sync",
+    "none": "none",
+    "unlinked": "unlinked",
+    "no_errors": "No delivery errors."
+  },
+  "notifications": {
+    "done": "Done: {title}",
+    "snooze": "Remind in 10 min",
+    "outstanding": "{count} outstanding: {steps}. Buttons apply to {title}. Review the timeline.",
+    "hot": "Hot cast iron: use dry oven gloves; avoid burns.",
+    "title": "Bread Assistant — {title}",
+    "catchup": "catch-up"
+  },
+  "live": {
+    "bake": "Bake",
+    "paused": "Paused (process time continues)",
+    "due": "Action due — confirm manually",
+    "next": "Next action",
+    "critical_paused": "Paused · {title}",
+    "message": "{title} · {status}"
+  },
+  "diagnostics": {
+    "storage": "Storage/scheduler error: {error}",
+    "reminder": "Reminder delivery failed: {error}",
+    "live_cleanup": "Live Activity cleanup failed: {error}",
+    "live_delivery": "Live Activity delivery failed: {error}"
+  },
+  "recipes": {
+    "justyna_basic_wheat_sourdough": {
+      "v1": {
+        "title": "Basic wheat sourdough - after Justyna Dragan",
+        "description": "A wheat sourdough loaf with autolyse, stretch-and-folds, overnight cold proof and Dutch oven baking.",
+        "ingredients": {
+          "0": "Starter feeding: 40 g refrigerated starter, 40 g whole wheat flour, 40 g wheat bread flour type 750, 80 g water.",
+          "1": "Dough: 350 g wheat bread flour type 750, 235 g water (32-35 C), 120 g active fed starter, 10 g salt.",
+          "2": "Accessories: olive oil, rice flour, bench flour, parchment, proofing basket, Dutch oven, dry oven gloves, cooling rack."
+        },
+        "steps": {
+          "feed_starter": {
+            "title": "Feed starter",
+            "instructions": "Combine the starter feeding ingredients. Mark Done after feeding; readiness is confirmed separately."
+          },
+          "autolyse_start": {
+            "title": "Start autolyse",
+            "instructions": "Mix the dough flour and water until no dry patches remain. Cover and rest; keep starter and salt aside."
+          },
+          "starter_ready": {
+            "title": "Confirm starter readiness",
+            "instructions": "Check the starter yourself. Continue only when active and suitable for baking; the four-hour estimate is not a readiness test."
+          },
+          "autolyse_complete": {
+            "title": "Confirm autolyse complete",
+            "instructions": "Confirm the dough has completed its one-hour hydration rest."
+          },
+          "knead_start": {
+            "title": "Begin kneading",
+            "instructions": "Work the active starter and salt into the rested dough until evenly incorporated."
+          },
+          "bulk_start": {
+            "title": "Begin bulk fermentation",
+            "instructions": "After kneading, place dough in a lightly oiled covered container. Mark Done to record the actual bulk start."
+          },
+          "fold_1": {
+            "title": "First stretch-and-fold",
+            "instructions": "With damp hands, stretch and fold the dough gently. Cover again."
+          },
+          "fold_2": {
+            "title": "Second stretch-and-fold",
+            "instructions": "Repeat the stretch-and-fold. Its target is one hour after bulk began, independent of the first fold timestamp."
+          },
+          "bulk_ready": {
+            "title": "Confirm bulk fermentation readiness",
+            "instructions": "Assess dough expansion and aeration. Wait longer if needed; confirm only after your own assessment."
+          },
+          "preshape": {
+            "title": "Pre-shape",
+            "instructions": "Gently turn out the dough and form a loose round. Record completion to begin the bench rest."
+          },
+          "final_shape": {
+            "title": "Final shape",
+            "instructions": "After the ten-minute bench rest, shape the loaf with gentle surface tension."
+          },
+          "cold_proof_start": {
+            "title": "Refrigerate shaped dough",
+            "instructions": "Place the shaped loaf seam-up in a floured basket, cover and refrigerate. Mark Done when refrigerated."
+          },
+          "preheat_oven": {
+            "title": "Preheat oven and cast iron",
+            "instructions": "Preheat the oven and covered cast iron pot to 250 C. Use dry oven gloves; hot iron can cause severe burns."
+          },
+          "dough_ready": {
+            "title": "Confirm dough readiness",
+            "instructions": "Inspect the cold-proofed loaf and confirm it is ready. Twelve hours is a suggested proof, not automatic release."
+          },
+          "oven_ready": {
+            "title": "Confirm oven readiness",
+            "instructions": "Verify the oven and cast iron are fully heated. Handle the 250 C pot with dry heatproof gloves."
+          },
+          "score_loaf": {
+            "title": "Score loaf",
+            "instructions": "Turn the loaf onto parchment and score carefully before loading. Keep hands clear of the hot pot."
+          },
+          "bake_start": {
+            "title": "Begin covered baking",
+            "instructions": "Carefully load the loaf into the hot pot. Cover and bake at 250 C for 20 minutes. Mark Done once loaded."
+          },
+          "remove_lid": {
+            "title": "Remove lid; bake uncovered",
+            "instructions": "Use dry oven gloves to remove the hot lid. Reduce the oven to 230 C and bake uncovered for 15-20 minutes."
+          },
+          "bake_finish": {
+            "title": "Remove loaf",
+            "instructions": "Check the loaf after 15-20 minutes uncovered (the target is 20). Use oven gloves to lift it onto a rack."
+          },
+          "cooling_start": {
+            "title": "Begin cooling",
+            "instructions": "Place the loaf on a rack with air underneath. Keep the hot pot and lid safely away from hands."
+          },
+          "cooling_check": {
+            "title": "Check cooling before slicing",
+            "instructions": "Allow the crumb to cool before slicing. Confirm by checking the loaf yourself; this two-hour reminder is an estimate."
+          }
+        }
+      }
+    }
+  }
+}

@@ -13,6 +13,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
 
 from . import scheduler
+from .i18n import Translator, resolve_language
 from .models import BakeRun, BakeStatus, DomainError, LiveActivity
 from .notifications import is_mobile_app_target
 from .storage import BakeStorage
@@ -27,18 +28,26 @@ def activity_tag(bake_id: str) -> str:
 
 
 def activity_payload(
-    bake: BakeRun, now: datetime, dashboard_path: str
+    bake: BakeRun,
+    now: datetime,
+    dashboard_path: str,
+    translator: Translator | None = None,
 ) -> dict[str, Any]:
     """Use the same required-step progress and actionable order as the sensors."""
+    tr = translator or Translator()
     steps = scheduler.actionable(bake, include_paused=True)
     current = steps[0] if steps else None
-    title = bake.recipe_snapshot.by_id[current.step_id].title if current else "Bake"
+    title = (
+        tr.step(bake.recipe_snapshot, current.step_id, "title")
+        if current
+        else tr.text("content.live.bake")
+    )
     paused = bake.status == BakeStatus.PAUSED
     due = current is not None and current.due_at <= now
     status = (
-        "Paused (process time continues)"
+        tr.text("content.live.paused")
         if paused
-        else ("Action due — confirm manually" if due else "Next action")
+        else tr.text("content.live.due" if due else "content.live.next")
     )
     required = [
         bake.step_runs[step.id]
@@ -48,7 +57,9 @@ def activity_payload(
     data: dict[str, Any] = {
         "tag": activity_tag(bake.id),
         "live_update": True,
-        "critical_text": f"Paused · {title}" if paused else title,
+        "critical_text": tr.text("content.live.critical_paused", title=title)
+        if paused
+        else title,
         "progress": sum(run.finished for run in required),
         "progress_max": len(required),
         "chronometer": bool(current and not paused and not due),
@@ -62,7 +73,7 @@ def activity_payload(
         data["when_relative"] = False
     return {
         "title": "Bread Assistant",
-        "message": f"{title} · {status}",
+        "message": tr.text("content.live.message", title=title, status=status),
         "data": data,
     }
 
@@ -81,9 +92,26 @@ class LiveActivities:
         self.storage = storage
         self.options = options
         self.closed = closed
-        self.error: str | None = None
+        self._error: tuple[str, Exception] | None = None
         self.retry_at: datetime | None = None
         self._last_delivery: tuple[str, dict[str, Any]] | None = None
+
+    @property
+    def translator(self) -> Translator:
+        return Translator(
+            resolve_language(
+                self.options.get("language", "auto"), self.hass.config.language
+            )
+        )
+
+    @property
+    def error(self) -> str | None:
+        if self._error is None:
+            return None
+        kind, error = self._error
+        return self.translator.text(
+            f"content.diagnostics.{kind}", error=self.translator.error(error)
+        )
 
     def next_deadline(self) -> datetime | None:
         if self.retry_at:
@@ -95,10 +123,10 @@ class LiveActivities:
 
     async def _send(self, target: str, payload: dict[str, Any]) -> None:
         if not is_mobile_app_target(target):
-            raise DomainError("Only mobile_app notification targets are supported")
+            raise DomainError("mobile_only")
         domain, service = target.split(".", 1)
         if not self.hass.services.has_service(domain, service):
-            raise DomainError("Live Activity notification destination is unavailable")
+            raise DomainError("live_unavailable")
         async with asyncio.timeout(15):
             await self.hass.services.async_call(domain, service, payload, blocking=True)
 
@@ -128,7 +156,7 @@ class LiveActivities:
             else ""
         )
         self.retry_at = None
-        cleanup_error: str | None = None
+        cleanup_error: tuple[str, Exception] | None = None
         try:
             for record in list(self.storage.live_activities):
                 if self.closed():
@@ -169,21 +197,19 @@ class LiveActivities:
                         OSError,
                     ) as err:
                         # A removed old phone must not block a new destination.
-                        cleanup_error = f"Live Activity cleanup failed: {err}"
+                        cleanup_error = ("live_cleanup", err)
             if self.closed():
                 return
             if not target or not bake:
-                self.error = cleanup_error
+                self._error = cleanup_error
                 if cleanup_error:
                     self.retry_at = now + RETRY_AFTER
                 return
             # Check before reserving a start for an invalid/unavailable service.
             if not is_mobile_app_target(target):
-                raise DomainError("Only mobile_app notification targets are supported")
+                raise DomainError("mobile_only")
             if not self.hass.services.has_service(*target.split(".", 1)):
-                raise DomainError(
-                    "Live Activity notification destination is unavailable"
-                )
+                raise DomainError("live_unavailable")
             active_record = next(
                 (
                     r
@@ -198,7 +224,7 @@ class LiveActivities:
             ):
                 # The clear failed: retry later instead of updating an expired
                 # activity or issuing a duplicate push-to-start on the same tag.
-                self.error = cleanup_error
+                self._error = cleanup_error
                 self.retry_at = now + RETRY_AFTER
                 return
             if active_record is None:
@@ -213,15 +239,17 @@ class LiveActivities:
                 self._last_delivery = None
             if self.closed():
                 return
-            payload = activity_payload(bake, now, self.options["dashboard_path"])
+            payload = activity_payload(
+                bake, now, self.options["dashboard_path"], self.translator
+            )
             delivery = (target, payload)
             if force or delivery != self._last_delivery:
                 await self._send(target, payload)
                 self._last_delivery = delivery
-            self.error = cleanup_error
+            self._error = cleanup_error
             if cleanup_error:
                 self.retry_at = now + RETRY_AFTER
         except (ValueError, TimeoutError, HomeAssistantError, OSError) as err:
             # Notification or metadata-write failures must not undo a bake action.
-            self.error = f"Live Activity delivery failed: {err}"
+            self._error = ("live_delivery", err)
             self.retry_at = now + RETRY_AFTER
