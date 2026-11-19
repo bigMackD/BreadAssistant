@@ -1,4 +1,4 @@
-# Codex agent instructions — Bread Assistant
+# Codex agent instructions - Bread Assistant
 
 You are implementing a local-first Home Assistant custom integration named `bread_assistant`.
 

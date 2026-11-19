@@ -5,7 +5,7 @@ from pathlib import Path
 from homeassistant.core import HomeAssistant
 
 URL_BASE = "/bread_assistant/frontend"
-MODULE_URL = f"{URL_BASE}/bread-assistant-card.js?v=1"
+MODULE_URL = f"{URL_BASE}/bread-assistant-card.js?v=2"
 
 
 async def async_setup_frontend(hass: HomeAssistant) -> None:

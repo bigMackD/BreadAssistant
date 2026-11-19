@@ -152,12 +152,7 @@ def complete(bake: BakeRun, step_id: str, now: datetime) -> bool:
     step = bake.recipe_snapshot.by_id[step_id]
     if not eligible(bake, step):
         raise DomainError("prerequisites")
-    # Readiness estimates can be confirmed early; fixed baking/rest timers cannot.
-    earliest = run.due_at
-    if step.minimum_minutes is not None:
-        earliest -= timedelta(minutes=step.duration_minutes - step.minimum_minutes)
-    if step.kind.value == "timer" and now < earliest:
-        raise DomainError("too_early")
+    # Deadlines are reminders; the person confirms actual completion, even early.
     run.status = StepStatus.DONE
     run.started_at = run.completed_at = run.acknowledged_at = now
     run.snoozed_until = None

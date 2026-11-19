@@ -35,13 +35,13 @@
     "snooze": "Remind in 10 min",
     "outstanding": "{count} outstanding: {steps}. Buttons apply to {title}. Review the timeline.",
     "hot": "Hot cast iron: use dry oven gloves; avoid burns.",
-    "title": "Bread Assistant — {title}",
+    "title": "Bread Assistant - {title}",
     "catchup": "catch-up"
   },
   "live": {
     "bake": "Bake",
     "paused": "Paused (process time continues)",
-    "due": "Action due — confirm manually",
+    "due": "Action due - confirm manually",
     "next": "Next action",
     "critical_paused": "Paused · {title}",
     "message": "{title} · {status}"

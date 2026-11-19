@@ -41,6 +41,17 @@ async def test_real_store_roundtrip(hass, hass_storage):
     assert hass_storage["bread_assistant.bakes"]["version"] == 2
 
 
+async def test_legacy_archives_and_retention_limit(hass, hass_storage):
+    legacy = {"id": "old-summary", "done_count": 21}
+    archives = [legacy] + [{"id": f"bake-{i}"} for i in range(50)]
+    await BakeStorage(hass).async_save(bake(), archives)
+    _, restored = await BakeStorage(hass).async_load()
+    assert restored == archives[-50:]
+    await BakeStorage(hass).async_save(bake(), [legacy])
+    _, restored = await BakeStorage(hass).async_load()
+    assert restored == [legacy]
+
+
 async def test_live_activity_metadata_roundtrip_and_old_v2_default(hass, hass_storage):
     from custom_components.bread_assistant.models import LiveActivity
 

@@ -7,6 +7,7 @@ import voluptuous as vol
 from homeassistant.exceptions import HomeAssistantError
 
 from custom_components.bread_assistant.const import DOMAIN
+from custom_components.bread_assistant.models import BakeStatus
 
 from .test_schedule import START
 
@@ -112,4 +113,42 @@ async def test_native_prepared_and_complete_buttons(hass, integration):
     assert (
         hass.states.get("button.bread_assistant_complete_current").state
         != "unavailable"
+    )
+
+
+@pytest.mark.parametrize("workflow", ["feed", "prepared"])
+async def test_native_confirm_available_for_every_step_before_deadline(
+    hass, integration, workflow
+):
+    c = integration.runtime_data
+    await c.async_action("start_bake", {"starter_workflow": workflow})
+    early_steps = set()
+    while c.bake.status == BakeStatus.ACTIVE:
+        current = c.current_steps()[0]
+        if current.due_at > START:
+            early_steps.add(current.step_id)
+            assert (
+                hass.states.get("button.bread_assistant_snooze_current").state
+                == "unavailable"
+            )
+        assert (
+            hass.states.get("button.bread_assistant_complete_current").state
+            != "unavailable"
+        )
+        await hass.services.async_call(
+            "button",
+            "press",
+            {"entity_id": "button.bread_assistant_complete_current"},
+            blocking=True,
+        )
+        assert c.bake.step_runs[current.step_id].completed_at == START
+    assert {
+        "autolyse_complete",
+        "remove_lid",
+        "bake_finish",
+        "cooling_check",
+    } <= early_steps
+    assert (
+        hass.states.get("button.bread_assistant_complete_current").state
+        == "unavailable"
     )

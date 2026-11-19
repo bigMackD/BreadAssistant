@@ -105,7 +105,7 @@ views:
       {% set fmt = '%d.%m.%Y %I:%M %p %Z' if state_attr('sensor.kitchen_bread_assistant_status', 'time_format') == '12h' else '%d.%m.%Y %H:%M %Z' %}
       {% for step in state_attr('sensor.kitchen_bread_assistant_current_step', 'timeline') or [] %}
 
-      {{ '✅' if step.state == 'done' else '⏭' if step.state == 'skipped' else '⚠' if step.overdue else '●' if step.state == 'ready' else '○' }} {{ '**' if step.reference else '' }}{{ step.title }}{{ '**' if step.reference else '' }} — {{ step.state_label }}{{ ' (' ~ ui.overdue ~ ')' if step.overdue else '' }}
+      {{ '✅' if step.state == 'done' else '⏭' if step.state == 'skipped' else '⚠' if step.overdue else '●' if step.state == 'ready' else '○' }} {{ '**' if step.reference else '' }}{{ step.title }}{{ '**' if step.reference else '' }} - {{ step.state_label }}{{ ' (' ~ ui.overdue ~ ')' if step.overdue else '' }}
 
       {{ ui.plan }}: {{ as_local(as_datetime(step.planned_at)).strftime(fmt) }}
       · {{ ui.due }}: {{ as_local(as_datetime(step.due_at)).strftime(fmt) }}

@@ -66,11 +66,12 @@ def test_oven_and_dough_gates_and_bake_segments():
     scheduler.complete(b, "score_loaf", b.step_runs["score_loaf"].due_at)
     scheduler.complete(b, "bake_start", b.step_runs["bake_start"].due_at)
     remove = b.step_runs["remove_lid"].due_at
-    with pytest.raises(DomainError, match="deadline"):
-        scheduler.complete(b, "remove_lid", remove - timedelta(minutes=1))
-    scheduler.complete(b, "remove_lid", remove)
-    with pytest.raises(DomainError, match="deadline"):
-        scheduler.complete(b, "bake_finish", remove + timedelta(minutes=14))
-    scheduler.complete(b, "bake_finish", remove + timedelta(minutes=15))
-    assert b.step_runs["cooling_check"].due_at == remove + timedelta(minutes=135)
+    uncovered = remove - timedelta(minutes=1)
+    scheduler.complete(b, "remove_lid", uncovered)
+    assert b.step_runs["remove_lid"].completed_at == uncovered
+    assert b.step_runs["bake_finish"].due_at == uncovered + timedelta(minutes=20)
+    finish = uncovered + timedelta(minutes=14)
+    scheduler.complete(b, "bake_finish", finish)
+    assert b.step_runs["bake_finish"].completed_at == finish
+    assert b.step_runs["cooling_check"].due_at == finish + timedelta(minutes=120)
     assert b.status == BakeStatus.ACTIVE  # Cooling is still a manual checkpoint.

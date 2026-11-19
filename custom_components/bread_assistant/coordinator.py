@@ -190,7 +190,19 @@ class BakeCoordinator:
                         if bake.archived_at
                         else None,
                         "starter_id": bake.starter_id,
+                        "starter_workflow": bake.starter_workflow,
                         "done_count": sum(r.finished for r in bake.step_runs.values()),
+                        "step_runs": {
+                            step_id: {
+                                "status": run.status,
+                                "planned_at": run.planned_at.isoformat(),
+                                "due_at": run.due_at.isoformat(),
+                                "completed_at": run.completed_at.isoformat()
+                                if run.completed_at
+                                else None,
+                            }
+                            for step_id, run in bake.step_runs.items()
+                        },
                     }
                 )
         await self.storage.async_save(bake, archives)

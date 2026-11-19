@@ -1,4 +1,4 @@
-# Bread Assistant — Home Assistant Custom Integration
+# Bread Assistant - Home Assistant Custom Integration
 
 ## Implementation plan for Codex
 
@@ -304,7 +304,7 @@ Keep the domain engine decoupled from Home Assistant, and all IO/side effects be
 
 ## 9. Step-by-step implementation tasks
 
-### Phase 0 — Inspect and validate environment
+### Phase 0 - Inspect and validate environment
 
 - [ ] **P0.1** Inspect existing repository structure and HA Docker Compose/config volume paths. Do not assume or overwrite user config.
 - [x] **P0.2** Determine installed HA Core version and supported Python version; consult current HA developer documentation for integration lifecycle, services, config flow, storage, entity APIs, event/time helpers, and translations.
@@ -314,7 +314,7 @@ Keep the domain engine decoupled from Home Assistant, and all IO/side effects be
 
 **Done when:** contributor can run unit tests locally and understands deployment mount; no production change yet.
 
-### Phase 1 — Integration skeleton
+### Phase 1 - Integration skeleton
 
 - [x] **P1.1** Implement `manifest.json` (`domain`, `name`, `version`, `documentation`, `issue_tracker` if real, `config_flow: true`, appropriate `iot_class`, dependencies if needed). Never invent published URLs.
 - [x] **P1.2** Implement async config flow and options flow with user-friendly errors and proper single-instance behavior.
@@ -324,7 +324,7 @@ Keep the domain engine decoupled from Home Assistant, and all IO/side effects be
 
 **Done when:** integration can be installed, configured, reloaded and unloaded without HA errors.
 
-### Phase 2 — Domain, recipe and deterministic schedule
+### Phase 2 - Domain, recipe and deterministic schedule
 
 - [x] **P2.1** Implement validated dataclasses or equivalent typed models for recipe, step, bake, dependencies and timestamps.
 - [x] **P2.2** Bundle the first recipe's ingredient list, 12 reference milestones, original concise instructions, readiness checkpoints, and two baking phases.
@@ -335,7 +335,7 @@ Keep the domain engine decoupled from Home Assistant, and all IO/side effects be
 
 **Done when:** all 12 reference offsets match the article, independent stages are not globally shifted, and schedule tests pass.
 
-### Phase 3 — Persistence and runtime coordination
+### Phase 3 - Persistence and runtime coordination
 
 - [x] **P3.1** Implement HA Store adapter, JSON schema version, serialization and migration hook.
 - [x] **P3.2** Implement coordinator with `asyncio.Lock` guarding mutations, idempotence, and event listeners for state changes.
@@ -346,7 +346,7 @@ Keep the domain engine decoupled from Home Assistant, and all IO/side effects be
 
 **Done when:** restart mid-bake preserves progress and does not double-trigger a reminder.
 
-### Phase 4 — Native entities and actions
+### Phase 4 - Native entities and actions
 
 - [x] **P4.1** Create a single integration device with stable unique IDs and availability behavior.
 - [x] **P4.2** Implement required sensor and timestamp entities; use entity descriptions, properties, update callbacks and correct device classes.
@@ -357,7 +357,7 @@ Keep the domain engine decoupled from Home Assistant, and all IO/side effects be
 
 **Done when:** all actions work in Developer Tools → Actions and entities respond immediately.
 
-### Phase 5 — Companion notifications
+### Phase 5 - Companion notifications
 
 - [x] **P5.1** Add configurable notification target and optional disable toggle.
 - [x] **P5.2** Implement due reminders using supported HA notification actions, category/tag data and dashboard deep links.
@@ -368,7 +368,7 @@ Keep the domain engine decoupled from Home Assistant, and all IO/side effects be
 
 **Done when:** notification buttons change only the intended current step and stale notification buttons cannot change a new bake.
 
-### Phase 6 — Dashboard
+### Phase 6 - Dashboard
 
 - [x] **P6.1** Provide a native Lovelace dashboard YAML file and a clear registration/import guide for a Docker HA installation.
 - [x] **P6.2** Build status, current-step, next-step, progress and actionable control sections.
@@ -378,7 +378,7 @@ Keep the domain engine decoupled from Home Assistant, and all IO/side effects be
 
 **Done when:** a user can perform a complete bake using only the HA dashboard and iPhone reminders.
 
-### Phase 7 — Quality and release
+### Phase 7 - Quality and release
 
 - [x] **P7.1** Run Ruff lint/format, mypy or equivalent targeted type validation, pytest, and HA-specific test fixtures.
 - [x] **P7.2** Add scenario tests: midnight, DST boundary, 17-minute lateness, concurrent Done buttons, stale IDs, shutdown while a callback is pending, storage corruption, no phone configured, unavailability, cancel and restart.

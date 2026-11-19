@@ -105,8 +105,8 @@ try {
               await card.locator(`[data-detail="${label}"] > summary`).click();
               assert.equal(await card.locator(`[data-detail="${label}"]`).getAttribute("open"), "");
             }
-            if (scenario === "active") assert.equal(await card.locator('[data-action="complete"]').isDisabled(), true);
-            if (["due", "overdue", "prepared", "snoozed"].includes(scenario)) assert.equal(await card.locator('[data-action="complete"]').isEnabled(), true);
+            if (["active", "due", "overdue", "prepared", "snoozed", "cold_proof"].includes(scenario)) assert.equal(await card.locator('[data-action="complete"]').isEnabled(), true);
+            if (scenario === "active") assert.equal(await card.locator('[data-action="snooze"]').isDisabled(), true);
             if (scenario === "paused") {
               assert.equal(await card.locator('[data-action="complete"]').count(), 0);
               assert.equal(await card.locator('[data-countdown]').innerText(), language === "pl" ? "Przypomnienia wstrzymane" : "Reminders paused");
@@ -163,8 +163,7 @@ try {
           assert.match(await card.locator(".confirmation-hint").innerText(), new RegExp(language === "pl" ? "Kiedy potwierdzić" : "When to confirm"));
           assert.equal(await details.locator("a").getAttribute("href"), states["sensor.bread_assistant_status"].attributes.recipe_url);
           assert.equal(await card.evaluate(element => element.scrollWidth <= innerWidth), true, `${size}/${theme}/${language}/${stepId}: instruction overflow`);
-          const due = await page.evaluate(value => Date.parse(value) <= Date.now(), attrs.due_at);
-          assert.equal(await card.locator('[data-action="complete"]').isEnabled(), due);
+          assert.equal(await card.locator('[data-action="complete"]').isEnabled(), true);
           if (size === "mobile" && theme === "maciek" && language === "pl" && ["preshape","dough_ready","bake_start","cooling_check"].includes(stepId)) {
             await page.screenshot({path:resolve(output, `${size}-${stepId}-full-instructions.png`), fullPage:true, animations:"disabled"});
           }
@@ -200,6 +199,13 @@ try {
   await show("due"); await click("snooze");
   assert.equal(await page.evaluate(() => calls[0].data.minutes), 10);
   assert.equal(await page.evaluate(() => calls[0].service), "snooze_step");
+  // Confirmation before the deadline submits the same explicit bake/step identity.
+  await show("active"); await click("complete");
+  assert.deepEqual(await page.evaluate(() => calls[0]), {
+    domain:"bread_assistant", service:"complete_step", data:{
+      bake_id:fixtures.scenarios.en.active["sensor.bread_assistant_status"].attributes.bake_id, step_id:"autolyse_start",
+    },
+  });
   await show("active"); await click("pause");
   assert.equal(await page.evaluate(() => calls[0].service), "pause_bake");
   await show("paused"); await click("resume");
@@ -247,15 +253,17 @@ try {
   assert.equal(await card.locator('button[data-action]:enabled:not([data-action="timeline"])').count(), 0);
   await page.evaluate(() => { hass.connection.connected = true; }); await page.clock.runFor(1000);
   assert.equal(await card.locator('[data-action="pause"]').isEnabled(), true);
-  // At the deadline the primary action becomes available without recreating the card.
+  // Confirmation stays available across the deadline; only Snooze waits for it.
   await page.evaluate(states => {
     const imminent = structuredClone(states);
     imminent["sensor.bread_assistant_current_step"].attributes.due_at = new Date(Date.now() + 1000).toISOString();
     window.show(imminent, "en");
   }, fixtures.scenarios.en.active);
-  assert.equal(await card.locator('[data-action="complete"]').isDisabled(), true);
+  assert.equal(await card.locator('[data-action="complete"]').isEnabled(), true);
+  assert.equal(await card.locator('[data-action="snooze"]').isDisabled(), true);
   await page.clock.runFor(2000);
   assert.equal(await card.locator('[data-action="complete"]').isEnabled(), true);
+  assert.equal(await card.locator('[data-action="snooze"]').isEnabled(), true);
   assert.equal(await page.evaluate(() => calls.length), 0); // Readiness is never inferred.
   // 12h/24h and DST use HA's configured zone, irrespective of the browser's zone.
   await page.evaluate(states => {
@@ -283,7 +291,7 @@ try {
     window.show(partial, "en");
   }, fixtures.scenarios.en.active);
   assert.equal(await card.locator('[data-action="complete"]').isDisabled(), true);
-  assert.equal(await card.locator('[data-countdown]').innerText(), "—");
+  assert.equal(await card.locator('[data-countdown]').innerText(), "-");
   // Configuration rejects invalid IDs before rendering.
   assert.equal(await page.evaluate(() => {
     try { card.setConfig({entity_prefix:"sensor.bad"}); return false; } catch { return true; }

@@ -100,10 +100,25 @@ def test_midnight_and_dst(start):
     assert finish.astimezone(start.tzinfo).date() > start.date()
 
 
-def test_naive_and_fixed_timer_early_rejected():
+def test_naive_timestamp_and_completion_before_bake_start_rejected():
     with pytest.raises(DomainError, match="timezone"):
         create_bake(next(iter(load_catalog().values())), datetime(2026, 1, 1))
     b = bake(starter_workflow="prepared", starter_ready=True)
+    with pytest.raises(DomainError, match="not started"):
+        complete(b, "autolyse_start", START - timedelta(seconds=1))
+
+
+def test_early_timer_confirmation_preserves_plan_and_reschedules_dependents():
+    b = bake(starter_workflow="prepared", starter_ready=True)
     complete(b, "autolyse_start", START)
-    with pytest.raises(DomainError, match="deadline"):
-        complete(b, "autolyse_complete", START)
+    run = b.step_runs["autolyse_complete"]
+    planned, due = run.planned_at, run.due_at
+    early = START + timedelta(minutes=40)
+    assert early < due
+    assert complete(b, "autolyse_complete", early)
+    assert run.completed_at == early
+    assert run.planned_at == planned
+    assert run.due_at == due
+    assert b.step_runs["knead_start"].due_at == early
+    assert not complete(b, "autolyse_complete", early + timedelta(minutes=1))
+    assert run.completed_at == early

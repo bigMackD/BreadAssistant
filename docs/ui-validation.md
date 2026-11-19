@@ -25,6 +25,8 @@ Additional browser assertions cover:
 
 - Both starter workflows, Done, ten-minute Snooze, Pause, Resume, confirmed Cancel
   and dismissed Cancel, including exact service arguments and captured bake/step IDs.
+- Early Done for every current stage, including timers, before and after crossing
+  its deadline. Snooze continues to wait for the reminder deadline.
 - In-flight action locking, failure display and retries retaining the original step
   after an intervening state update.
 - Local countdown updates and deadline crossing without automatic completion or
@@ -47,7 +49,8 @@ Real HA tests cover HTTP asset serving, path traversal rejection, headless setup
 HTTP without frontend, automatic module registration and config-entry reload.
 The frontend lifecycle test supplies an empty static asset directory because the
 backend test image omits HA's browser asset wheel; the module loader runs normally.
-All **119 Python tests** pass, including the existing integration regression suite.
+All **125 Python tests** pass, including the existing integration regression suite,
+early confirmation, prerequisite protection and archived step timestamps.
 Ruff lint/format and strict mypy pass. Existing native dashboard templates still
 render in both languages. The browser matrix and additional assertions all pass.
 

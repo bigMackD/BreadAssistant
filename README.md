@@ -69,6 +69,23 @@ Ingredients, full current instructions, recipe attribution, oven safety and bake
 diagnostics expand on demand. Idle, paused, completed, canceled, unavailable and
 delivery/action error states include appropriate guidance and controls.
 
+**Done / Confirm step** is available throughout each current stage, including
+before its countdown reaches zero. Timers guide reminders; confirm when you have
+actually finished the action or assessed readiness. Prerequisites still apply,
+and paused bakes must be resumed before confirming. Early confirmation records
+the actual time and recalculates dependent deadlines while preserving the original
+plan. **Remind in 10 min** becomes available when the current reminder is due.
+
+Each loaf has a unique bake ID. The current/latest bake stores its full recipe
+snapshot and step timestamps locally in Home Assistant Store
+(`.storage/bread_assistant.bakes`). The last 50 completed/canceled loaf archives
+also retain each step's status, original planned time, final due time and actual
+confirmation time, so a future history view can show when each stage finished.
+Skipped steps are recorded separately from completed steps; unfinished steps have
+no completion time. These records survive restarts and starting another loaf.
+Older archive summaries remain compatible but cannot recover timestamps that
+were never saved. There is no history browser or unlimited retention yet.
+
 Open **Read full stage instructions** directly below the current-stage summary to
 read the complete source passage before confirming a step. All 21 stages include
 the relevant original Polish text supplied from Justyna's recipe, with English
@@ -83,7 +100,8 @@ and uncovering the loaf, and cooling. The quote includes both pot/lid and tray/
 inverted-pot baking methods. Images referenced in the text are available through
 the original recipe link. The cooling passage mentions waiting at least 20
 minutes; the app retains its existing two-hour cooling-check reminder and clearly
-labels it as an app estimate. No timing, dependencies or readiness rules change.
+labels it as an app estimate. Recipe timing estimates and prerequisite checks
+still apply; manual confirmation can happen earlier.
 
 The card inherits HA colors, typography, borders, shadows and corner radius in a
 shadow root, so its styles cannot affect other dashboards. Baking uses the theme's
@@ -263,7 +281,8 @@ are needed. The test image is development tooling, not a production service.
 
 ## Scope and operational limits
 
-One active bake, one bundled recipe, the latest full bake and 50 archive summaries.
+One active bake, one bundled recipe, the latest full bake and 50 archives with
+per-step timing records (older archives may contain summaries only).
 Cooking actions and biological readiness are always confirmed by a person. Bake
 completion includes a final cooling check. Starter Manager itself is deliberately
 absent; only the optional domain interface/reference is implemented.
@@ -301,3 +320,11 @@ Polish recipe passages and English translations, with separate summaries and
 confirmation guidance. 119 Python tests and 612 browser combinations pass (234
 lifecycle plus 378 full-instruction combinations). Ruff lint/format and strict
 mypy pass. Existing bake snapshots, recipe timings and action contracts are retained.
+
+Early confirmation and loaf timing archives (19 November 2026): completion is
+available before the countdown ends for every current stage, including timers.
+New completed/canceled archives retain step statuses and planned, due and actual
+completion timestamps, bounded to the last 50 loaves. 125 Python tests and 612
+browser combinations pass, including early native/card confirmation, dependent
+rescheduling, restart persistence and legacy archive compatibility. Ruff
+lint/format and strict mypy pass. Physical iPhone and staging HA checks remain manual.

@@ -57,13 +57,15 @@ was tested on Linux/Python 3.14.2, not Windows.
   skipped, and retains the readiness checkpoint. Passing explicit readiness at
   start is valid only with that workflow. Original reference times stay unchanged.
 - All timers are wall-clock. Pause freezes only reminders; it does not freeze
-  fermentation or oven time. `adjust_step` requests an earliest deadline and cannot
-  bypass dependency or minimum-duration constraints.
+  fermentation or oven time. `adjust_step` requests an earliest reminder deadline;
+  dependency scheduling still applies. Manual completion may be confirmed earlier
+  for every stage once its prerequisites are met.
 - The recipe uses 20 minutes as the uncovered reminder target while allowing actual
   removal at 15–20 minutes. The final manual cooling check completes the bake;
   the optional cooling-start technique item has no independent push.
-- Archives are compact summaries, bounded to 50. The latest full bake retains its
-  snapshot; arbitrary historical analytics/import/export are outside this MVP.
+- Archives are bounded to 50 and retain per-step status, planned, due and completion
+  timestamps. Older summaries without step data still load. The latest full bake
+  retains its snapshot; a history browser and import/export are outside this MVP.
 - Push delivery cannot be transactional with Store. A crash after reservation but
   before send can postpone the next push until its repeat interval. This is an
   explicit durability/deduplication tradeoff; see [architecture](architecture.md).
@@ -80,7 +82,7 @@ was tested on Linux/Python 3.14.2, not Windows.
   or generated under another language.
 - [ ] Complete the staging checklist in the deployment guide before the user
   independently chooses production installation and backup/rollback timing.
-# Live Activities extension verification — 14 November 2026
+# Live Activities extension verification - 14 November 2026
 
 The existing MVP was extended through its coordinator, Store and single UTC
 callback. Regular actionable reminders, domain scheduling and dashboard controls

@@ -95,8 +95,12 @@ The coordinator deep-copies the current bake, applies a transition, persists the
 candidate atomically, then publishes it. A failed write leaves the published bake
 unchanged. Timer write failures retry after a minute. Service errors are returned
 to the caller for explicit retry. All changes share one async lock, including
-notification actions. Completed and canceled summaries are archived once; the
-last 50 summaries and latest full bake are retained. There is one active bake.
+notification actions. Completed and canceled bakes are archived once; the last
+50 archives and latest full bake are retained. Archives include recipe identity,
+starter workflow and each step's status, original plan, final due time and actual
+completion time. This additive data is compatible with existing schema-v2
+summaries; older missing step records cannot be reconstructed. Archives remain
+in Store rather than sensor attributes. There is one active bake.
 
 ## Time and dependency semantics
 
@@ -110,18 +114,19 @@ last 50 summaries and latest full bake are retained. There is one active bake.
   completion and gates execution on it. `parallel_anchor` shares an actual anchor
   without chaining sibling completions. Explicit prerequisites add manual gates.
   `absolute` allows a validated UTC instant. Multiple anchors use their maximum.
-- `adjust_step` requests an **earliest deadline**. It cannot bypass prerequisites
-  or shorten a fixed process interval; the original plan remains unchanged. To
-  advance a biological estimate, explicitly confirm its readiness checkpoint.
+- `adjust_step` requests an **earliest reminder deadline**. Scheduling retains the
+  recipe's process intervals and prerequisites; the original plan remains unchanged.
+  Explicit completion may be confirmed before that deadline.
 - Starting/completing a milestone records a human event, such as loading the loaf
-  or placing dough in the fridge. Timed stages become actionable at their target;
-  they never complete themselves. Starter, bulk, dough, oven and cooling readiness
-  always require a person. Readiness estimates may be confirmed early through the
-  canonical `complete_step` action when prerequisites are met.
+  or placing dough in the fridge. Every current stage, including timers, may be
+  confirmed before its target through the dashboard, native completion button or
+  canonical `complete_step` action when prerequisites are met. Targets control
+  reminders, not permission to complete. Stages never complete themselves. Starter,
+  bulk, dough, oven and cooling readiness always require a person.
 - Both folds anchor to actual `bulk_start` (+30/+60), not to the previous fold.
   Preheat runs during cold proof, while baking waits for oven and dough gates.
 - Covered baking is 20 minutes at 250 °C. Uncovered baking targets 20 minutes at
-  230 °C and accepts manual removal after its minimum 15 minutes. Cooling adds a
+  230 °C; recipe timing guidance does not block manual completion. Cooling adds a
   final manual checkpoint with a two-hour estimate. The 12 reference milestones
   are retained; `cooling_start` is an optional, silent technique substep.
 - All MVP timers are wall-clock timers. Pause stops reminders and invalidates

@@ -73,7 +73,7 @@ export class BreadAssistantCard extends HTMLElement {
   _text(key) { return this._strings[key] ?? strings.en[key] ?? key; }
 
   _date(value) {
-    if (!Number.isFinite(timestamp(value))) return "—";
+    if (!Number.isFinite(timestamp(value))) return "-";
     const timeZone = this._hass?.config?.time_zone || "UTC";
     const options = {
       timeZone, month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit",
@@ -278,18 +278,19 @@ export class BreadAssistantCard extends HTMLElement {
       const valid = Number.isFinite(due);
       const seconds = Math.floor(Math.abs(delta) / 1000);
       const pad = (n) => String(n).padStart(2, "0");
-      timer.textContent = paused ? this._text("paused_timer") : !valid ? "—" :
+      timer.textContent = paused ? this._text("paused_timer") : !valid ? "-" :
         `${pad(Math.floor(seconds / 3600))}:${pad(Math.floor(seconds / 60) % 60)}:${pad(seconds % 60)}`;
       timer.classList.toggle("paused", paused);
       const label = this.shadowRoot.querySelector("[data-countdown-label]");
       label.textContent = this._text(paused ? "paused" : delta < -1000 ? "late" : delta <= 0 ? "due_now" : "next_action");
-      const actionable = this._status === "active" && !!this._view.bake_id && !!this._view.step_id && valid && delta <= 0;
+      const actionable = this._status === "active" && !!this._view.bake_id && !!this._view.step_id;
       for (const action of ["complete", "snooze"]) {
         const button = this.shadowRoot.querySelector(`[data-action="${action}"]`);
-        if (button) button.disabled = !actionable || this._busy || !connected;
+        const waitingForDue = action === "snooze" && (!valid || delta > 0);
+        if (button) button.disabled = !actionable || waitingForDue || this._busy || !connected;
       }
       const waiting = this.shadowRoot.querySelector("[data-waiting]");
-      waiting.textContent = this._status === "active" && !actionable ? this._text("waiting") : "";
+      waiting.textContent = actionable && valid && delta > 0 ? this._text("waiting") : "";
       waiting.hidden = !waiting.textContent;
     }
     this.shadowRoot.querySelectorAll("[data-step]").forEach((item) => {

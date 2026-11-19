@@ -99,11 +99,14 @@ manually assess starter readiness. Use **Prepared starter** to intentionally ski
 feeding and begin autolyse immediately. You must still confirm starter readiness.
 Complete the autolyse checkpoint before kneading. **Done / Confirm ready** acts on
 the current named step; **Remind in 10 min** changes reminders only. These controls
-are unavailable while paused or before their target is due. Developer Tools →
-Actions allows individual step confirmation, including early biological readiness.
+are unavailable while paused. **Done / Confirm ready** is available before the
+countdown ends, including for timed stages; prerequisites still apply. **Remind
+in 10 min** waits until the reminder is due. Developer Tools → Actions also allows
+individual step confirmation before its target time.
 
 Pause reminders only when appropriate; dough and oven processes continue. Resume
-to review overdue estimates. Cancel archives a summary and stops further alerts.
+to review overdue estimates. Cancel archives progress and per-step timestamps and
+stops further alerts.
 After the cooling checkpoint the bake completes; then you can start another.
 
 The source recipe is [Justyna Dragan's basic wheat sourdough](https://justynadragan.pl/2020/08/podstawowy-chleb-pszenny-na-zakwasie.html).
@@ -172,8 +175,9 @@ data:
   due_at: "2026-11-14T21:00:00+01:00"
 ```
 
-`adjust_step` sets a requested earliest deadline; prerequisite and minimum timer
-constraints still apply. `pause_bake`, `resume_bake` and `cancel_bake` each require
+`adjust_step` sets a requested earliest reminder deadline; dependency scheduling
+still applies. Manual confirmation may occur earlier. `pause_bake`, `resume_bake`
+and `cancel_bake` each require
 `bake_id`. All schemas reject unknown fields. Step mutation actions require both
 bake and step IDs. Old/canceled bake IDs cannot modify the current workflow.
 

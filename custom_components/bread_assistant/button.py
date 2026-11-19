@@ -54,6 +54,8 @@ class BreadButton(BreadEntity, ButtonEntity):
         if status != BakeStatus.ACTIVE:
             return False
         steps = self.coordinator.current_steps()
+        if key == "complete_current":
+            return bool(steps)
         return bool(steps and steps[0].due_at <= self.coordinator.clock())
 
     async def async_press(self) -> None:

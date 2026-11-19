@@ -35,13 +35,13 @@
     "snooze": "Przypomnij za 10 minut",
     "outstanding": "Zaległe etapy ({count}): {steps}. Przyciski dotyczą etapu: {title}. Sprawdź harmonogram.",
     "hot": "Gorące żeliwo: używaj suchych rękawic kuchennych; unikaj oparzeń.",
-    "title": "Bread Assistant — {title}",
+    "title": "Bread Assistant - {title}",
     "catchup": "zaległe zadania"
   },
   "live": {
     "bake": "Wypiek",
     "paused": "Wstrzymano (czas procesu nadal biegnie)",
-    "due": "Czas wykonać etap — potwierdź ręcznie",
+    "due": "Czas wykonać etap - potwierdź ręcznie",
     "next": "Następna czynność",
     "critical_paused": "Wstrzymano · {title}",
     "message": "{title} · {status}"
@@ -55,7 +55,7 @@
   "recipes": {
     "justyna_basic_wheat_sourdough": {
       "v1": {
-        "title": "Podstawowy chleb pszenny na zakwasie — według Justyny Dragan",
+        "title": "Podstawowy chleb pszenny na zakwasie - według Justyny Dragan",
         "description": "Chleb pszenny na zakwasie z autolizą, rozciąganiem i składaniem, nocnym wyrastaniem w lodówce oraz pieczeniem w garnku żeliwnym.",
         "ingredients": {
           "0": "Dokarmienie zakwasu: 40 g zakwasu z lodówki, 40 g mąki pszennej pełnoziarnistej, 40 g mąki pszennej chlebowej typ 750, 80 g wody.",

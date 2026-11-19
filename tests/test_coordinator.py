@@ -9,7 +9,8 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.bread_assistant.const import DOMAIN
 from custom_components.bread_assistant.coordinator import BakeCoordinator
-from custom_components.bread_assistant.models import BakeStatus, DomainError
+from custom_components.bread_assistant.models import BakeStatus, DomainError, StepStatus
+from custom_components.bread_assistant.storage import BakeStorage
 
 from .test_schedule import START
 
@@ -172,3 +173,36 @@ async def test_startup_storage_failure_keeps_a_retry_scheduled(coordinator):
     assert coordinator._cancel_timer is not None
     await coordinator.async_tick()
     assert coordinator.last_error is None
+
+
+@pytest.mark.parametrize("finish", ["complete", "cancel"])
+async def test_archive_retains_step_times_across_new_bake_and_restart(
+    coordinator, hass, finish
+):
+    await coordinator.async_action("start_bake", {"starter_workflow": "prepared"})
+    bake_id = coordinator.bake.id
+    while coordinator.bake.status == BakeStatus.ACTIVE:
+        current = coordinator.current_steps()[0]
+        coordinator.clock = lambda: START + timedelta(minutes=1)
+        await coordinator.async_action(
+            "complete_step", {"bake_id": bake_id, "step_id": current.step_id}
+        )
+        if finish == "cancel":
+            await coordinator.async_action("cancel_bake", {"bake_id": bake_id})
+    finished_bake = coordinator.bake
+    await coordinator.async_action("start_bake", {})
+    restored, archives = await BakeStorage(hass).async_load()
+    assert restored.id != bake_id
+    assert len(archives) == 1
+    archive = archives[0]
+    assert archive["id"] == bake_id
+    assert archive["starter_workflow"] == "prepared"
+    assert archive["step_runs"]["feed_starter"]["status"] == StepStatus.SKIPPED
+    assert archive["step_runs"]["feed_starter"]["completed_at"] == START.isoformat()
+    for step_id, run in finished_bake.step_runs.items():
+        assert archive["step_runs"][step_id] == {
+            "status": run.status,
+            "planned_at": run.planned_at.isoformat(),
+            "due_at": run.due_at.isoformat(),
+            "completed_at": run.completed_at.isoformat() if run.completed_at else None,
+        }

@@ -7,7 +7,8 @@ setup without replacing the saved bake. Unknown Store versions indicate a newer
 integration wrote the file; restore the matching integration version or a consistent
 backup. HA may preserve malformed JSON as a `.corrupt.*` file; retain that copy
 before recovery. Do not delete all of `.storage` and do not edit storage while HA
-is running. The latest full bake plus up to 50 archive summaries are retained.
+is running. The latest full bake plus up to 50 archives are retained. New archives
+include per-step planned, due and completion times; older summaries may lack them.
 
 ## No push notifications
 
@@ -31,9 +32,9 @@ Check the displayed bake ID, step prerequisites and lifecycle. Paused/canceled b
 cannot advance. A stale phone capability is deliberately ignored after snooze,
 adjustment, pause, completion or a new bake. Use the latest notification or dashboard.
 Readiness is never inferred from time; a prerequisite may need manual confirmation.
-The completion button waits for its displayed due time. Biological checkpoints
-can be confirmed earlier through `complete_step`; fixed timers enforce their
-minimum duration (15 minutes for the uncovered stage, 20 for covered baking).
+The completion button and `complete_step` allow confirmation before the displayed
+due time, including timed stages. Recipe durations guide reminders; they do not
+block your confirmation. Snooze remains unavailable until the reminder is due.
 
 ## Dashboard shows unavailable entities or missing cards
 
