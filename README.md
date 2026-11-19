@@ -62,19 +62,36 @@ for adding another language.
 ## Baking dashboard
 
 The iOS-inspired overview includes a circular progress indicator, live countdown,
-current stage, explicit completion and ten-minute reminder snooze, compact status
+ongoing processes, explicit completion and ten-minute reminder snooze, compact status
 cards, and a timeline with completed, active, upcoming and overdue states. It shows
 nearby steps first; **Show all steps** reveals the complete timeline and timestamps.
 Ingredients, full current instructions, recipe attribution, oven safety and bake
 diagnostics expand on demand. Idle, paused, completed, canceled, unavailable and
 delivery/action error states include appropriate guidance and controls.
 
+**Now / Teraz** describes processes already started by your confirmed actions:
+starter maturation, autolyse, fermentation, proofing, preheating, baking or cooling.
+Parallel processes appear together, with their actual start times. After feeding,
+for example, you see **Zakwas dojrzewa**, followed by **Następna czynność:
+Rozpocznij autolizę** and its countdown. The timeline labels that future action as
+next, rather than current. The duplicate next-step and due-time status cards have
+been removed.
+
+While waiting, action instructions are collapsed and the step-specific
+confirmation button stays enabled with secondary styling. When its estimate
+becomes due, the card emphasizes **To do now / Do zrobienia teraz**, opens the
+summary and confirmation guidance, promotes the confirmation button, and reveals
+Snooze. Full source passages remain separately expandable. Ordinary countdown
+ticks preserve your open/closed instructions and focus. Processes end only when
+their corresponding human checkpoint is confirmed, including when overdue or
+paused; elapsed time never asserts readiness.
+
 **Done / Confirm step** is available throughout each current stage, including
 before its countdown reaches zero. Timers guide reminders; confirm when you have
 actually finished the action or assessed readiness. Prerequisites still apply,
 and paused bakes must be resumed before confirming. Early confirmation records
 the actual time and recalculates dependent deadlines while preserving the original
-plan. **Remind in 10 min** becomes available when the current reminder is due.
+plan. **Remind in 10 min** appears when the current reminder is due.
 
 Each loaf has a unique bake ID. The current/latest bake stores its full recipe
 snapshot and step timestamps locally in Home Assistant Store
@@ -86,7 +103,7 @@ no completion time. These records survive restarts and starting another loaf.
 Older archive summaries remain compatible but cannot recover timestamps that
 were never saved. There is no history browser or unlimited retention yet.
 
-Open **Read full stage instructions** directly below the current-stage summary to
+Open **Instructions for this action**, then **Read full stage instructions**, to
 read the complete source passage before confirming a step. All 21 stages include
 the relevant original Polish text supplied from Justyna's recipe, with English
 translations. When several app checkpoints belong to one recipe section, that
@@ -328,3 +345,10 @@ completion timestamps, bounded to the last 50 loaves. 125 Python tests and 612
 browser combinations pass, including early native/card confirmation, dependent
 rescheduling, restart persistence and legacy archive compatibility. Ruff
 lint/format and strict mypy pass. Physical iPhone and staging HA checks remain manual.
+
+Waiting-state UX (19 November 2026, version 0.2.2): the card separates ongoing
+processes from the next human action, supports parallel process descriptions,
+uses specific confirmation labels, and promotes upcoming actions when due.
+143 Python tests, 288 lifecycle/layout browser combinations and 378 full-instruction
+browser combinations pass. Ruff lint/format and strict mypy pass. Frontend asset
+cache keys are updated; physical iPhone/Safari and staging HA remain manual checks.

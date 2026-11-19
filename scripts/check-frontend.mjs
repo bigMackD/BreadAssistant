@@ -105,8 +105,27 @@ try {
               await card.locator(`[data-detail="${label}"] > summary`).click();
               assert.equal(await card.locator(`[data-detail="${label}"]`).getAttribute("open"), "");
             }
-            if (["active", "due", "overdue", "prepared", "snoozed", "cold_proof"].includes(scenario)) assert.equal(await card.locator('[data-action="complete"]').isEnabled(), true);
-            if (scenario === "active") assert.equal(await card.locator('[data-action="snooze"]').isDisabled(), true);
+            if (["active", "due", "overdue", "prepared", "snoozed", "cold_proof", "parallel", "overnight", "preheating"].includes(scenario)) assert.equal(await card.locator('[data-action="complete"]').isEnabled(), true);
+            if (["active", "parallel", "overnight", "preheating"].includes(scenario)) {
+              assert.equal(await card.locator('[data-action="snooze"]').isVisible(), false);
+              assert.equal(await card.locator('[data-action="complete"]').getAttribute("class"), "secondary");
+              assert.equal(await card.locator('[data-action-label]').textContent(), language === "pl" ? "Następna czynność" : "Next action");
+              assert.equal(await card.locator('[data-detail="action-guidance"]').getAttribute("open"), null);
+              assert.equal(await card.locator('.step[aria-current="step"]').count(), 0);
+              assert.equal(await card.locator('.step.next').count(), 1);
+              assert.match(await card.locator('.step.next [data-step-state]').innerText(), language === "pl" ? /Za/ : /In/);
+            }
+            const attrs = states["sensor.bread_assistant_current_step"].attributes;
+            for (const process of attrs.ongoing_processes || []) {
+              assert.equal(await card.locator(`[data-process="${process.id}"] h3`).innerText(), process.title);
+              assert.equal(await card.locator(`[data-process="${process.id}"] .process-hint`).innerText(), process.hint);
+            }
+            if (attrs.timeline?.length) assert.equal(await card.locator('.stat').count(), 2);
+            if (["due", "overdue", "snoozed"].includes(scenario)) {
+              assert.equal(await card.locator('[data-detail="action-guidance"]').getAttribute("open"), "");
+              assert.equal(await card.locator('[data-action="complete"]').getAttribute("class"), "primary");
+              assert.equal(await card.locator('[data-action="snooze"]').isVisible(), true);
+            }
             if (scenario === "paused") {
               assert.equal(await card.locator('[data-action="complete"]').count(), 0);
               assert.equal(await card.locator('[data-countdown]').innerText(), language === "pl" ? "Przypomnienia wstrzymane" : "Reminders paused");
@@ -155,7 +174,10 @@ try {
           await page.evaluate(({states,language}) => window.show(states,language), {states,language});
           const attrs = states["sensor.bread_assistant_current_step"].attributes;
           assert.equal(attrs.step_id, stepId);
+          const guidance = card.locator('[data-detail="action-guidance"]');
+          if (await guidance.getAttribute("open") === null) await guidance.locator(":scope > summary").click();
           assert.equal(await card.locator(".stage-copy").innerText(), attrs.instructions_summary);
+          assert.equal(await card.locator('[data-action="complete"]').innerText(), attrs.confirmation_label);
           const details = card.locator('[data-detail="current-instructions"]');
           await details.locator("summary").click();
           assert.equal(await details.locator(".current-instructions-copy").innerText(), attrs.instructions);
@@ -253,18 +275,36 @@ try {
   assert.equal(await card.locator('button[data-action]:enabled:not([data-action="timeline"])').count(), 0);
   await page.evaluate(() => { hass.connection.connected = true; }); await page.clock.runFor(1000);
   assert.equal(await card.locator('[data-action="pause"]').isEnabled(), true);
-  // Confirmation stays available across the deadline; only Snooze waits for it.
+  // Crossing the deadline promotes the action and reveals guidance without replacing the DOM.
   await page.evaluate(states => {
     const imminent = structuredClone(states);
     imminent["sensor.bread_assistant_current_step"].attributes.due_at = new Date(Date.now() + 1000).toISOString();
     window.show(imminent, "en");
   }, fixtures.scenarios.en.active);
   assert.equal(await card.locator('[data-action="complete"]').isEnabled(), true);
-  assert.equal(await card.locator('[data-action="snooze"]').isDisabled(), true);
+  assert.equal(await card.locator('[data-action="complete"]').getAttribute("class"), "secondary");
+  assert.equal(await card.locator('[data-action="snooze"]').isVisible(), false);
+  assert.equal(await card.locator('[data-detail="action-guidance"]').getAttribute("open"), null);
+  assert.equal(await card.locator('.step[aria-current="step"]').count(), 0);
+  await page.evaluate(() => { window.originalTimer = card.shadowRoot.querySelector('[data-countdown]'); });
   await page.clock.runFor(2000);
   assert.equal(await card.locator('[data-action="complete"]').isEnabled(), true);
+  assert.equal(await card.locator('[data-action="complete"]').getAttribute("class"), "primary");
+  assert.equal(await card.locator('[data-detail="action-guidance"]').getAttribute("open"), "");
+  assert.equal(await card.locator('[data-action-label]').textContent(), "To do now");
   assert.equal(await card.locator('[data-action="snooze"]').isEnabled(), true);
+  assert.equal(await card.locator('[data-action="snooze"]').isVisible(), true);
+  assert.equal(await card.locator('.step[aria-current="step"]').count(), 1);
+  assert.equal(await page.evaluate(() => originalTimer === card.shadowRoot.querySelector('[data-countdown]')), true);
   assert.equal(await page.evaluate(() => calls.length), 0); // Readiness is never inferred.
+  // User-closed instructions remain closed across ordinary ticks and sensor updates.
+  await card.locator('[data-detail="action-guidance"] > summary').click();
+  await page.clock.runFor(2000);
+  await page.evaluate(() => {
+    hass = {...hass, states:structuredClone(hass.states)};
+    hass.states["sensor.bread_assistant_progress"].state = "10"; card.hass = hass;
+  });
+  assert.equal(await card.locator('[data-detail="action-guidance"]').getAttribute("open"), null);
   // 12h/24h and DST use HA's configured zone, irrespective of the browser's zone.
   await page.evaluate(states => {
     const twelve = structuredClone(states);

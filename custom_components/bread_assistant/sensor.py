@@ -14,6 +14,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DEFAULT_RECIPE
 from .entity import BreadEntity
+from .presentation import ongoing_processes
 
 DESCRIPTIONS = (
     SensorEntityDescription(
@@ -136,6 +137,12 @@ class BreadSensor(BreadEntity, SensorEntity):
             )
             if bake and current
             else None,
+            "confirmation_label": tr.recipe(
+                bake.recipe_snapshot, f"steps.{current.step_id}.confirmation_label"
+            )
+            if bake and current
+            else None,
+            "ongoing_processes": ongoing_processes(bake, tr),
             "instructions_attribution": tr.recipe(
                 bake.recipe_snapshot, "instructions_attribution"
             )

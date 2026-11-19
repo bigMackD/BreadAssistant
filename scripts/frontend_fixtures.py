@@ -45,8 +45,8 @@ def presentation(bake, language, error=None):
     return result
 
 
-def advance_to(step_id):
-    bake = scheduler.create_bake(recipe, NOW - timedelta(hours=22))
+def advance_to(step_id, started_at=NOW - timedelta(hours=22)):
+    bake = scheduler.create_bake(recipe, started_at)
     while True:
         current = scheduler.actionable(bake)[0]
         if current.step_id == step_id:
@@ -70,6 +70,11 @@ for language in ["en", "pl"]:
     completed = advance_to("cooling_check")
     scheduler.complete(completed, "cooling_check", NOW)
     prepared = scheduler.create_bake(recipe, NOW, starter_workflow="prepared")
+    parallel = deepcopy(waiting)
+    scheduler.complete(parallel, "autolyse_start", NOW - timedelta(minutes=15))
+    overnight = advance_to("preheat_oven", NOW - timedelta(hours=16))
+    preheating = deepcopy(overnight)
+    scheduler.complete(preheating, "preheat_oven", NOW)
     scenarios[language] = {
         name: presentation(bake, language)
         for name, bake in {
@@ -83,6 +88,9 @@ for language in ["en", "pl"]:
             "canceled": canceled,
             "prepared": prepared,
             "cold_proof": advance_to("preheat_oven"),
+            "parallel": parallel,
+            "overnight": overnight,
+            "preheating": preheating,
         }.items()
     }
     scenarios[language]["error"] = presentation(

@@ -17,8 +17,8 @@ server. It does not connect to a running HA instance or send notifications.
 | Viewports | 402 × 874 (iPhone 16 Pro CSS viewport), 834 × 1194, 1440 × 1000 |
 | Themes | HA-style light defaults, dark defaults, exact supplied Maciek iOS dark tokens |
 | Languages | English and Polish, including localized recipe/safety content |
-| States | Idle, active/waiting, due, overdue, snoozed, paused, completed, canceled, prepared starter, cold proof, delivery error, unavailable, disconnected |
-| Layout result | 234 combinations; no horizontal overflow; expected one/two-column layouts |
+| States | Idle, active/waiting, due, overdue, snoozed, paused, completed, canceled, prepared starter, cold proof, parallel maturation/autolyse, overnight waiting, parallel proof/preheating, delivery error, unavailable, disconnected |
+| Layout result | 288 combinations; no horizontal overflow; expected one/two-column layouts |
 | Full instructions | All 21 stages × 2 languages × 3 sizes × 3 themes (378 additional combinations) |
 
 Additional browser assertions cover:
@@ -26,7 +26,13 @@ Additional browser assertions cover:
 - Both starter workflows, Done, ten-minute Snooze, Pause, Resume, confirmed Cancel
   and dismissed Cancel, including exact service arguments and captured bake/step IDs.
 - Early Done for every current stage, including timers, before and after crossing
-  its deadline. Snooze continues to wait for the reminder deadline.
+  its deadline. Snooze is hidden until the reminder deadline.
+- Ongoing processes and their actual starts, with overlapping processes shown
+  together; future actions labeled Next, without a current-step accessibility
+  marker. Step-specific confirmation labels match each of the 21 stages.
+- Waiting/due transitions promote the confirmation button, open action guidance
+  and reveal Snooze in place. User-closed guidance stays closed across ordinary
+  ticks and sensor updates. Only completion and overdue counts remain in stats.
 - In-flight action locking, failure display and retries retaining the original step
   after an intervening state update.
 - Local countdown updates and deadline crossing without automatic completion or
@@ -49,8 +55,9 @@ Real HA tests cover HTTP asset serving, path traversal rejection, headless setup
 HTTP without frontend, automatic module registration and config-entry reload.
 The frontend lifecycle test supplies an empty static asset directory because the
 backend test image omits HA's browser asset wheel; the module loader runs normally.
-All **125 Python tests** pass, including the existing integration regression suite,
-early confirmation, prerequisite protection and archived step timestamps.
+All **143 Python tests** pass, including the existing integration regression suite,
+early confirmation, prerequisite protection, archived step timestamps, ongoing
+process transitions, prepared-starter semantics and presentation after reload.
 Ruff lint/format and strict mypy pass. Existing native dashboard templates still
 render in both languages. The browser matrix and additional assertions all pass.
 

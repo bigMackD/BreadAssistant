@@ -83,7 +83,7 @@ For frontend configurations that do not load the module automatically, add this
 merge it into `lovelace.resources` when resources are managed in YAML:
 
 ```yaml
-url: /bread_assistant/frontend/bread-assistant-card.js?v=1
+url: /bread_assistant/frontend/bread-assistant-card.js?v=3
 type: module
 ```
 
@@ -97,6 +97,12 @@ both cards and Jinja templates. Existing dashboards and automations keep working
 Use **Feed starter** for a normal bake. Confirm feeding, follow reminders and
 manually assess starter readiness. Use **Prepared starter** to intentionally skip
 feeding and begin autolyse immediately. You must still confirm starter readiness.
+The bundled card separates **Now / Teraz** (processes started by confirmed actions)
+from **Next action / Następna czynność**. Starter maturation and autolyse can appear
+together. Future actions have a countdown and a secondary confirmation button;
+their instructions expand automatically when due, alongside Snooze. Step-specific
+button labels explain exactly what will be recorded. You can also open the
+instructions yourself while waiting, including the full recipe passages.
 Complete the autolyse checkpoint before kneading. **Done / Confirm ready** acts on
 the current named step; **Remind in 10 min** changes reminders only. These controls
 are unavailable while paused. **Done / Confirm ready** is available before the

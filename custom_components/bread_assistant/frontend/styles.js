@@ -50,12 +50,20 @@ export const styles = `
   .ring-label { font-size: 11px; color: var(--ba-muted); margin-top: 3px; max-width: 90px; text-align: center; }
   .recipe-title { font-size: 17px; line-height: 1.45; letter-spacing: -.02em; font-weight: 620; margin-top: 10px; }
   .hero-title { min-width: 0; }
-  .timer-block { border-top: 1px solid var(--ba-line); border-bottom: 1px solid var(--ba-line); padding: 22px 0; margin-bottom: 24px; }
+  .processes { border-top: 1px solid var(--ba-line); padding: 22px 0; margin-bottom: 12px; }
+  .ongoing-process { margin-top: 14px; }
+  .ongoing-process h3 { font-size: 19px; margin-bottom: 5px; }
+  .process-hint { color: var(--ba-muted); font-size: 13px; margin-top: 8px; }
+  .hero.waiting .processes { border-left: 3px solid var(--ba-accent); padding-left: 16px; }
+  .timer-block { border-bottom: 1px solid var(--ba-line); padding: 12px 0 20px; margin-bottom: 16px; }
   .countdown { font-size: clamp(38px, 9cqi, 55px); font-weight: 650; letter-spacing: -.05em; font-variant-numeric: tabular-nums; line-height: 1.2; margin: 5px 0 8px; }
   .countdown.paused { font-size: 27px; line-height: 1.35; }
   .due-time { font-size: 12px; color: var(--ba-muted); }
   .stage { margin: 10px 0 12px; }
   .stage-copy { color: var(--ba-muted); margin-bottom: 20px; }
+  .action-guidance { margin-bottom: 20px; }
+  .action-guidance > summary { color: var(--ba-ink); min-height: 44px; padding: 12px 0; font-size: 14px; font-weight: 600; }
+  .action-guidance[open] > summary { margin-bottom: 8px; }
   .stage-instructions { margin: -8px 0 20px; }
   .stage-instructions > summary { color: var(--ba-ink); min-height: 44px; padding: 12px 0; font-size: 14px; font-weight: 600; }
   .stage-instructions[open] > summary { margin-bottom: 8px; }
@@ -105,10 +113,11 @@ export const styles = `
   .step.overdue .step-dot { color: var(--error-color, #c43830); border-color: currentColor; }
   .step.current.overdue .step-dot { background: var(--error-color, #c43830); color: var(--card-background-color, #fff); border-color: var(--error-color, #c43830); }
   .step-title { font-size: 14px; font-weight: 500; line-height: 1.5; }
-  .step.reference .step-title, .step.current .step-title { font-weight: 680; }
+  .step.next .step-dot { border-color: var(--ba-accent); color: var(--ba-ink); }
+  .step.reference .step-title, .step.current .step-title, .step.next .step-title { font-weight: 680; }
   .step.done .step-title, .step.skipped .step-title { color: var(--ba-muted); }
   .step-state { display: inline-block; color: var(--ba-muted); font-size: 11px; margin-top: 4px; }
-  .step.current .step-state { color: var(--ba-ink); font-weight: 650; }
+  .step.current .step-state, .step.next .step-state { color: var(--ba-ink); font-weight: 650; }
   .step.overdue .step-state { color: var(--error-color, #c43830); }
   .step time { display: block; font-size: 12px; color: var(--ba-muted); line-height: 1.6; margin-top: 4px; }
   .step details { margin-top: 6px; }

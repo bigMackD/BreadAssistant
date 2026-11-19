@@ -1,6 +1,6 @@
 [project]
 name = "bread-assistant"
-version = "0.2.1"
+version = "0.2.2"
 description = "Local-first sourdough bake guidance for Home Assistant"
 requires-python = ">=3.14.2"
 
@@ -20,7 +20,7 @@ select = ["E", "F", "I", "UP", "B", "ASYNC"]
 
 [tool.mypy]
 python_version = "3.14"
-files = ["custom_components/bread_assistant/models.py", "custom_components/bread_assistant/scheduler.py", "custom_components/bread_assistant/recipe_catalog.py", "custom_components/bread_assistant/starter.py", "custom_components/bread_assistant/serialization.py", "custom_components/bread_assistant/live_activities.py", "custom_components/bread_assistant/i18n.py"]
+files = ["custom_components/bread_assistant/models.py", "custom_components/bread_assistant/scheduler.py", "custom_components/bread_assistant/recipe_catalog.py", "custom_components/bread_assistant/starter.py", "custom_components/bread_assistant/serialization.py", "custom_components/bread_assistant/live_activities.py", "custom_components/bread_assistant/i18n.py", "custom_components/bread_assistant/presentation.py"]
 strict = true
 follow_imports = "silent"
 

@@ -1,5 +1,5 @@
-import { styles } from "./styles.js";
-import { strings } from "./strings.js";
+import { styles } from "./styles.js?v=3";
+import { strings } from "./strings.js?v=3";
 
 const SENSOR_KEYS = ["status", "current_step", "next_step", "next_due", "progress", "overdue_count"];
 const VALID_STATES = new Set(["idle", "active", "paused", "completed", "canceled"]);
@@ -83,6 +83,14 @@ export class BreadAssistantCard extends HTMLElement {
     catch { return new Intl.DateTimeFormat("en", { ...options, timeZone: "UTC" }).format(new Date(value)); }
   }
 
+  _remaining(milliseconds) {
+    const minutes = Math.max(1, Math.ceil(milliseconds / 60000));
+    const unit = (value, name) => new Intl.NumberFormat(this._language, { style: "unit", unit: name, unitDisplay: "short" }).format(value);
+    const hours = Math.floor(minutes / 60);
+    const remainder = minutes % 60;
+    return `${this._text("in_time")} ${[hours ? unit(hours, "hour") : "", remainder ? unit(remainder, "minute") : ""].filter(Boolean).join(" ")}`;
+  }
+
   _button(action, label, primary = false, disabled = false) {
     return `<button type="button" data-action="${action}" class="${primary ? "primary" : "secondary"}"
       ${disabled || this._busy || !this._connected ? "disabled" : ""}>${escapeHTML(this._text(label))}</button>`;
@@ -97,7 +105,8 @@ export class BreadAssistantCard extends HTMLElement {
   _render() {
     if (!this._hass || !this._entities) return;
     const root = this.shadowRoot;
-    const open = new Set([...root.querySelectorAll("details[open]")].map((detail) => detail.dataset.detail));
+    const disclosures = new Map([...root.querySelectorAll("details")].map((detail) => [detail.dataset.detail, detail.open]));
+    const previousStep = this._view?.step_id;
     const focus = root.activeElement?.dataset.action || this._focusAction;
     const focusDetail = root.activeElement?.closest("details")?.dataset.detail;
     this._connected = this._isConnected();
@@ -113,6 +122,7 @@ export class BreadAssistantCard extends HTMLElement {
     this._timeline = Array.isArray(this._step.timeline) ? this._step.timeline : [];
     this._running = ["active", "paused"].includes(this._status);
     this._view = { bake_id: this._attrs.bake_id, step_id: this._step.step_id };
+    if (previousStep !== this._view.step_id) this._actionPhase = undefined;
     const rawProgress = Number(this._state("progress")?.state);
     this._progress = Number.isFinite(rawProgress) ? Math.min(100, Math.max(0, rawProgress)) : 0;
     const available = VALID_STATES.has(this._status);
@@ -142,7 +152,9 @@ export class BreadAssistantCard extends HTMLElement {
           <div class="column">${this._timelineCard()}</div>
         </div>`}
     </div>`;
-    root.querySelectorAll("details").forEach((detail) => { detail.open = open.has(detail.dataset.detail); });
+    root.querySelectorAll("details").forEach((detail) => {
+      if (disclosures.has(detail.dataset.detail)) detail.open = disclosures.get(detail.dataset.detail);
+    });
     this._tick();
     if (focus && !this._busy) {
       const target = root.querySelector(`button[data-action="${focus}"]:not(:disabled)`) || root.querySelector(".stage");
@@ -163,6 +175,7 @@ export class BreadAssistantCard extends HTMLElement {
     const instructions = this._step.instructions || this._ui.start_hint || "";
     const concise = this._step.instructions_summary || instructions.match(/^.*?[.!?](?:\s|$)/)?.[0] || instructions;
     const title = current && !["unknown", "unavailable"].includes(current.state) ? current.state : this._ui.no_task;
+    const processes = Array.isArray(this._step.ongoing_processes) ? this._step.ongoing_processes : [];
     return `<ha-card class="hero">
       <div class="hero-top">
         <div class="ring" role="progressbar" aria-label="${escapeHTML(this._text("progress"))}"
@@ -175,12 +188,23 @@ export class BreadAssistantCard extends HTMLElement {
         <div class="hero-title"><p class="eyebrow">${escapeHTML(this._text(this._status === "paused" ? "paused" : "active"))}</p>
           <p class="recipe-title">${escapeHTML(this._attrs.recipe_title)}</p></div>
       </div>
+      ${processes.length ? `<section class="processes" aria-labelledby="ongoing-heading">
+        <p class="eyebrow" id="ongoing-heading">${escapeHTML(this._text("now"))}</p>
+        ${processes.map((process) => `<div class="ongoing-process" data-process="${escapeHTML(process.id)}">
+          <h3>${escapeHTML(process.title)}</h3>
+          <p class="due-time">${escapeHTML(process.started_label)} · ${escapeHTML(this._date(process.started_at))}</p>
+          <p class="process-hint">${escapeHTML(process.hint)}</p>
+        </div>`).join("")}
+      </section>` : ""}
+      <p class="eyebrow" data-action-label>${escapeHTML(this._text("next_task"))}</p>
+      <h2 class="stage" tabindex="-1">${escapeHTML(title)}</h2>
       <div class="timer-block"><p class="eyebrow" data-countdown-label></p>
         <div class="countdown" data-countdown role="timer" aria-live="off"></div>
         <p class="due-time">${escapeHTML(this._text("due"))} · ${escapeHTML(this._date(this._step.due_at))}</p>
         ${this._step.snoozed_until ? `<p class="footnote">${escapeHTML(this._text("snoozed"))} ${escapeHTML(this._date(this._step.snoozed_until))}</p>` : ""}
       </div>
-      <p class="eyebrow">${escapeHTML(this._text("current"))}</p><h2 class="stage" tabindex="-1">${escapeHTML(title)}</h2>
+      <details class="action-guidance" data-detail="action-guidance">
+      <summary>${escapeHTML(this._text("action_instructions"))}</summary>
       <p class="stage-copy">${copy(concise)}</p>
       ${this._step.instructions ? `<details class="stage-instructions" data-detail="current-instructions">
         <summary>${escapeHTML(this._text("stage_instructions"))}</summary>
@@ -189,8 +213,9 @@ export class BreadAssistantCard extends HTMLElement {
         ${this._sourceLink() ? `<p class="footnote">${this._sourceLink()}</p><p class="footnote">${escapeHTML(this._text("recipe_illustrations"))}</p>` : ""}
       </details>` : ""}
       ${this._step.confirmation_hint ? `<p class="footnote confirmation-hint"><strong>${escapeHTML(this._ui.when_to_confirm || this._text("when_to_confirm"))}</strong><br>${copy(this._step.confirmation_hint)}</p>` : ""}
+      </details>
       <div class="actions">${this._status === "paused" ? this._button("resume", "resume", true) :
-        `${this._button("complete", "done", true, true)}${this._button("snooze", "snooze", false, true)}`}</div>
+        `${this._button("complete", this._step.confirmation_label || "done", true, true)}${this._button("snooze", "snooze", false, true)}`}</div>
       <p class="footnote" data-waiting></p><p class="footnote">${copy(this._ui.confirm || this._text("check"))}</p>
       <span class="sr-only" role="status">${this._busy ? escapeHTML(this._text("working")) : ""}</span>
     </ha-card>`;
@@ -207,13 +232,9 @@ export class BreadAssistantCard extends HTMLElement {
 
   _stats() {
     const done = this._timeline.filter(finished).length;
-    const next = this._state("next_step")?.state;
-    const nextTitle = next && !["unknown", "unavailable"].includes(next) ? next : this._text("no_next");
     return `<div class="stats">
       <div class="card stat">${icon("check-circle-outline")}<p class="stat-label">${escapeHTML(this._text("steps"))}</p><p class="stat-value">${done} / ${this._timeline.length}</p></div>
-      <div class="card stat">${icon("arrow-right-circle-outline")}<p class="stat-label">${escapeHTML(this._text("next"))}</p><p class="stat-value">${escapeHTML(nextTitle)}</p></div>
       <div class="card stat">${icon("clock-alert-outline")}<p class="stat-label">${escapeHTML(this._text("overdue"))}</p><p class="stat-value" data-overdue-count>0</p></div>
-      <div class="card stat">${icon("calendar-clock")}<p class="stat-label">${escapeHTML(this._text("due"))}</p><p class="stat-value">${escapeHTML(this._date(this._step.due_at))}</p></div>
     </div>`;
   }
 
@@ -226,7 +247,7 @@ export class BreadAssistantCard extends HTMLElement {
       ${!this._timeline.length ? `<p class="muted">${escapeHTML(this._text("timeline_empty"))}</p>` : `<ol>${this._timeline.map((step, index) => {
         const isCurrent = this._running && step.id === this._step.step_id;
         const stepState = finished(step) ? (step.state === "done" ? "done_state" : "skipped") : isCurrent ? "active_step" : "upcoming";
-        return `<li class="step ${finished(step) ? step.state : "upcoming"} ${isCurrent ? "current" : ""} ${step.reference ? "reference" : ""}" data-step="${index}" ${isCurrent ? 'aria-current="step"' : ""}
+        return `<li class="step ${finished(step) ? step.state : "upcoming"} ${step.reference ? "reference" : ""}" data-step="${index}"
           ${!this._expandedTimeline && (index < visibleStart || index >= visibleStart + 5) ? "hidden" : ""}>
           <span class="step-dot" aria-hidden="true">${finished(step) ? (step.state === "done" ? "✓" : "−") : isCurrent ? "●" : ""}</span>
           <p class="step-title">${escapeHTML(step.title)}</p><span class="step-state" data-step-state>${escapeHTML(this._text(stepState))}</span>
@@ -276,6 +297,14 @@ export class BreadAssistantCard extends HTMLElement {
     if (timer) {
       const paused = this._status === "paused";
       const valid = Number.isFinite(due);
+      const waitingForDue = valid && delta > 0;
+      const phase = paused ? "paused" : !valid ? "unknown" : waitingForDue ? "waiting" : "due";
+      if (phase !== this._actionPhase) {
+        this.shadowRoot.querySelector('[data-detail="action-guidance"]').open = phase === "due";
+        this._actionPhase = phase;
+      }
+      this.shadowRoot.querySelector(".hero").classList.toggle("waiting", waitingForDue);
+      this.shadowRoot.querySelector("[data-action-label]").textContent = this._text(phase === "due" ? "action_now" : "next_task");
       const seconds = Math.floor(Math.abs(delta) / 1000);
       const pad = (n) => String(n).padStart(2, "0");
       timer.textContent = paused ? this._text("paused_timer") : !valid ? "-" :
@@ -286,8 +315,15 @@ export class BreadAssistantCard extends HTMLElement {
       const actionable = this._status === "active" && !!this._view.bake_id && !!this._view.step_id;
       for (const action of ["complete", "snooze"]) {
         const button = this.shadowRoot.querySelector(`[data-action="${action}"]`);
-        const waitingForDue = action === "snooze" && (!valid || delta > 0);
-        if (button) button.disabled = !actionable || waitingForDue || this._busy || !connected;
+        if (button) {
+          const snoozeUnavailable = action === "snooze" && (!valid || waitingForDue);
+          button.disabled = !actionable || snoozeUnavailable || this._busy || !connected;
+          if (action === "snooze") button.hidden = snoozeUnavailable;
+          if (action === "complete") {
+            button.classList.toggle("primary", !waitingForDue);
+            button.classList.toggle("secondary", waitingForDue);
+          }
+        }
       }
       const waiting = this.shadowRoot.querySelector("[data-waiting]");
       waiting.textContent = actionable && valid && delta > 0 ? this._text("waiting") : "";
@@ -295,11 +331,19 @@ export class BreadAssistantCard extends HTMLElement {
     }
     this.shadowRoot.querySelectorAll("[data-step]").forEach((item) => {
       const step = this._timeline[Number(item.dataset.step)];
-      const overdue = this._running && !finished(step) && timestamp(step.due_at) < now;
+      const selected = this._running && step.id === this._step.step_id;
+      const until = timestamp(selected ? this._step.due_at : step.due_at) - now;
+      const isNext = selected && until > 0;
+      const isCurrent = selected && until <= 0;
+      const overdue = this._running && !finished(step) && until < 0;
       item.classList.toggle("overdue", overdue);
+      item.classList.toggle("current", isCurrent);
+      item.classList.toggle("next", isNext);
+      if (isCurrent) item.setAttribute("aria-current", "step");
+      else item.removeAttribute("aria-current");
       const stepState = finished(step) ? (step.state === "done" ? "done_state" : "skipped") :
-        step.id === this._step.step_id && this._running ? "active_step" : "upcoming";
-      item.querySelector("[data-step-state]").textContent = `${this._text(stepState)}${overdue ? ` · ${this._text("overdue")}` : ""}`;
+        isNext ? "next_task" : isCurrent ? "action_now" : "upcoming";
+      item.querySelector("[data-step-state]").textContent = `${this._text(stepState)}${isNext ? ` · ${this._remaining(until)}` : overdue ? ` · ${this._text("overdue")}` : ""}`;
     });
     const count = this.shadowRoot.querySelector("[data-overdue-count]");
     if (count) count.textContent = String(this._state("overdue_count")?.state?.match(/^\d+$/)?.[0] ?? 0);

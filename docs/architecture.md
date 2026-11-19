@@ -104,6 +104,17 @@ in Store rather than sensor attributes. There is one active bake.
 
 ## Time and dependency semantics
 
+The sensor's additive `ongoing_processes` presentation is derived from confirmed
+start/end checkpoints by `presentation.py`, with recipe-versioned localized labels
+and actual start timestamps. Multiple processes may overlap. Skipped starter
+feeding does not imply maturation; a process remains visible through pause or
+overdue estimates until its end checkpoint is confirmed. This projection does not
+change persisted bake state or add workflow steps. Existing `current_step` and
+`next_step` sensor contracts are retained for automations; the bundled card calls
+a future current-step candidate **Next action** and emphasizes it when due.
+Its deadline transition updates the existing DOM locally, expands action guidance,
+and reveals Snooze without submitting any action or writing HA state.
+
 - All elapsed-time calculations and stored timestamps use aware UTC. HA dashboard
   templates convert to the configured HA timezone, including DST and midnight.
   Inputs without an offset are rejected, including ambiguous local times.
